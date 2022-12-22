@@ -1,5 +1,5 @@
 
-Welcome to c++mdp's documentation!
+C++mdp's documentation
 =================================
 
 ``c++mdp`` is a C++ header library for simulating active inference agents in
