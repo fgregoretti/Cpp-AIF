@@ -40,11 +40,11 @@ protected:
   unsigned int N; /* number of variational iterations */
   unsigned int seed;
   std::vector<unsigned int> Ns;
-  unsigned int Nu;
+  unsigned int Nu; /* number of hidden controls */
   std::vector<unsigned int> No; /* number of outcomes */
-  std::vector<std::vector<int>> _V;
+  std::vector<std::vector<int>> _V; /* policies */
   std::vector<Beliefs<Ty>*> _lnD;
-  std::vector<States*> _S;
+  std::vector<States*> _S; /* real state in the world */
   std::vector<std::vector<Transitions<Ty>*> > _B;
   std::vector<std::vector<likelihood<Ty,M>*> > _A;
 #ifndef NO_PRECOMPUTE_ALOGA
@@ -53,18 +53,17 @@ protected:
   std::vector<Priors<Ty>*> _lnC;
   std::vector<likelihood<Ty,M>*> Au;
   std::vector<Beliefs<Ty>*> _X;
-  std::vector<States*> _O;
-  std::vector<int> U;
+  std::vector<States*> _O; /* states observed */
+  std::vector<int> U; /* action selected each time */
   std::mt19937 generator;
-  std::vector<std::vector<Ty>> _ut;
-  std::vector<std::vector<Ty>> _P;
-  std::vector<Ty> _W;
-  std::vector<unsigned int> _wt;
+  std::vector<std::vector<Ty>> _ut; /* policy expectations */
+  std::vector<std::vector<Ty>> _P; /* posterior beliefs about control */
+  std::vector<Ty> _W; /* posterior precision */
+  std::vector<unsigned int> _wt; /* indices of allowable policies */
 
 public:
   unsigned int Nf;
   unsigned int Ng;
-  //unsigned int tt;
   unsigned int Np;
   std::vector<std::vector<int>> _st;
   std::vector<std::vector<int>> _ot;
@@ -205,10 +204,11 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
     std::cout << std::endl;
 #endif
 
-    /* real state in the world */
+    /* initial states */
     //_S.push_back(new States(*__S[i]));
     _S.push_back(__S[i]);
 
+    /* states sampled */
     s.push_back(_S[i]->StateFind());
 
     /* transition probabilities (priors) */
@@ -248,6 +248,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
     std::vector<likelihood<Ty,M>*> a2;
 #endif
 
+    /* future outcomes probabilities (priors) */
     __C[g]->NormLog();
 
     //_lnC.push_back(new Priors<Ty>(*__C[g]));
@@ -284,6 +285,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
       delete [] dims;
 #endif
  
+      /* likelihood model */
       //__A[g][j]->Addp0();
       __A[g][j]->Norm();
 
@@ -357,7 +359,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
     std::cout << "MDP: q=" << q << std::endl;
 #endif
 
-    /* states observed */
+    /* initial outcomes */
     _O.push_back(new States(T));
     _O[g]->StateSet(q);
   }
@@ -369,8 +371,6 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   _ut.resize(T, std::vector<Ty>(Np, 0));
   _P.resize(T, std::vector<Ty>(Nu, 0));
   _W.resize(T, 0);
-
-  //tt = 0;
 
   for (unsigned int i = 0; i < Nf; i++)
     _st[0][i] = _S[i]->id[0];
@@ -387,7 +387,7 @@ int MDP<Ty,M>::get_st(unsigned int f, unsigned int t, int action)
   std::vector<Ty> ps(Ns[f], 0.0);
 
 #ifdef DEBUG
-  std::cout << "get_st: t=" << t << " _S[" << f << "]->StateFind(" << t << ")=" << _S[f]->StateFind(t) << std::endl;
+  std::cout << "get_st: t=" << t << " action=" << action << " _S[" << f << "]->StateFind(" << t << ")=" << _S[f]->StateFind(t) << std::endl;
 #endif
   _B[f][action]->extract_column(_S[f]->StateFind(t),ps);
 
@@ -424,7 +424,7 @@ void MDP<Ty,M>::marginal_likelihood(unsigned int f, unsigned int tt, std::vector
       Ag = Au[g]->Dot(sq,f);
 
 #ifdef DEBUG
-    std::cout << "infer_states: g=" << g << " Ag = ";
+    std::cout << "marginal_likelihood: tt=" << tt << " f=" << f << " g=" << g << " Ag = ";
     for (std::size_t k = 0; k < _A[g][0]->get_firstdimension(); k++)
     {
       for(unsigned int ii = 0; ii < Ns[f]; ii++)
@@ -451,14 +451,12 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
     sq.push_back(_S[i]->StateFind(tt));
 
 #ifdef DEBUG
-  std::cout << "infer_states: sq = ";
+  std::cout << "infer_states: tt=" << tt << " sq = ";
   for (unsigned int val: sq) {
     std::cout << val << " ";
   }
   std::cout << std::endl;
 #endif
-
-  //std::vector<unsigned int> _wt;
 
   if (tt > 0)
   {
@@ -545,8 +543,6 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
     std::cout << std::endl;
 #endif
   }
-
-  //return _wt;
 }
 
 template <typename Ty, std::size_t M>
@@ -557,6 +553,7 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
 
   for (unsigned int k = 0; k < Np_t; k++)
   {
+    /* path integral of expected free energy */
     Ty **x = new Ty*[Nf];
     for (unsigned int i = 0; i < Nf; i++)
       x[i] = new Ty[Ns[i]];
@@ -571,7 +568,8 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
       /* transition probability from current state */
       for (unsigned int i = 0; i < Nf; i++)
       {
-        _B[i][_V[j][_wt[k]]]->Txv(&x[i][0], &x[i][0]);
+        /* hidden state belief expected according to the k-th policy */
+        _B[i][_V[j][_wt[k]]]->Txv(x[i], x[i]);
 #ifdef DEBUG                                                                                                      
         std::cout << "infer_policies: x[" << i << "] = ";
         for (std::size_t jj = 0; jj != Ns[i]; ++jj)
@@ -619,7 +617,7 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
     delete [] x;
   }
 
-  Ty b = alpha / gamma;
+  Ty b = alpha / gamma; /* expected rate parameter */
 
   /* Variational iterations (assuming precise inference about past action) */
   for (unsigned int it = 0; it < N; it++)
@@ -647,7 +645,6 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
   std::cout << std::endl;
 #endif
 
-  std::cout << std::endl;
   /* posterior expectations (control) */
   for (unsigned int k = tt; k < T; k++)
     for (unsigned int j = 0; j < Nu; j++)
@@ -667,7 +664,6 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
     }
     std::cout << std::endl;
   }
-  std::cout << std::endl;
 #endif
 
   return G;
@@ -683,7 +679,7 @@ int MDP<Ty,M>::sample_action(unsigned int tt)
   int a = std::max_element(_P[tt].begin(),_P[tt].end()) - _P[tt].begin();
 #endif
 #ifdef DEBUG
-  std::cout << "sample_action: a=" << a << std::endl;
+  std::cout << "sample_action: tt=" << tt << " a=" << a << std::endl;
 #endif
 
   U[tt] = a;
@@ -731,19 +727,24 @@ void MDP<Ty,M>::active_inference()
   while (tt < T)
   {
 #ifdef PRINT
-    std::cout << "tt=" << tt << std::endl;
+    std::cout << "active_inference: tt=" << tt << std::endl;
 #endif
 
     infer_states(tt);
 
+    /* value of policies (G) */
     std::vector<Ty> G = infer_policies(tt);
 
+    /* next action (the action that minimises expected free energy) */
     int a = sample_action(tt);
 
+    /* sampling of next state (outcome) */
     if (tt < T-1)
     {
+      /* next sampled state */
       sample_state(tt+1, a);
 
+      /* next observed state */
       sample_observation(tt+1, a);
     }
 

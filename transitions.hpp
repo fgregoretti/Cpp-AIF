@@ -103,15 +103,8 @@ public:
       _y[j] = 0.0;
 
     for(unsigned int j = 0; j < Ns; j++)
-    {
-      T t = 0.0;
-
       for(unsigned int i = row_ptr[j]; i < row_ptr[j+1]; i++)
-        t = t + data[i]*x[col[i]];
-
-      //y[j] = y[j] + t;
-      _y[j] = t;
-    }
+        _y[j] = _y[j] + data[i]*x[col[i]];
 
     for(unsigned int j = 0; j < Ns; j++)
       y[j] = _y[j];
