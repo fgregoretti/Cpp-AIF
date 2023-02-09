@@ -12,7 +12,7 @@ int main(int argc,char *argv[])
   if ( (argc > 1) && ((std::string(argv[1]) == "-h") || (std::string(argv[1]) == "--help")) )
   {
     std::cerr << "Usage: " << argv[0] << " <seed> <context>" << std::endl
-              << "context: <0> tiger at the left, <1> tiger at the right"
+              << "context: <0> mouse at the left, <1> mouse at the right"
 	      << std::endl;
 
     return 0;
