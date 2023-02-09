@@ -17,7 +17,7 @@ int main(int argc,char *argv[])
   if ( (argc > 1) && ((std::string(argv[1]) == "-h") || (std::string(argv[1]) == "--help")) )
   {
     std::cerr << "Usage: " << argv[0] << " <seed> <context>" << std::endl
-              << "context: <0> mouse at the left, <1> mouse at the right"
+              << "context: <0> reward at the left, <1> reward at the right"
 	      << std::endl;
 
     return 0;
@@ -28,8 +28,8 @@ int main(int argc,char *argv[])
     seed = atoi(argv[1]);
 
   /* context
-     l = 1;              mouse at the left
-     r = 1-l;            mouse at the right */
+     l = 1;              reward at the left
+     r = 1-l;            reward at the right */
   unsigned int context = 0;
   if (argc > 2)
     context = atoi(argv[2]);
@@ -223,9 +223,10 @@ int main(int argc,char *argv[])
   std::cout << "=========" << std::endl;
 
   for (std::size_t i = 0; i < mdp->_st.size(); i++)
-    std::cout << "T=" << i+1 << " Action: [" << ActionString[mdp->getU(i)] << "] "
-              << "Location: [" << LocationString[mdp->_st[i][0]] << "]  "
+    std::cout << "T=" << i+1
+              << " Location: [" << LocationString[mdp->_st[i][0]] << "] "
               << "Observation: [" << RewardString[mdp->_ot[i][1]] << "]"
+	      << " Action: [" << ActionString[mdp->getU(i)] << "]"
               << std::endl;
 
   delete mdp;
