@@ -23,8 +23,8 @@ int main(int argc,char *argv[])
     seed = atoi(argv[1]);
 
   /* context
-     l = 1;              tiger at the left
-     r = 1-l;            tiger at the right */
+     l = 1;              mouse at the left
+     r = 1-l;            mouse at the right */
   unsigned int context = 0;
   if (argc > 2)
     context = atoi(argv[2]);
