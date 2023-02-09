@@ -3,9 +3,14 @@
 #include <vector>
 #include <stdlib.h>
 #include <ctime>
+#include <cstring>
 #include <iomanip>
 #include "common.h"
 #include "mdp.hpp"
+
+const std::string LocationString[] = { "Center", "Left", "Right", "Bottom" };
+const std::string RewardString[] = { "Cue Left", "Cue Right", "Reward!", "No Reward" };
+const std::string ActionString[] = { "Move to Center", "Move to Left", "Move to Right", "Move to Bottom" };
 
 int main(int argc,char *argv[])
 {
@@ -36,7 +41,7 @@ int main(int argc,char *argv[])
   
   /* two factors */
   std::vector<FLOAT_TYPE> D1 = {1., 0., 0., 0.}; /* hidden location states */
-  std::vector<FLOAT_TYPE> D2 = {1./2, 1./2}; /* % cue left, cue right */
+  std::vector<FLOAT_TYPE> D2 = {1./2, 1./2}; /* cue left, cue right */
 
   std::vector<Beliefs<FLOAT_TYPE>*> __D;
   Beliefs<FLOAT_TYPE> *d1 = new Beliefs<FLOAT_TYPE>(D1);
@@ -218,9 +223,10 @@ int main(int argc,char *argv[])
   std::cout << "=========" << std::endl;
 
   for (std::size_t i = 0; i < mdp->_st.size(); i++)
-    std::cout << i+1 << "," << mdp->getU(i) << ","
-              << mdp->_st[i][0] << "," <<
-	      mdp->_st[i][1] << std::endl;
+    std::cout << "T=" << i+1 << " Action: [" << ActionString[mdp->getU(i)] << "] "
+              << "Location: [" << LocationString[mdp->_st[i][0]] << "]  "
+              << "Observation: [" << RewardString[mdp->_ot[i][1]] << "]"
+              << std::endl;
 
   delete mdp;
 
