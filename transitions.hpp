@@ -44,6 +44,18 @@ public:
     data = new T[Nnz_];
   }
 
+  void Eye()
+  {
+    row_ptr[0] = 0;
+
+    for(unsigned int i = 0; i < this->Ns; i++)
+    {
+      row_ptr[i + 1] = row_ptr[i] + 1;
+      col[i] = i;
+      data[i] = 1;
+    }
+  }
+
   /* normalisation (columns) */
   void Norm()
   {

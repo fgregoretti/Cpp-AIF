@@ -86,7 +86,7 @@ public:
   int sample_action(unsigned int t);
   void sample_state(unsigned int t, int action);
   void sample_observation(unsigned int t, int action);
-  void active_inference();
+  virtual void active_inference();
   int getU(unsigned int t) { return this->U[t]; }
 
   virtual ~MDP() {
