@@ -15,17 +15,17 @@ The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$*
 1. Agent location: **$S^0$** encodes the agent's location in the grid world Cue with as many elements as there are the grid locations. Therefore it has cardinality **$35$** and the tuples of **$(x, y)$** coordinate locations are mapped to linear indices by using **$y*dim_x+x$**.
 <img src=s0.png width=300>
 
-2. Cue2 location: it has cardinality **$4$**, encoding in which of the four possible location Cue 2 is actually located.
+2. Cue2 location: it has cardinality **$4$**, encoding in which of the four possible location Cue 2 is actually located (**$[L1, L2, L3, L4]$**).
 
-3. Reward location: it has cardinality **$2$**, encoding which of the two reward positions ("First" equal to **$0$** or "Second" equal to **$1$**) the "Cheese" has to be found in.
+3. Reward location: it has cardinality **$2$**, encoding which of the two reward positions ("First" or "Second") the "Cheese" has to be found in (**$[First, Second]$**).
 
 
 Observation **$\bf{O}$** are organized in four factors **$O^0, O^1, O^2$**, and **$O^3$**
 
 1. Location observation, representing the agent’s observation of its location in the grid world, with as many elements as there are the grid locations.
 
-2. Cue1 observation, only obtained at the Cue 1 location, that signals in which of the 4 possible locations Cue 2 is located. When not at the Cue 1 location, the agent sees **Null** observation. Therefore it has cardinality **$5$**.
+2. Cue1 observation, only obtained at the Cue 1 location, that signals in which of the 4 possible locations Cue 2 is located. When not at the Cue 1 location, the agent sees **Null** observation. Therefore it has cardinality **$5$** (**$[Null, L1, L2, L3, L4]$**).
 
-3. Cue2 observation, only obtained at the Cue 2 location, that signals in which of the two reward locations (“First” or “Second”) the “Cheese” is located. When not at the Cue 2 location, the agent sees **Null**  observation. Therefore it has cardinality **$3$**.
+3. Cue2 observation, only obtained at the Cue 2 location, that signals in which of the two reward locations (“First” or “Second”) the “Cheese” is located. When not at the Cue 2 location, the agent sees **Null**  observation. Therefore it has cardinality **$3$** (**$[Null, First, Second]$**).
 
-4. Reward observation, only received when occupying one of the two reward locations (“Cheese” or “Shock”), and Null otherwise. Therefore it has cardinality **$3$**.
+4. Reward observation, only received when occupying one of the two reward locations (“Cheese” or “Shock”), and Null otherwise. Therefore it has cardinality **$3$** (**$[Null, Cheese, Shock]$**).
