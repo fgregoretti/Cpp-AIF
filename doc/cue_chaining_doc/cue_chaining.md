@@ -13,6 +13,7 @@ The optimal strategy to maximize reward while minimizing risk in this task invol
 The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$**
 
 1. Agent location: **$S^0$** encodes the agent's location in the grid world with as many elements as there are the grid locations. Therefore it has cardinality **$35$** and the tuples of **$(x, y)$** coordinate locations are mapped to linear indices by using **$y*dim_x+x$**.
+<img src=s0.png width=300>
 
 2. Cue2 location: it has cardinality **$4$** encoding in which of the four possible location Cue 2 is actually located.
 
