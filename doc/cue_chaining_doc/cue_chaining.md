@@ -38,7 +38,7 @@ The control states **$\bf{U}$** encode the actions of the agent. In this 2D grid
 ### The transition model: a derived Transition class
 The control states **$\bf{U}$** determine the transitions from one state to another for the first hidden state factor.
 
-We need to write a derived Transition class that add a specialized method to fill out **$B[0]$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B[0]$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transition` class.
+We need to write a derived Transition class that adds a specialized method to fill out **$B[0]$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B[0]$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transition` class.
 
 ```c++
 class _Transitions : public Transitions<Ty>
