@@ -33,15 +33,18 @@ Observations **$\bf{O}$** are organized in four factors **$O^0, O^1, O^2$**, and
 
 The vector **$\bf{N_o}$** listing the number of outcomes for each factor is **$[dim_x \times dim_y, 5, 3, 3]$**.
 
-The control states **$\bf{U}$** encode the actions of the agent. In this 2D grid world the agent have the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
+The control states **$U$** encode the actions of the agent. In this 2D grid world the agent have the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
 
 ### The transition model
-To create the transition model we have to create a vector of vector of objects `Transitions`. Specifically a vector with size **$N_f$**, and each element **$i$** will contain a vector of **$num\\_controls[i]$** of objects `Transition` **$B$** with size **$N_s[f]$**
+To create the transition model we have to define the arrays **$B^0, B^1$**, and **$B^2$**, one for each state factor. The control states **$U$** determine the transitions from one state to another for the first hidden state factor only. Therefore only **$B^0$** will be dependent from action **$u$**, namely **$B^0_u$**
 
-The control states **$\bf{U}$** determine the transitions from one state to another for the first hidden state factor only. Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
+We create the transition model defining a vector of vector of objects `Transitions`. Specifically a vector with size **$N_f$**, and each element **$i$** will contain a vector of **$num\\_controls[i]$** of objects `Transitions` **$B$** with size **$N_s[f] \times N_s[f]$**
 
-We need to write a derived Transitions class that adds a specialized method to fill out **$B[0][j]$** with 
-**$j=0,...,3$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B[0][j]$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
+Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
+
+We need to write a derived Transitions class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
+
+In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we write:
 
 ```c++
 class _Transitions : public Transitions<Ty>
@@ -99,4 +102,31 @@ int NextState(unsigned int state, unsigned int action,
 }
 ```
 
-Fill out B[1] and B[2] as identity matrices, encoding the fact that those hidden states are uncontrollable
+In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) we write:
+
+```c++
+  std::vector<std::vector<Transitions<FLOAT_TYPE>*>> __B;
+
+  std::vector<Transitions<FLOAT_TYPE>*> _b1;
+  for (unsigned int a = 0; a < Nu; a++) {
+    _Transitions<FLOAT_TYPE> *__b1 = new _Transitions<FLOAT_TYPE>(Ns[0], Ns[0]);
+    __b1->epistemic_chaining_init(a, grid_);
+    _b1.push_back((Transitions<FLOAT_TYPE> *) __b1);
+  }
+  __B.push_back(_b1);                                                                             
+```
+
+Fill out **$B^1$**, and **$B^2$** as identity matrices, encoding the fact that those hidden states are uncontrollable
+```c++
+  std::vector<Transitions<FLOAT_TYPE>*> _b2;
+  Transitions<FLOAT_TYPE> *__b2 = new Transitions<FLOAT_TYPE>(Ns[1], Ns[1]);
+  __b2->Eye();
+  _b2.push_back(__b2);                                                            
+  __B.push_back(_b2);
+  
+  std::vector<Transitions<FLOAT_TYPE>*> _b3;
+  Transitions<FLOAT_TYPE> *__b3 = new Transitions<FLOAT_TYPE>(Ns[2], Ns[2]);
+  __b3->Eye();
+  _b3.push_back(__b3);
+  __B.push_back(_b3);
+```
