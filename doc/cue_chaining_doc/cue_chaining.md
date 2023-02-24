@@ -116,7 +116,7 @@ In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) w
   __B.push_back(_b1);                                                                             
 ```
 
-Fill out **$B^1$**, and **$B^2$** as identity matrices, encoding the fact that those hidden states are uncontrollable
+Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that those hidden states are uncontrollable
 ```c++
   std::vector<Transitions<FLOAT_TYPE>*> _b2;
   Transitions<FLOAT_TYPE> *__b2 = new Transitions<FLOAT_TYPE>(Ns[1], Ns[1]);
