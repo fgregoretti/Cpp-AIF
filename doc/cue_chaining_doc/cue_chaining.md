@@ -36,4 +36,62 @@ The vector **$\bf{N_o}$** listing the number of outcomes for each factor is **$[
 The control states **$\bf{U}$** encode the actions of the agent. In this 2D grid world the agent have the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
 
 ### The transition model: a derived Transition class
-The control states **$\bf{U}$** determine the transitions from one state to another for the first hidden state factor. We need to write a derived Transition class that add a specialized method to fill out **$B[0]$** according to the expected outcomes of the **$4$** actions. 
+The control states **$\bf{U}$** determine the transitions from one state to another for the first hidden state factor.
+
+We need to write a derived Transition class that add a specialized method to fill out **$B[0]$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B[0]$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transition` class.
+
+```c++
+class _Transitions : public Transitions<Ty>
+{
+public:
+  using Transitions<Ty>::Transitions;
+
+  void epistemic_chaining_init(int action, Grid<int> grid_)
+  {
+    for(unsigned int i = 0; i < this->Ns; i++)
+    {
+      this->col[i] = 0;
+      this->row_ptr[i] = 0;
+      this->data[i] = 0.0;
+    }
+    this->row_ptr[this->Ns] = 0;
+
+    unsigned int row[this->Ns];
+    memset(row, 0, this->Ns*sizeof(unsigned int));
+    unsigned int col_ptr[this->Ns+1];
+    memset(col_ptr, 0, (this->Ns+1)*sizeof(unsigned int));
+
+    for (unsigned int s = 0; s < this->Ns; s++)
+    {
+      col_ptr[s] = s;
+      row[s] = NextState(s, action, grid_);
+      this->data[s] = 1;
+    }
+    col_ptr[this->Ns] = this->Ns;
+
+    this->csc_tocsr(col_ptr, row);
+  }
+};
+```
+
+Where the function `NextState` is
+
+```c++
+/* return the state obtained performing action 'action'
+from state 'state' */
+int NextState(unsigned int state, unsigned int action,
+              Grid<int> grid_)
+{
+  Coord current_pos = grid_.IndexToCoord(state);
+  current_pos += MoveTo[action];
+
+  if (grid_.Inside(current_pos)) {
+    int next_pos = grid_.CoordToIndex(current_pos);
+    return next_pos;
+  }
+  else
+  {
+    return state;
+  }
+}
+```
