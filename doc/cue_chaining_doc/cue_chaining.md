@@ -35,10 +35,13 @@ The vector **$\bf{N_o}$** listing the number of outcomes for each factor is **$[
 
 The control states **$\bf{U}$** encode the actions of the agent. In this 2D grid world the agent have the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
 
-### The transition model: a derived Transition class
-The control states **$\bf{U}$** determine the transitions from one state to another for the first hidden state factor.
+### The transition model
+To create the transition model we have to create a vector of vector of objects `Transitions`. Specifically a vector with size **$N_f$**, and each element **$i$** will contain a vector of **$num\\_controls[i]$** of objects `Transition` **$B$** with size **$N_s[f]$**
 
-We need to write a derived Transition class that adds a specialized method to fill out **$B[0]$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B[0]$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transition` class.
+The control states **$\bf{U}$** determine the transitions from one state to another for the first hidden state factor only. Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
+
+We need to write a derived Transitions class that adds a specialized method to fill out **$B[0][j]$** with 
+**$j=0,...,3$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B[0][j]$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
 
 ```c++
 class _Transitions : public Transitions<Ty>
@@ -95,3 +98,5 @@ int NextState(unsigned int state, unsigned int action,
   }
 }
 ```
+
+Fill out B[1] and B[2] as identity matrices, encoding the fact that those hidden states are uncontrollable
