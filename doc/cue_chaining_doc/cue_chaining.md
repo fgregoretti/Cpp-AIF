@@ -180,5 +180,7 @@ Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that th
 
 ### The observation model: **$\bf{A}$**
 **$\bf{A}$** has four components, encoding the agents beliefs about how hidden states probabilistically cause observations within each factor of the observations: the multidimensional arrays **$A^0, A^1, A^2$**, and **$A^3$**. Their dimensions are **$N_o[0] \times N_s[0] \times N_s[1] \times N_s[2]$**, 
-**$N_o[1] \times N_s[0] \times N_s[1] \times N_s[2]$**, **$N_o[2] \times N_s[0] \times N_s[1] \times N_s[2]$**, and **$N_o[3] \times N_s[0] \times N_s[1] \times N_s[2]$** respectively. All the components are 4-dimensional arrays and are the same for each action **$u$**.
+**$N_o[1] \times N_s[0] \times N_s[1] \times N_s[2]$**, **$N_o[2] \times N_s[0] \times N_s[1] \times N_s[2]$**, and **$N_o[3] \times N_s[0] \times N_s[1] \times N_s[2]$** respectively. All the components are therefore 4-dimensional arrays and are the same for each action **$u$**.
+
+We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$N_g$**, and each element **$i$** will contain a vector of one object `likelihood` **$A$** with size **$N_o[g] \times N_s[0] \times N_s[1] \times N_s[2]$**.
 
