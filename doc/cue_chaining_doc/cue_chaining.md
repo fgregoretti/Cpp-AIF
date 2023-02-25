@@ -10,7 +10,7 @@ The optimal strategy to maximize reward while minimizing risk in this task invol
 
 ## 2. The generative model
 
-The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$**
+The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$**. **$N_f=3$**.
 
 1. Agent location: **$S^0$** encodes the agent's location in the grid world Cue with as many elements as there are the grid locations. Therefore it has cardinality **$dim_x \times dim_y$** and the tuples of **$(x, y)$** coordinate locations are mapped to linear indices by using **$y \times dim_x+x$**. It follows an example for a grid world of size **$7 \times 5$**
 <img src=s0.png width=300>
@@ -21,7 +21,7 @@ The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$*
 
 The vector **$\bf{N_s}$** listing the dimensionality of the hidden states is **$[dim_x \times dim_y, 4, 2]$**.
 
-Observations **$\bf{O}$** are organized in four factors **$O^0, O^1, O^2$**, and **$O^3$**
+Observations **$\bf{O}$** are organized in four factors **$O^0, O^1, O^2$**, and **$O^3$**. **$N_g=4$**.
 
 1. Location observation, **$O^0$**, representing the agent’s observation of its location in the grid world, with as many elements as there are the grid locations.
 
@@ -35,14 +35,61 @@ The vector **$\bf{N_o}$** listing the number of outcomes for each factor is **$[
 
 The control states **$U$** encode the actions of the agent. In this 2D grid world the agent have the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
 
-### The transition model
+### The initial beliefs: **$\bf{D}$**
+The agent's initial belief is defined over the multi-factor hidden states, therefore we have to define three arrays **$D^0, D^1$**, and **$D^2$**, each corresponding to a specific hidden state factor.
+
+**$D^0$** encodes the prior beliefs over the initial location of the agent in the grid world, while **$D^1$** and **$D^2$** are array of ones impling that all the states are equally probable.
+ 
+We create the initial beliefs defining a vector of objects `Beliefs`. Specifically a vector with size **$N_f$**, and each element will contain an object `Beliefs` with size **$N_s[f]$**.
+
+We need to write a derived `Beliefs` class that adds a specialized method to fill out **$D^0$**, that is a method that assign **$1$** to the state correspoing to the initial location of the agent and **$0$** elsewhere.
+
+In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we write:
+
+```c++
+template <typename T>
+class _Beliefs : public Beliefs<T>
+{
+public:
+  using Beliefs<T>::Beliefs;
+
+  void epistemic_chaining_init(Coord start_pos_,
+                               Grid<int> grid_)
+  {
+    this->Zeros();
+
+    int pos = grid_.CoordToIndex(start_pos_);
+
+    this->value[pos] = 1.0;
+  }
+};
+```
+In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) we write:
+
+```c++
+  std::vector<Beliefs<FLOAT_TYPE>*> __D;
+
+  _Beliefs<FLOAT_TYPE> *_d1 = new _Beliefs<FLOAT_TYPE>(Ns[0]);
+  _d1->epistemic_chaining_init(start_position_, grid_);
+  __D.push_back((Beliefs<FLOAT_TYPE> *) _d1);
+
+  _Beliefs<FLOAT_TYPE> *_d2 = new _Beliefs<FLOAT_TYPE>(Ns[1]);
+  _d2->Ones();
+  __D.push_back((Beliefs<FLOAT_TYPE> *) _d2);
+
+  _Beliefs<FLOAT_TYPE> *_d3 = new _Beliefs<FLOAT_TYPE>(Ns[2]);
+  _d3->Ones();
+  __D.push_back((Beliefs<FLOAT_TYPE> *) _d3);
+```
+
+### The transition model: **$\bf{B}$**
 To create the transition model we have to define the arrays **$B^0, B^1$**, and **$B^2$**, one for each state factor. The control states **$U$** determine the transitions from one state to another for the first hidden state factor only. Therefore only **$B^0$** will be dependent from action **$u$**, namely **$B^0_u$**
 
 We create the transition model defining a vector of vector of objects `Transitions`. Specifically a vector with size **$N_f$**, and each element **$i$** will contain a vector of **$num\\_controls[i]$** of objects `Transitions` **$B$** with size **$N_s[f] \times N_s[f]$**
 
 Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
 
-We need to write a derived Transitions class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
+We need to write a derived `Transitions` class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
 
 In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we write:
 
@@ -130,3 +177,7 @@ Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that th
   _b3.push_back(__b3);
   __B.push_back(_b3);
 ```
+
+### The observation model: **$\bf{A}$**
+**$\bf{A}$** has four components, encoding the agents beliefs about how hidden states probabilistically cause observations within each factor of the observations: the multidimensional arrays **$A^0, A^1, A^2$**, and **$A^3$**. Their dimensions are **$N_o[0] \times N_s[0] \times N_s[1] \times N_s[2], $N_o[1] \times N_s[0] \times N_s[1] \times N_s[2], $N_o[2] \times N_s[0] \times N_s[1] \times N_s[2], $N_o[3] \times N_s[0] \times N_s[1] \times N_s[2]$** respectively. All the components are 4-dimensional arrays and are the same for each action **$u$**.
+
