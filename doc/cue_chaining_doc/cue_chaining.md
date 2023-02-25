@@ -184,3 +184,28 @@ Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that th
 
 We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$N_g$**, and each element **$i$** will contain a vector of one object `likelihood` **$A$** with size **$N_o[g] \times N_s[0] \times N_s[1] \times N_s[2]$**.
 
+We need to write a derived `likelihood` class that adds specialized methods to fill out **$A^0, A^1, A^2$**, and **$A^3$**.
+
+In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we write:
+
+```c++
+template <typename T, std::size_t N>
+class _likelihood : public detail::likelihood<T, typename gen_seq<N>::type>
+{
+public:
+  using likelihood<T,N>::likelihood;
+
+  /* location observation */
+  void Observe(std::vector<int> num_states);
+  /* cue1 observation */
+  void Observe(std::vector<int> num_states,
+               Grid<int> grid_, Coord cue1_location,
+               std::vector<Coord> cue2_location);
+  /* cue2 observation */
+  void Observe(std::vector<int> num_states, Grid<int> grid_,
+               std::vector<Coord> cue2_location);
+  /* reward observation  */
+  void Observe(std::vector<int> num_states, Grid<int> grid_,
+               std::vector<Coord> reward_location, T a);
+};
+```
