@@ -32,6 +32,7 @@ void Init_7_5(Grid<int>& grid_, Coord& cue1_pos_,
   grid_(reward_pos_[1-reward]) = -100;
 }
 ```
+<img src=grid_world_7x5.png width=300>
 
 ## 3. The generative model
 The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$**. **$N_f=3$**.
