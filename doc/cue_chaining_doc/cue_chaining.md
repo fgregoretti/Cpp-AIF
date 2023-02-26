@@ -358,3 +358,39 @@ In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) w
   _a4.push_back((likelihood<FLOAT_TYPE,4> *) __a4);
   __A.push_back(_a4);
 ```
+
+### The prior over (preferred) observations: **$\bf{C}$**
+Being defined as priors over observations, C will consist of four arrays corresponding to the priors over the different observation factors: **$C^0, C^1, C^2$**, and **$C^3$** with size **$N_s[0]$**, **$5$**, **$3$**, and **$3$$** respectively. **$C^3$** encodes the prior preferences for different levels of the Reward observation outcome, while the others are zero arrays.
+
+We create the prior over observations defining a vector of objects `Priors`. Specifically a vector with size **$N_g$**, and each element will contain an object `Priors` with size **$N_o[g]$**.
+
+In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) we wrote:
+```c++
+  std::vector<Priors<FLOAT_TYPE>*> __C;
+
+  std::vector<FLOAT_TYPE> C1(Ns[0]);
+  std::fill(C1.begin(), C1.end(), 0);
+  softmax<FLOAT_TYPE>(C1);
+  Priors<FLOAT_TYPE>* _C1 = new Priors<FLOAT_TYPE>(C1);
+  __C.push_back(_C1);
+
+  std::vector<FLOAT_TYPE> C2(5);
+  std::fill(C2.begin(), C2.end(), 0);
+  softmax<FLOAT_TYPE>(C2);
+  Priors<FLOAT_TYPE>* _C2 = new Priors<FLOAT_TYPE>(C2);
+  __C.push_back(_C2);
+
+  std::vector<FLOAT_TYPE> C3(3);
+  std::fill(C3.begin(), C3.end(), 0);
+  softmax<FLOAT_TYPE>(C3);
+  Priors<FLOAT_TYPE>* _C3 = new Priors<FLOAT_TYPE>(C3);
+  __C.push_back(_C3);
+  
+  std::vector<FLOAT_TYPE> C4(3);
+  std::fill(C4.begin(), C4.end(), 0);
+  C4[1] = 2.0; /* make the agent want to encounter the "Cheese" observation level */
+  C4[2] = -4.0; /* make the agent not want to encounter the "Shock" observation level */
+  softmax<FLOAT_TYPE>(C4);
+  Priors<FLOAT_TYPE>* _C4 = new Priors<FLOAT_TYPE>(C4);
+  __C.push_back(_C4);
+```
