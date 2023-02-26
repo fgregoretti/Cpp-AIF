@@ -69,7 +69,7 @@ We create the initial beliefs defining a vector of objects `Beliefs`. Specifical
 
 We need to write a derived `Beliefs` class that adds a specialized method to fill out **$D^0$**, that is a method that assign **$1$** to the state correspoing to the initial location of the agent and **$0$** elsewhere.
 
-In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we wrote:
+In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
 ```c++
 template <typename T>
@@ -116,7 +116,7 @@ Being only the first hidden state factor controllable by the agent, **$num\\_con
 
 We need to write a derived `Transitions` class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
 
-In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we wrote:
+In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
 ```c++
 class _Transitions : public Transitions<Ty>
@@ -211,7 +211,7 @@ We create the observation model defining a vector of vector of objects `likeliho
 
 We need to write a derived `likelihood` class that adds specialized methods to fill out **$A^0, A^1, A^2$**, and **$A^3$**.
 
-In [`epistemic_chaining.hpp`](../../epistemic_chaining.hpp) we wrote:
+In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
 ```c++
 template <typename T, std::size_t N>
