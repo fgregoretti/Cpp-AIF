@@ -4,7 +4,7 @@ The generative model used by the Active Inference agent is defined by setting th
 the observations **$\bf{O}$**, the control states **$U$**, and the parameters **$\bf{\Theta} = \\{\bf{𝐀}, \bf{𝐁}, \bf{𝐂}, \bf{𝐃}\\}$**.
 
 Hidden States and Observations are represented as instances of the [States](#-class-states) class.
-A arrays are represented as istances of the [likelihood](#-class-likelihood) class.
+A arrays are represented as istances of the [likelihood](#template-typename-t-typename-s-class-likelihood) class.
 
 ## `class States`
 ```c++
