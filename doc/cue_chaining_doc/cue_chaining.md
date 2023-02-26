@@ -11,6 +11,28 @@ The optimal strategy to maximize reward while minimizing risk in this task invol
 ## 2. The 2D grid world
 To create the physical environment inhabited by the agent we defined a 2D grid world within a specific class `Grid` (header file [`grid.hpp`](../../examples/grid.hpp)). Locations on the grid are identified using **$(x, y)$** tuples, which correspond to a specific row and column, respectively, on the grid.
 
+Let's create a grid world with dimensions **$7 \times 5$**. To this purpose we can write a function whose parameters are `Grid<int> grid_(size_x, size_y)`, `Coord cue1_pos_`, `std::vector<Coord> cue2_pos_`, `Coord start_position_`, `std::vector<Coord> reward_pos_`, respectively the `Grid` object, the Cue 1 location, the vector of four Cue2 locations, the agent starttinlocation, and the vector of the reward locations, as follows:
+
+```c++
+void Init_7_5(Grid<int>& grid_, Coord& cue1_pos_,
+              std::vector<Coord>& cue2_pos_, Coord& start_pos_,
+              std::vector<Coord>& reward_pos_, unsigned int reward)
+{
+  std::cout << "epistemic_chaining(7, 5)" << std::endl;
+  cue1_pos_ = Coord(0, 2);
+  cue2_pos_ = { Coord(2, 4), Coord(3, 3), Coord(3, 1), Coord(2, 0) };
+  start_pos_ = Coord(0, 4);
+  reward_pos_ = { Coord(5, 3), Coord(5, 1) };
+  grid_.SetAllValues(-1);
+  grid_(cue1_pos_) = 1;
+  for (unsigned int i = 0; i < cue2_pos_.size(); ++i) {
+    grid_(cue2_pos_[i]) = 2+i;
+  }
+  grid_(reward_pos_[reward]) = 100;
+  grid_(reward_pos_[1-reward]) = -100;
+}
+```
+
 ## 3. The generative model
 The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$**. **$N_f=3$**.
 
