@@ -53,11 +53,11 @@ int main(int argc,char *argv[])
   std::vector<States*> __S;
   States *s1 = new States(T);
   s1->Zeros();
-  s1->StateSet(0);
+  s1->Set(0);
   __S.push_back(s1);
   States *s2 = new States(T);
   s2->Zeros();
-  s2->StateSet(context);
+  s2->Set(context);
   __S.push_back(s2);
 
   /* controlled transitions: __B
@@ -123,10 +123,10 @@ int main(int argc,char *argv[])
               { 0., 1. }
           };
   /* context, which cannot be changed by action */
-  for (unsigned int j = 0; j < 4; j++) {
-    Transitions<FLOAT_TYPE> *__b2 = new Transitions<FLOAT_TYPE>(eye);
-    _b2.push_back(__b2);
-  }
+  //for (unsigned int j = 0; j < 4; j++) {
+    Transitions<FLOAT_TYPE> *__b = new Transitions<FLOAT_TYPE>(eye);
+    _b2.push_back(__b);
+  //}
 
   __B.push_back(_b1);
   __B.push_back(_b2);
@@ -189,17 +189,18 @@ int main(int argc,char *argv[])
   __C.push_back(Initial_C2);
 
   /* policies */
-  std::vector<std::vector<int>> V {
-    { 0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3 },
-    { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 },
-    { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 }
-  };
+  //std::vector<std::vector<int>> V {
+  //  { 0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3 },
+  //  { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 },
+  //  { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 }
+  //};
+  std::vector<std::vector<int>> V;
 
   time_t start, end;
 
   time(&start);
 
-  MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,seed);
+  MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,1,seed);
 
   time(&end);
 
@@ -238,9 +239,6 @@ int main(int argc,char *argv[])
   delete __B[0][2];
   delete __B[0][3];
   delete __B[1][0];
-  delete __B[1][1];
-  delete __B[1][2];
-  delete __B[1][3];
   delete __C[0];
   delete __C[1];
   delete __S[0];
