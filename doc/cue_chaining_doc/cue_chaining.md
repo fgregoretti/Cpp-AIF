@@ -360,7 +360,7 @@ In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) w
 ```
 
 ### The prior over (preferred) observations: **$\bf{C}$**
-Being defined as priors over observations, C will consist of four arrays corresponding to the priors over the different observation factors: **$C^0, C^1, C^2$**, and **$C^3$** with size **$N_s[0]$**, **$5$**, **$3$**, and **$3$$** respectively. **$C^3$** encodes the prior preferences for different levels of the Reward observation outcome, while the others are zero arrays.
+Being defined as priors over observations, C will consist of four arrays corresponding to the priors over the different observation factors: **$C^0, C^1, C^2$**, and **$C^3$** with size **$N_s[0]$**, **$5$**, **$3$**, and **$3$** respectively. **$C^3$** encodes the prior preferences for different levels of the Reward observation outcome, while the others are zero arrays.
 
 We create the prior over observations defining a vector of objects `Priors`. Specifically a vector with size **$N_g$**, and each element will contain an object `Priors` with size **$N_o[g]$**.
 
