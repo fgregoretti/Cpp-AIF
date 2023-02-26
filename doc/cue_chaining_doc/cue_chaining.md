@@ -8,11 +8,13 @@ Cue 1 is located in one location of the grid world, while there are four additio
 
 The optimal strategy to maximize reward while minimizing risk in this task involves the following approach: first, the agent needs to visit Cue 1 to obtain the signal that reveals the location of Cue 2. Once the location of Cue 2 is determined, the agent can then visit that location to receive the signal that indicates the location of the reward or punishment.
 
-## 2. The generative model
+## 2. The 2D grid world
+To create the physical environment inhabited by the agent we defined a 2D grid world within a specific class `Grid` (header file [`grid.hpp`](../../examples/grid.hpp)). Locations on the grid are identified using **$(x, y)$** tuples, which correspond to a specific row and column, respectively, on the grid.
 
+## 3. The generative model
 The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$**. **$N_f=3$**.
 
-1. Agent location: **$S^0$** encodes the agent's location in the grid world with as many elements as there are the grid locations. Therefore it has cardinality **$dim_x \times dim_y$** and the tuples of **$(x, y)$** coordinate locations are mapped to linear indices by using the function **$y \times dim_x+x$**. It follows an example for the grid world of size **$7 \times 5$**
+1. Agent location: **$S^0$** encodes the agent's location in the grid world with as many elements as there are the grid locations. Therefore it has cardinality **$dim_x \times dim_y$** and the tuples of **$(x, y)$** coordinate locations are mapped to linear indices by using the function **$y \times dim_x+x$** (`CoordToIndex` method of the class `Grid`). It follows an example for the grid world of size **$7 \times 5$**
 <img src=s0.png width=300>
 
 2. Cue2 location: **$S^1$** has cardinality **$4$**, encoding in which of the four possible location Cue 2 is actually located (**$[L1, L2, L3, L4]$**).
