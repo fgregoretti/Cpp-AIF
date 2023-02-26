@@ -211,6 +211,7 @@ public:
 ```
 
 Fill out **$A^0$** making the location observation only depending on the location state:
+
 ```c++
 template <typename T, std::size_t N>
 void _likelihood<T,N>::Observe(std::vector<int> num_states)
@@ -227,6 +228,7 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states)
 ```
 
 Fill out **$A^1$** making the cue1 observation depending on both the agent being at cue1 location and the location of cue2:
+
 ```c++
 /* cue1 observation */
 template <typename T, std::size_t N>
@@ -252,7 +254,9 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states,
     }
 }
 ```
+
 Fill out **$A^2$** making cue2 observation depending on both the agent's presence at correct cue2 location and the reward location:
+
 ```c++
 /* cue2 observation */
 template <typename T, std::size_t N>
@@ -280,7 +284,9 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
   }
 }
 ```
+
 Fill out **$A^3$** making the reward observation to be contingent upon both the agent's presence at the reward location and the reward location:
+
 ```c++
 /* reward observation  */
 template <typename T, std::size_t N>
