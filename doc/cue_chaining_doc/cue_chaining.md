@@ -209,3 +209,116 @@ public:
                std::vector<Coord> reward_location, T a);
 };
 ```
+
+Fill out **$A^0$** making the location observation only depending on the location state:
+```c++
+template <typename T, std::size_t N>
+void _likelihood<T,N>::Observe(std::vector<int> num_states)
+{
+  this->Zeros();
+
+  /* make the location observation only depend on the location
+     state  */
+  for (int s = 0; s < num_states[0]; s++)
+    for (int j = 0; j < num_states[1]; ++j)
+      for (int k = 0; k < num_states[2]; ++k)
+        this->setValue(1,s,s,j,k);
+}
+```
+
+Fill out **$A^1$** making the cue1 observation depending on both the agent being at cue1 location and the location of cue2:
+```c++
+/* cue1 observation */
+template <typename T, std::size_t N>
+void _likelihood<T,N>::Observe(std::vector<int> num_states,
+               Grid<int> grid_, Coord cue1_location,
+               std::vector<Coord> cue2_location)
+{
+  this->Zeros();
+
+  /* make Null the most likely observation everywhere */
+  for (int i = 0; i < num_states[0]; ++i)
+    for (int j = 0; j < num_states[1]; ++j)
+      for (int k = 0; k < num_states[2]; ++k)
+        this->setValue(1,0,i,j,k);
+
+  /* make the cue1 signal to be contingent upon both the agent's
+     presence at the cue 1 location and the location of cue2 */
+  for (unsigned int i = 0; i < cue2_location.size(); ++i)
+    for (int k = 0; k < num_states[2]; ++k)
+    {
+      this->setValue(0,0,grid_.CoordToIndex(cue1_location),i,k);
+      this->setValue(1,i+1,grid_.CoordToIndex(cue1_location),i,k);
+    }
+}
+```
+Fill out **$A^2$** making cue2 observation depending on both the agent's presence at correct cue2 location and the reward location:
+```c++
+/* cue2 observation */
+template <typename T, std::size_t N>
+void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
+               std::vector<Coord> cue2_location)
+{
+  this->Zeros();
+
+  /* make Null the most likely observation everywhere */
+  for (int i = 0; i < num_states[0]; ++i)
+    for (int j = 0; j < num_states[1]; ++j)
+      for (int k = 0; k < num_states[2]; ++k)
+        this->setValue(1,0,i,j,k);
+
+  /* if the agent is located at the cue2 location, provide 
+     a signal indicating the location of the reward */
+  for (unsigned int i = 0; i < cue2_location.size(); ++i)
+  {
+    int loc_index = grid_.CoordToIndex(cue2_location[i]);
+
+    for (int k = 0; k < num_states[2]; ++k)
+      this->setValue(0,0,loc_index,i,k);
+    this->setValue(1,1,loc_index,i,0);
+    this->setValue(1,2,loc_index,i,1);
+  }
+}
+```
+Fill out **$A^3$** making the reward observation to be contingent upon both the agent's presence at the reward location and the reward location:
+```c++
+/* reward observation  */
+template <typename T, std::size_t N>
+void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
+               std::vector<Coord> reward_location, T a)
+{
+  this->Zeros();
+
+  /* make Null the most likely observation everywhere */
+  for (int i = 0; i < num_states[0]; ++i)
+    for (int j = 0; j < num_states[1]; ++j)
+      for (int k = 0; k < num_states[2]; ++k)
+      {
+        this->setValue(a,0,i,j,k);
+        this->setValue((1-a)/2,1,i,j,k);
+        this->setValue((1-a)/2,2,i,j,k);
+      }
+
+  int reward_first_index = grid_.CoordToIndex(reward_location[0]);
+  int reward_second_index = grid_.CoordToIndex(reward_location[1]);
+
+  /* fill out the contingences arising when the agent is located
+     in the reward location identified as 'first' */
+  for (int j = 0; j < num_states[1]; ++j)
+  {
+    this->setValue(a,1,reward_first_index,j,0);
+        this->setValue(a,2,reward_first_index,j,1);
+    for (int k = 0; k < num_states[2]; ++k)
+      this->setValue((1-a)/2,0,reward_first_index,j,k);
+  }
+  /* fill out the contingences arising when the agent is located
+     in the reward location identified as 'second' */
+  for (int j = 0; j < num_states[1]; ++j)
+  {
+    this->setValue(a,1,reward_second_index,j,1);
+    this->setValue(a,2,reward_second_index,j,0);
+        for (int k = 0; k < num_states[2]; ++k)
+      this->setValue((1-a)/2,0,reward_second_index,j,k);
+  }
+}
+```
