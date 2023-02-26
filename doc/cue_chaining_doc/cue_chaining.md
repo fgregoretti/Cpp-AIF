@@ -11,7 +11,7 @@ The optimal strategy to maximize reward while minimizing risk in this task invol
 ## 2. The 2D grid world
 To create the physical environment inhabited by the agent we defined a 2D grid world within a specific class `Grid` (header file [`grid.hpp`](../../examples/grid.hpp)). Locations on the grid are identified using **$(x, y)$** tuples, which correspond to a specific row and column, respectively, on the grid.
 
-Let's create a grid world with dimensions **$7 \times 5$**. To this purpose we can write a function whose parameters are `Grid<int> grid_(size_x, size_y)`, `Coord cue1_pos_`, `std::vector<Coord> cue2_pos_`, `Coord start_position_`, `std::vector<Coord> reward_pos_`, respectively the `Grid` object, the Cue 1 location, the vector of four Cue2 locations, the agent starttinlocation, and the vector of the reward locations, as follows:
+Let's create a grid world with dimensions **$7 \times 5$**. To this purpose we can write a function whose parameters are `Grid<int> grid_(size_x, size_y)`, `Coord cue1_pos_`, `std::vector<Coord> cue2_pos_`, `Coord start_position_`, `std::vector<Coord> reward_pos_`, `unsigned int reward`, respectively the `Grid` object, the Cue 1 location, the vector of four Cue2 locations, the agent start location, the vector of the reward locations, and the variable indicating where the positive reward is located, as follows:
 
 ```c++
 void Init_7_5(Grid<int>& grid_, Coord& cue1_pos_,
@@ -418,4 +418,32 @@ In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) w
   softmax<FLOAT_TYPE>(C4);
   Priors<FLOAT_TYPE>* _C4 = new Priors<FLOAT_TYPE>(C4);
   __C.push_back(_C4);
+```
+
+### True Initial State
+If we set up the true Cue 2 location and the location of the positive reward:
+```c++
+unsigned int cue2 = 0;
+unsigned int reward = 0;
+```
+we can set up the true initial State accrodingly. We define a vector of object `States`
+
+```c++
+  std::vector<States*> __S;
+
+  States *_s1 = new States(T);
+  _s1->Zeros();
+  int start_state = grid_.CoordToIndex(start_position_);
+  _s1->Set(start_state);
+  __S.push_back(_s1);
+
+  States *_s2 = new States(T);
+  _s2->Zeros();
+  _s2->Set(cue2);
+  __S.push_back(_s2);
+
+  States *_s3 = new States(T);
+  _s3->Zeros();
+  _s3->Set(reward);
+  __S.push_back(_s3);
 ```
