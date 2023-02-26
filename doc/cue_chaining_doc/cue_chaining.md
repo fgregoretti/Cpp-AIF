@@ -322,3 +322,33 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
   }
 }
 ```
+
+In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) we wrote:
+
+```c++
+  std::vector<std::vector<likelihood<FLOAT_TYPE,4>*>> __A;
+
+  std::vector<likelihood<FLOAT_TYPE,4>*> _a1;
+  _likelihood<FLOAT_TYPE,4> *__a1 = new _likelihood<FLOAT_TYPE,4>(Ns[0],Ns[0],Ns[1],Ns[2]);
+  __a1->Observe(Ns);
+  _a1.push_back((likelihood<FLOAT_TYPE,4> *) __a1);
+  __A.push_back(_a1);
+
+  std::vector<likelihood<FLOAT_TYPE,4>*> _a2;
+  _likelihood<FLOAT_TYPE,4> *__a2 = new _likelihood<FLOAT_TYPE,4>(5,Ns[0],Ns[1],Ns[2]);
+  __a2->Observe(Ns, grid_, cue1_pos_, cue2_pos_);
+  _a2.push_back((likelihood<FLOAT_TYPE,4> *) __a2);
+  __A.push_back(_a2);
+
+  std::vector<likelihood<FLOAT_TYPE,4>*> _a3;
+  _likelihood<FLOAT_TYPE,4> *__a3 = new _likelihood<FLOAT_TYPE,4>(3,Ns[0],Ns[1],Ns[2]);
+  __a3->Observe(Ns, grid_, cue2_pos_);
+  _a3.push_back((likelihood<FLOAT_TYPE,4> *) __a3);
+  __A.push_back(_a3);
+  
+    std::vector<likelihood<FLOAT_TYPE,4>*> _a4;
+  _likelihood<FLOAT_TYPE,4> *__a4 = new _likelihood<FLOAT_TYPE,4>(3,Ns[0],Ns[1],Ns[2]);
+  __a4->Observe(Ns, grid_, reward_pos_, 0.9);
+  _a4.push_back((likelihood<FLOAT_TYPE,4> *) __a4);
+  __A.push_back(_a4);
+```
