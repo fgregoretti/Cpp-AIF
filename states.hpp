@@ -8,7 +8,7 @@
 class States {
 protected:
   unsigned int T;
-public:
+private:
   unsigned int *id;
 
 public:
@@ -25,24 +25,34 @@ public:
       id[i] = 0;
   }
 
-  void StateSet(unsigned int val, unsigned int t)
+  void Set(unsigned int val, unsigned int t)
   {
     id[t] = val;
   }
 
-  void StateSet(unsigned int val)
+  void Set(unsigned int val)
   {
     id[0] = val;
   }
 
-  unsigned int StateFind(unsigned int t)
+  unsigned int Get(unsigned int t)
   {
     return id[t];
   }
 
-  unsigned int StateFind()
+  unsigned int Get()
   {
     return id[0];
+  }
+
+  inline unsigned int StateFind(unsigned int t)
+  {
+    return Get(t);
+  }
+
+  inline unsigned int StateFind()
+  {
+    return Get();
   }
 
   /* copy constructor by passing the object */

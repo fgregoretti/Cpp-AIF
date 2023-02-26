@@ -44,7 +44,6 @@ namespace detail
         : s{}
     {
       t = NULL;
-      eye = false;
     }
 
     likelihood(decltype(Iseq)... size)
@@ -52,7 +51,6 @@ namespace detail
     {
       t = new T[mult(s)];
       memset(t, 0, mult(s)*sizeof(T));
-      eye = false;
     }
 
     ~likelihood()
@@ -77,6 +75,11 @@ namespace detail
       return t[i];
     }
 
+    void setValue(T value, decltype(Iseq)... i)
+    {
+      t[index({{ i... }})] = value;
+    }
+
     void Zeros()
     {
       for (std::size_t i = 0; i < mult(s); ++i)
@@ -86,16 +89,14 @@ namespace detail
     /* two dimentional identity array */
     void Eye()
     {
-      //std::cout << "s.size() = " << s.size() << std::endl;
       assert(s.size()==2);
-      eye = true;
-      //assert(s[0] == s[1]);
+      assert(s[0] == s[1]);
 
-      //for (std::size_t i = 0; i < mult(s); ++i)
-      //  t[i] = 0.0;
+      for (std::size_t i = 0; i < mult(s); ++i)
+        t[i] = 0.0;
 
-      //for (std::size_t i = 0; i < s[0]; ++i)
-      //  t[s[0]*i+i]=1;
+      for (std::size_t i = 0; i < s[0]; ++i)
+        t[s[0]*i+i]=1;
     }
 
     /* add a constant value to all elements */
@@ -188,9 +189,6 @@ namespace detail
     /* index of first dimension with maximum value in t(:,a[0],...,a[Nf-1]) */
     int MaxIndex(const std::vector<std::size_t>& a) const
     {
-      if (eye)
-        return a[0];
-
       assert(a.size()==s.size()-1);
 
 #ifdef _OPENMP
@@ -286,7 +284,6 @@ namespace detail
         : s(ia)
     {
       t = new T[mult(ia)];
-      eye = false;
     }
 
     /* return a new object obtained by multiplying each element of the
@@ -491,14 +488,6 @@ namespace detail
     and store them in the vector p */
     void find(std::vector<int> sq, std::vector<T> &p)
     {
-      if (eye)
-      {
-        for (std::size_t k = 0; k < p.size(); ++k)
-          p.at(k) = (sq[0] == (int)k ) ? 1 : 0;
-
-        return;
-      }
-
 #ifdef _OPENMP
       #pragma omp parallel for
 #endif
@@ -513,9 +502,6 @@ namespace detail
       }
     }
  
-    T *t;
-    bool eye;
-
   private:
     std::size_t index(const std::array<std::size_t, sizeof...(Iseq)>& a) const
     {
@@ -532,6 +518,7 @@ namespace detail
       return std::accumulate(begin(a), end(a), 1, std::multiplies<std::size_t>{});
     }
  
+    T *t;
     const std::array<std::size_t, sizeof...(Iseq)> s;
   };
 }

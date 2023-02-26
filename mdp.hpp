@@ -15,6 +15,7 @@
 #include "priors.hpp"
 #include "constants.h"
 #include "util.hpp"
+#include "construct_policies.hpp"
 #include "common.h"
 //#ifdef _OPENMP
 //#include "omp.h"
@@ -38,6 +39,9 @@ protected:
   Ty lambda; /* precision update rate */
   Ty gamma;
   unsigned int N; /* number of variational iterations */
+#ifndef FULL
+  unsigned int policy_len;
+#endif
   unsigned int seed;
   std::vector<unsigned int> Ns;
   unsigned int Nu; /* number of hidden controls */
@@ -59,7 +63,9 @@ protected:
   std::vector<std::vector<Ty>> _ut; /* policy expectations */
   std::vector<std::vector<Ty>> _P; /* posterior beliefs about control */
   std::vector<Ty> _W; /* posterior precision */
+#ifdef FULL
   std::vector<unsigned int> _wt; /* indices of allowable policies */
+#endif
 
 public:
   unsigned int Nf;
@@ -76,6 +82,9 @@ public:
       std::vector<std::vector<int>>& __V, /* policies */
       unsigned int T_ = 10, Ty alpha_ = 8, Ty beta_ = 4,
       Ty lambda_ = 0, Ty gamma_ = 1, unsigned int N_ = 4,
+#ifndef FULL
+      unsigned int policy_len_ = 1,
+#endif
       unsigned int seed_ = 0);
 
   virtual int get_st(unsigned int f, unsigned int t, int action);
@@ -130,6 +139,9 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   std::vector<std::vector<int>>& __V,
   unsigned int T_, Ty alpha_, Ty beta_,
   Ty lambda_, Ty gamma_, unsigned int N_,
+#ifndef FULL
+  unsigned int policy_len_,
+#endif
   unsigned int seed_) :
   T(T_),
   alpha(alpha_),
@@ -137,6 +149,9 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   lambda(lambda_),
   gamma(gamma_),
   N(N_),
+#ifndef FULL
+  policy_len(policy_len_),
+#endif
   seed(seed_) {
   Ng = __A.size(); /* number of outcome factors */
   Nf = __S.size(); /* number of hidden-states factors */
@@ -146,11 +161,22 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   {
     _V = __V;
   }
-  Np = __V[0].size();
+  else
+#ifdef FULL
+    _V = construct_policies(Nu, T);
+#else
+    _V = construct_policies(Nu, (int) policy_len);
+#endif
+
+  Np = _V[0].size();
 
 #ifdef DEBUG
   std::cout << "MDP: Nf=" << Nf << " Ng=" << Ng << " Nu=" << Nu << std::endl;
+#ifdef FULL
   for (unsigned int j = 0; j < T; j++)
+#else
+  for (unsigned int j = 0; j < policy_len; j++)
+#endif
   {
     std::cout << "MDP: V[" << j << "] = ";
     for (int val: _V[j]) {
@@ -213,7 +239,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 
     /* transition probabilities (priors) */
     std::vector<Transitions<Ty>*> b1;
-    for (unsigned int j = 0; j < Nu; j++)
+    for (unsigned int j = 0; j < __B[i].size(); j++)
     {
       if (Ns[i] != __B[i][j]->get_size())
       {
@@ -230,7 +256,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
     _B.push_back(b1);
 
 #ifdef DEBUG
-    for (unsigned int j = 0; j < Nu; j++)
+    for (unsigned int j = 0; j < _B[i].size(); j++)
     {
       std::cout << "MDP: _B[" << i << "][" << j << "] = ";
       _B[i][j]->Print();
@@ -361,7 +387,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 
     /* initial outcomes */
     _O.push_back(new States(T));
-    _O[g]->StateSet(q);
+    _O[g]->Set(q);
   }
 
   U.resize(T, -1);
@@ -373,23 +399,29 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   _W.resize(T, 0);
 
   for (unsigned int i = 0; i < Nf; i++)
-    _st[0][i] = _S[i]->id[0];
+    _st[0][i] = _S[i]->Get();
 
   for (unsigned int g = 0; g < Ng; g++)
-    _ot[0][g] = _O[g]->id[0];
+    _ot[0][g] = _O[g]->Get();
 
   generator.seed(seed);
 }
 
 template <typename Ty, std::size_t M>
 int MDP<Ty,M>::get_st(unsigned int f, unsigned int t, int action)
-{                                                                                                                 
-  std::vector<Ty> ps(Ns[f], 0.0);
-
+{
 #ifdef DEBUG
   std::cout << "get_st: t=" << t << " action=" << action << " _S[" << f << "]->StateFind(" << t << ")=" << _S[f]->StateFind(t) << std::endl;
 #endif
-  _B[f][action]->extract_column(_S[f]->StateFind(t),ps);
+
+#ifdef SAMPLE_AS_MAX
+  int act_u = _B[f].size() == 1 ? 0 : action;
+  return _B[f][act_u]->MaxIndex(_S[f]->StateFind(t));
+#else
+  std::vector<Ty> ps(Ns[f], 0.0);
+
+  int act_u = _B[f].size() == 1 ? 0 : action;
+  _B[f][act_u]->extract_column(_S[f]->StateFind(t),ps);
 
 #ifdef DEBUG
   std::cout << "get_st: ps = ";
@@ -400,12 +432,14 @@ int MDP<Ty,M>::get_st(unsigned int f, unsigned int t, int action)
 #endif
 
   return CDFs<Ty>(ps, generateRand());
+#endif
 }
 
 template <typename Ty, std::size_t M>
 void MDP<Ty,M>::logBtimesX(unsigned int f, unsigned int t, std::vector<Ty>& v)
 {
-  _B[f][U[t-1]]->logTxv(&_X[f]->value[(t-1)*Ns[f]], v);
+  int act_ut = _B[f].size() == 1 ? 0 : U[t-1];
+  _B[f][act_ut]->logTxv(&_X[f]->value[(t-1)*Ns[f]], v);
 }
 
 template <typename Ty, std::size_t M>
@@ -460,6 +494,7 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
 
   if (tt > 0)
   {
+#ifdef FULL
     /* retain allowable policies (that are consistent with last action) */
     std::vector<unsigned int> __wt(_wt);
 
@@ -468,12 +503,22 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
     for(unsigned int jj = 0; jj < __wt.size(); jj++)
       if (_V[tt-1][__wt[jj]] == U[tt-1])
         _wt.push_back(__wt[jj]);
+#endif
 
     /* update policy expectations */
     Ty _ut_sum = 0.0;
+
+#ifdef FULL
     for (unsigned int val: _wt)
+#else
+    for (unsigned int val = 0; val < Np; val++)
+#endif
       _ut_sum += _ut[tt-1][val];
+#ifdef FULL
     for (unsigned int val: _wt)
+#else
+    for (unsigned int val = 0; val < Np; val++)
+#endif
       _ut[tt][val] = _ut[tt-1][val] / _ut_sum;
   }
   else
@@ -481,16 +526,20 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
     /* initialise policy expectations */
     for(unsigned int jj = 0; jj < Np; jj++)
     {
+#ifdef FULL
       _wt.push_back(jj);
+#endif
       _ut[tt][jj] = 1. / Np;
     }
   }
 #ifdef DEBUG
+#ifdef FULL
   std::cout << "infer_states: _wt = ";
   for (unsigned int val: _wt) {
     std::cout << val << " ";
   }
   std::cout << std::endl;
+#endif
   for (unsigned int j = 0; j < T; j++)
   {
     std::cout << "infer_states: _ut[" << j << "] = ";
@@ -548,7 +597,12 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
 template <typename Ty, std::size_t M>
 std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
 {
-  unsigned int Np_t = _wt.size();                                                                               
+#ifdef FULL
+  unsigned int Np_t = _wt.size();
+#else
+  unsigned int Np_t = Np;
+#endif
+
   std::vector<Ty> G(Np_t, 0.0); 
 
   for (unsigned int k = 0; k < Np_t; k++)
@@ -562,15 +616,27 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
       for (std::size_t j = 0; j != Ns[i]; ++j)
         x[i][j] = _X[i]->value[tt*Ns[i]+j];
 
+#ifdef FULL
     for (unsigned int j = tt; j < T; j++)
+#else
+    for (unsigned int j = 0; j < policy_len; j++)
+#endif
     {
+#ifdef DEBUG
       std::cout << "infer_policies: tt=" << tt << " k=" << k << " j=" << j << std::endl;
+#endif
       /* transition probability from current state */
       for (unsigned int i = 0; i < Nf; i++)
       {
         /* hidden state belief expected according to the k-th policy */
-        _B[i][_V[j][_wt[k]]]->Txv(x[i], x[i]);
-#ifdef DEBUG                                                                                                      
+#ifdef FULL
+        int act_u = _B[i].size() == 1 ? 0 : _V[j][_wt[k]];
+        _B[i][act_u]->Txv(x[i], x[i]);
+#else
+        int act_u = _B[i].size() == 1 ? 0 : _V[j][k];
+        _B[i][act_u]->Txv(x[i], x[i]);
+#endif
+#ifdef DEBUG
         std::cout << "infer_policies: x[" << i << "] = ";
         for (std::size_t jj = 0; jj != Ns[i]; ++jj)
           std::cout << x[i][jj] << " ";
@@ -581,7 +647,11 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
       /* predicted entropy and divergence */
       for (unsigned int g = 0; g < Ng; g++)
       {
+#ifdef FULL
         int act_t = (_A[g].size() == 1) ? 0 : _V[j][_wt[k]];
+#else
+        int act_t = (_A[g].size() == 1) ? 0 : _V[j][k];
+#endif
         Ty H = 0.0;
 
 #ifdef NO_PRECOMPUTE_ALOGA
@@ -631,7 +701,11 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
     softmax<Ty>(__ut);
 
     for (unsigned int i = 0; i < Np_t; i++)
+#ifdef FULL
       _ut[tt][_wt[i]] = __ut[i];
+#else
+      _ut[tt][i] = __ut[i];
+#endif
 
     /* precision */
     b = lambda*b + (1 - lambda)*(beta - std::inner_product(std::begin(__ut), std::end(__ut), std::begin(G), 0.0));
@@ -646,14 +720,24 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
 #endif
 
   /* posterior expectations (control) */
+#ifdef FULL
   for (unsigned int k = tt; k < T; k++)
+#else
+  unsigned int _T = (tt+policy_len < T) ? tt+policy_len : T;
+  for (unsigned int k = tt; k < _T; k++)
+#endif
     for (unsigned int j = 0; j < Nu; j++)
     {
       _P[k][j] = 0.0;
 
-      for (unsigned int i = 0; i < _wt.size(); i++)
-       if (_V[k][_wt[i]] == (int) j)
+      for (unsigned int i = 0; i < Np_t; i++)
+#ifdef FULL
+        if (_V[k][_wt[i]] == (int) j)
           _P[k][j] += _ut[tt][_wt[i]];
+#else
+        if (_V[k-tt][i] == (int) j)
+          _P[k][j] += _ut[tt][i];
+#endif
     }
 #ifdef DEBUG
   for (unsigned int k = 0; k < T; k++)
@@ -697,7 +781,7 @@ void MDP<Ty,M>::sample_state(unsigned int tt, int action)
     std::cout << "sample_state: _st[" << tt << "][" << i << "]=" << _st[tt][i] << std::endl;
 #endif
 
-    _S[i]->id[tt] = _st[tt][i];
+    _S[i]->Set(_st[tt][i],tt);
   }
 }
 
@@ -715,7 +799,7 @@ void MDP<Ty,M>::sample_observation(unsigned int tt, int action)
     std::cout << "sample_observation: _ot[" << tt << "][" << g << "]=" << _ot[tt][g] << std::endl;
 #endif
 
-    _O[g]->id[tt] = _ot[tt][g];
+    _O[g]->Set(_ot[tt][g],tt);
   }
 }
 
