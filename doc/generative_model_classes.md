@@ -166,3 +166,13 @@ Extract the array elements corresponding to the index tuple sq along dimension f
 **Parameters**
 - `sq` index tuple
 - `f` dimension along which extract elements
+
+```c++
+T *HDot(T **xt, likelihood& l, T *H)
+```
+Multidimensional dot (inner) producT: computer the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$*, along leading dimension of the array and the epistemic value. Returns an array.
+
+**Parameters**
+- `xt` array of vectors
+- `l` array with the products of the array elements by the logarithm of themselves
+- `H` epistemic value
