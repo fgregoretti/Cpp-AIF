@@ -210,4 +210,93 @@ private:
 Transition probabilities matrix class with size of **$Ns$** by **$Ns$** and **$Nnz$** non-zero values, stored in CSR format using three (one-dimensional) arrays (**$col$**, **$row\\_ptr$**, **$data$**). 
 The arrays **$data$** and **$col$** are of length **$Nnz$**, and contain the non-zero values and the column indices of those values respectively. The array **$row\\_ptr$** is of length **$Ns+1$** and encodes the index in **$data$** and **$col$** where the given row starts.
 
+***Constructor:***
+```c++
+Transitions(unsigned int Ns_, unsigned int Nnz_)
+```
 
+**Parameters**
+- `Ns_` size of the matrix
+- `Nnz_` number of non-zero values
+
+***Public methods:***
+```c++
+void SetCol(unsigned int i, unsigned int j)
+```
+Assign a column index to a specific element of the array **$col$**.
+
+**Parameters**
+- `i` column index
+- `j` **$col$** array index
+
+```c++
+void SetRowPtr(unsigned int p, unsigned int i)
+```
+Assign an index to a specific element of the array **$row\\_ptr$**.
+**Parameters**
+- `p` index to be assigned
+- `i` **$row\\_ptr$** array index
+
+```c++
+void SetData(T value, unsigned int i)
+```
+Assign a non-zero value to a specific element of the array **$data$**.
+
+**Parameters**
+- `value` value to assign
+- `i` **$data$** array index
+
+```c++
+void Eye()
+```
+Create a two dimentional identity array.
+
+```c++
+void Norm()
+```
+Normalisation.
+
+```c++
+unsigned int get_size()
+```
+Get matrix size.
+
+```c++
+unsigned int get_nnz()
+```
+Get numbers of non-zero values.
+
+```c++
+T *Txv(T *x)
+```
+Sparse matrix-vector multiplication. Return an array containing the prodcut vector.
+
+**Parameters**
+- `x` array containing the vector to be multiplied by the `Transition` matrix
+
+```c++
+void Txv(T *x, T *y)
+```
+Sparse matrix-vector multiplication.
+
+**Parameters**
+- `x` array containing the vector to be multiplied by the `Transition` matrix
+- `y` array containing the product vector
+- 
+```c++
+void logTxv(T *x, std::vector<T> &y)
+```
+```c++
+void extract_column(unsigned int f, std::vector<T> &s)
+```c++
+int MaxIndex(unsigned int f)
+```
+```c++
+Transitions(std::vector<std::vector<T>> const &matrix)
+```
+```c++
+Transitions(const Transitions<T> &t)
+```
+```c++
+void csc_tocsr(unsigned int col_ptr[], unsigned int row[])
+```
