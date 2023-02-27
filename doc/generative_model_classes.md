@@ -30,7 +30,7 @@ void Zeros()
 Set all array elements to **$0$**.
 
 ```c++
-Set(unsigned int val, unsigned int t)
+void Set(unsigned int val, unsigned int t)
 ```
 Assign a value to a specific element of the array.
 
@@ -39,7 +39,7 @@ Assign a value to a specific element of the array.
 - `t` element of the array where to assign the value
 
 ```c++
-Set(unsigned int val)
+void Set(unsigned int val)
 ```
 Assign a value to first element of the array.
 
@@ -47,7 +47,7 @@ Assign a value to first element of the array.
 - `val` value to assign
 
 ```c++
-Get(unsigned int t)
+unsigned int Get(unsigned int t)
 ```
 Retrieve value of a specific element of the array.
 
@@ -55,7 +55,7 @@ Retrieve value of a specific element of the array.
 - `t` element of the array whose value we are looking for
 
 ```c++
-Get()
+unsigned int Get()
 ```
 Retrive first element array value.
 
@@ -161,7 +161,7 @@ Return a new object obtained by multiplying each element of the array by the log
 ```c++
 T **Dot(std::vector<int> sq, std::size_t f)
 ```
-Extract the array elements corresponding to the index tuple sq along dimension f.
+Extract the array elements corresponding to the index tuple sq along dimension f and store them in a 2D array.
 
 **Parameters**
 - `sq` index tuple
@@ -170,9 +170,28 @@ Extract the array elements corresponding to the index tuple sq along dimension f
 ```c++
 T *HDot(T **xt, likelihood& l, T *H)
 ```
-Multidimensional dot (inner) producT: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value.
+Multidimensional dot (inner) producT: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value. Return an array.
 
 **Parameters**
 - `xt` array of vectors
-- `l` array with the products of the array elements by the logarithm of themselves
+- `l` likelihood with the products of the likelihood elements by the logarithm of themselves
 - `H` epistemic value
+
+```c++
+T *HDot(T **xt, T *H)
+```
+Multidimensional dot (inner) producT: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value. Return an array.
+
+**Parameters**
+- `xt` array of vectors
+- `H` epistemic value
+
+```c++
+void find(std::vector<int> sq, std::vector<T> &p)
+```
+Find the likelihood elements **$t(:,sq[0],...,sq[N_f-1])$** and store them in the vector **$p$**.
+
+**Parameters**
+- `sq` index tuple
+- `p` output vector
+
