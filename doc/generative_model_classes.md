@@ -282,15 +282,33 @@ Sparse matrix-vector multiplication.
 **Parameters**
 - `x` array containing the vector to be multiplied by the `Transitions` matrix
 - `y` array containing the product vector
-- 
+
 ```c++
 void logTxv(T *x, std::vector<T> &y)
 ```
+**$log$**(matrix)-vector multiplication
+
+**Parameters**
+- `x` array containing the vector to be multiplied by the **$log$**(`Transitions` matrix)
+- `y` vector containing the product vector
+
 ```c++
 void extract_column(unsigned int f, std::vector<T> &s)
+```
+Store the **$f-th$** column in vector **$s$**.
+
+**Parameters**
+- `f` column index of the column to store in **$s$**
+- `s` stores the extracted column
+
 ```c++
 int MaxIndex(unsigned int f)
 ```
+Return the index corresponding to the maximum value in the **$f-th$** column
+
+**Parameters**
+- `f` column index where the maximum value has to be found
+
 ```c++
 Transitions(std::vector<std::vector<T>> const &matrix)
 ```
@@ -302,6 +320,11 @@ Constructor by passing a vector of vector (matrix).
 ```c++
 Transitions(const Transitions<T> &t)
 ```
+Copy constructor by passing an instance of `Transitions`.
+
+**Parameters**
+- `t` instance of `Transitions`
+
 ```c++
 void csc_tocsr(unsigned int col_ptr[], unsigned int row[])
 ```
