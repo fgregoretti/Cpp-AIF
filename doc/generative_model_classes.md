@@ -16,7 +16,7 @@ protected:
 private:
   unsigned int *id;
 ```
-integer array (of size T) class 
+Integer array (of size T) class. 
 
 ***Constructor:***
 ```c++
@@ -207,5 +207,7 @@ private:
   unsigned int *row_ptr;
   T *data;
 ```
-Transition probabilities matrix class with size of **$Ns$** by **$Ns$** and **$Nnz$** non-zero values, stored in CSR format using three (one-dimensional) arrays (**$col$**, **$row_ptr$**, **$data$**).
+Transition probabilities matrix class with size of **$Ns$** by **$Ns$** and **$Nnz$** non-zero values, stored in CSR format using three (one-dimensional) arrays (**$col$**, **$row_ptr$**, **$data$**). 
+The arrays **$data$** and **$col$** are of length **$Nnz$**, and contain the non-zero values and the column indices of those values respectively. The array **$row_ptr$** is of length **$Ns+1$** and encodes the index in **$data$** and **$col$** where the given row starts.
+
 
