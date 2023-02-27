@@ -9,6 +9,8 @@ Hidden States and Observations are represented as instances of the [States](#cla
 
 **$\bf{B}$** arrays are represented as istances of the [Transitions](#template-typename-t-class-transitions) class.
 
+**$\bf{C}$** arrays are represented as istances of the [Priors](#template-typename-t-class-priors) class.
+
 ## `class States`
 ```c++
 protected:
@@ -333,3 +335,39 @@ Convert matrix stored in CSC format to CSR.
 **Parameters**
 - `col_ptr` array storing column pointers of CSC format
 - `row` array storing row indices of CSC format
+
+## `template <typename T> class Priors`
+```c++
+protected:
+  unsigned int Ns;
+private:
+  T *value;
+```
+Template priors array class: `T` is the template argument which is a placeholder for the data type used. **$Ns$** is the size of the array stored in `value`.
+
+***Constructor:***
+```c++
+Priors(unsigned int Ns_)
+```
+
+**Parameters**
+- `Ns_` size of the array
+
+***Public methods:***
+```c++
+void setValue(T val, unsigned int i)
+```
+Assign a value to a specific element of the array.
+
+**Parameters**
+- `val` value to assign
+- `i` element of the array where to assign the value
+
+```c++
+T getValue(unsigned int i)
+```
+Return the **$i-th$** array element.
+
+**Parameters**
+- `i` array element to be retrieve
+
