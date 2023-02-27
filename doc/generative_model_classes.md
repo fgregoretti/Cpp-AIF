@@ -101,38 +101,64 @@ void Norm()
 ```
 Normalisation.
 
+```c++
 void sum(const likelihood<T,seq<Iseq...>>& b)
+```
 Sum of this object and likelihood object given as a parameter.
+**Parameters**
 b likelihood instance to sum
 
+```c++
 const std::size_t get_order()
-return order (rank)
+```
+Return order (rank).
 
+```c++
 const std::size_t get_firstdimension()
-return size of first dimension
+```
+Return size of first dimension.
 
+```c++
 std::size_t *get_dimensions()
-return array with sizes for each dimension
+```
+Return array with sizes for each dimension.
 
+
+```c++
 const std::size_t get_tnc()
-return total number of components
+```
+Return total number of elements.
 
+```c++
 int MaxIndex(const std::vector<std::size_t>& a) const
-index of first dimension with maximum value in **$t(:,a[0],...,a[Nf-1])$**.
-a
+```
+Return the index of first dimension with maximum value in **$t(:,a[0],...,a[Nf-1])$**.
+**Parameters**
+- `a` index tuple 
 
+```c++
 likelihood(std::vector<std::vector<T>> const &matrix)
-constructor by passing a vector of vector (matrix).
-matrix
+```
+Constructor by passing a vector of vector (matrix).
+**Parameters**
+- `matrix` matrix used to construct a new `likelihood` instance.
   
+```c++
 likelihood(const std::array<std::size_t, sizeof...(Iseq)>& ia)
-copy constructor by passing the index array
-ia
+```
+Copy constructor by passing the index array.
+**Parameters**
+- `ia` index array
   
+```c++
 likelihood AlogA()
-return a new object obtained by multiplying each element of the array by the logarithm of itself
-  
+```
+Return a new object obtained by multiplying each element of the array by the logarithm of itself.
+
+```c++
 T **Dot(std::vector<int> sq, std::size_t f)
-extract the array elements corresponding to the index tuple sq along dimension f
-sq index tuples
-dimension along which extract elements
+```
+Extract the array elements corresponding to the index tuple sq along dimension f.
+**Parameters**
+- `sq` index tuple
+- `f` dimension along which extract elements
