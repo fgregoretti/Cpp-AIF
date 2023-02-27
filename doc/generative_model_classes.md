@@ -105,8 +105,9 @@ Normalisation.
 void sum(const likelihood<T,seq<Iseq...>>& b)
 ```
 Sum of this object and likelihood object given as a parameter.
+
 **Parameters**
-b likelihood instance to sum
+- `b` likelihood instance to sum
 
 ```c++
 const std::size_t get_order()
@@ -123,7 +124,6 @@ std::size_t *get_dimensions()
 ```
 Return array with sizes for each dimension.
 
-
 ```c++
 const std::size_t get_tnc()
 ```
@@ -132,7 +132,8 @@ Return total number of elements.
 ```c++
 int MaxIndex(const std::vector<std::size_t>& a) const
 ```
-Return the index of first dimension with maximum value in **$t(:,a[0],...,a[Nf-1])$**.
+Return the index of first dimension with maximum value in **$t(:,a[0],...,a[N_f-1])$**.
+
 **Parameters**
 - `a` index tuple 
 
@@ -140,6 +141,7 @@ Return the index of first dimension with maximum value in **$t(:,a[0],...,a[Nf-1
 likelihood(std::vector<std::vector<T>> const &matrix)
 ```
 Constructor by passing a vector of vector (matrix).
+
 **Parameters**
 - `matrix` matrix used to construct a new `likelihood` instance.
   
@@ -147,6 +149,7 @@ Constructor by passing a vector of vector (matrix).
 likelihood(const std::array<std::size_t, sizeof...(Iseq)>& ia)
 ```
 Copy constructor by passing the index array.
+
 **Parameters**
 - `ia` index array
   
@@ -159,6 +162,7 @@ Return a new object obtained by multiplying each element of the array by the log
 T **Dot(std::vector<int> sq, std::size_t f)
 ```
 Extract the array elements corresponding to the index tuple sq along dimension f.
+
 **Parameters**
 - `sq` index tuple
 - `f` dimension along which extract elements
