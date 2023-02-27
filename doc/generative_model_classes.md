@@ -280,7 +280,7 @@ void Txv(T *x, T *y)
 Sparse matrix-vector multiplication.
 
 **Parameters**
-- `x` array containing the vector to be multiplied by the `Transition` matrix
+- `x` array containing the vector to be multiplied by the `Transitions` matrix
 - `y` array containing the product vector
 - 
 ```c++
@@ -294,9 +294,19 @@ int MaxIndex(unsigned int f)
 ```c++
 Transitions(std::vector<std::vector<T>> const &matrix)
 ```
+Constructor by passing a vector of vector (matrix).
+
+**Parameters**
+- `matrix` matrix used to construct a new `Transitions` instance.
+
 ```c++
 Transitions(const Transitions<T> &t)
 ```
 ```c++
 void csc_tocsr(unsigned int col_ptr[], unsigned int row[])
 ```
+Convert matrix stored in CSC format to CSR.
+
+**Parameters**
+- `col_ptr` array storing column pointers of CSC format
+- `row` array storing row indices of CSC format
