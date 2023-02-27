@@ -269,7 +269,7 @@ Get numbers of non-zero values.
 ```c++
 T *Txv(T *x)
 ```
-Sparse matrix-vector multiplication. Return an array containing the prodcut vector.
+Sparse matrix-vector multiplication. Return an array containing the product vector.
 
 **Parameters**
 - `x` array containing the vector to be multiplied by the `Transition` matrix
