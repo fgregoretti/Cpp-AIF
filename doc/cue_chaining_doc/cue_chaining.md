@@ -426,7 +426,7 @@ If we set up the true Cue 2 location and the location of the positive reward:
 unsigned int cue2 = 0;
 unsigned int reward = 0;
 ```
-we can set up the true initial State accrodingly. We define a vector of object `States`
+we can set up the true initial State accordingly. We define a vector of object `States`
 
 ```c++
   std::vector<States*> __S;
