@@ -207,7 +207,7 @@ private:
   unsigned int *row_ptr;
   T *data;
 ```
-Transition probabilities matrix class with size of **$Ns$** by **$Ns$** and **$Nnz$** non-zero values, stored in CSR format using three (one-dimensional) arrays (**$col$**, **$row\\_ptr$**, **$data$**). 
+Template transition probabilities matrix class: `T` is the template argument which is a placeholder for the data type used. Transition matrix has size of **$Ns$** by **$Ns$** with **$Nnz$** non-zero values and is stored in CSR format using three (one-dimensional) arrays (**$col$**, **$row\\_ptr$**, **$data$**). 
 The arrays **$data$** and **$col$** are of length **$Nnz$**, and contain the non-zero values and the column indices of those values respectively. The array **$row\\_ptr$** is of length **$Ns+1$** and encodes the index in **$data$** and **$col$** where the given row starts.
 
 ***Constructor:***
