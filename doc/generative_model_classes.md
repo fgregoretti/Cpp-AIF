@@ -7,7 +7,7 @@ Hidden States and Observations are represented as instances of the [States](#cla
 
 **$\bf{𝐀}$** arrays are represented as istances of the [likelihood](#template-typename-t-typename-s-class-likelihood) class.
 
-**$\bf{B}$** arrays are represented as istances of the [Transitions](#class-transitions) class.
+**$\bf{B}$** arrays are represented as istances of the [Transitions](#template-typename-t-class-transitions) class.
 
 ## `class States`
 ```c++
