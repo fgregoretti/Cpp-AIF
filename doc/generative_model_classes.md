@@ -197,3 +197,15 @@ Find the likelihood elements **$t(:,sq[0],...,sq[N_f-1])$** and store them in th
 - `sq` index tuple
 - `p` output vector
 
+## `template <typename T> class Transitions`
+```c++
+protected:
+  unsigned int Ns;
+  unsigned int Nnz;
+private:
+  unsigned int *col;                                                              
+  unsigned int *row_ptr;
+  T *data;
+```
+Transition probabilities matrix class with size of **$Ns$** by **$Ns$** and **$Nnz$** non-zero values, stored in CSR format using three (one-dimensional) arrays (**$col$**, **$row_ptr$**, **$data$**).
+
