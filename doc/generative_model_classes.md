@@ -74,7 +74,7 @@ template likelihood multidimensional array class: `T` is the template argument w
 likelihood(decltype(Iseq)... size)
 ```
 **Parameters**
-- `decltype(Iseq)... size` integer tuple 
+- `size` integer sequence of the size in ecah dimension 
 
 ***Public methods:***
 ```c++
