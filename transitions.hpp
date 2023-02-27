@@ -18,7 +18,7 @@ class Transitions {
 protected:
   unsigned int Ns;
   unsigned int Nnz;
-public:
+private:
   unsigned int *col;
   unsigned int *row_ptr;
   T *data;
@@ -42,6 +42,21 @@ public:
     col = new unsigned int[Nnz_];
     row_ptr = new unsigned int[Ns_+1];
     data = new T[Nnz_];
+  }
+
+  void SetCol(unsigned int i, unsigned int j)
+  {
+    col[j] = i;
+  }
+
+  void SetRowPtr(unsigned int p, unsigned int i)
+  {
+    row_ptr[i] = p;
+  }
+
+  void SetData(T value, unsigned int i)
+  {
+    data[i] = value;
   }
 
   void Eye()
@@ -158,28 +173,6 @@ public:
 
       y[i] = y[i] + t;
     }
-  }
-
-  /* sparse matrix-vector multiplication */
-  std::vector<T> Txv(std::vector<T>& x)
-  {
-    std::vector<T> y;
-    y.resize(Ns);
-
-    for(unsigned int j = 0; j < Ns; j++)
-      y.at(j) = 0.0;
-
-    for(unsigned int j = 0; j < Ns; j++)
-    {
-      T t = 0.0;
-
-      for(unsigned int i = row_ptr[j]; i < row_ptr[j+1]; i++)
-        t = t + data[i]*x[col[i]];
-
-      y.at(j) = t;
-    }
-
-    return y;
   }
 
   /* store the f-th column in vector s */
