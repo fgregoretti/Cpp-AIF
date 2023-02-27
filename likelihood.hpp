@@ -149,7 +149,7 @@ namespace detail
       }
     }
 
-    /* sum of this obejct and likelihood object given as a parameter */
+    /* sum of this object and likelihood object given as a parameter */
     void sum(const likelihood<T,seq<Iseq...>>& b)
     {
 #ifdef _OPENMP
@@ -180,7 +180,7 @@ namespace detail
       return res;
     }
 
-    /* return total number of components */
+    /* return total number of elements */
     const std::size_t get_tnc()
     {
       return mult(s);
@@ -287,7 +287,7 @@ namespace detail
     }
 
     /* return a new object obtained by multiplying each element of the
-    likelihood given as a parameter by the logarithm of itself*/
+    array by the logarithm of itself*/
     likelihood AlogA()
     {
       likelihood a(s); 
@@ -302,12 +302,8 @@ namespace detail
     }
 
     /* multidimensional dot (inner) product
-    inner product obtained by summing the products of
-    the likelihood and the vectors with one 1-element 
-    with position as listed in sq, along dimension f
-    just pick up the likelihood elements corresponding
-    to the 1-element positions, as listed in sq, along
-    dimension f */
+    extract the array elements corresponding
+    to the index tuple sq along dimension f */
     T **Dot(std::vector<int> sq, std::size_t f)
     {
       T **_Ag = 0;
@@ -347,7 +343,7 @@ namespace detail
     inner product obtained by summing the products of
     the likelihood and the vectors xt[i], i=0,...,Nf-1,
     along leading dimension of the likelihood and
-    epistemic value of the whole likelihood */
+    epistemic value */
     T *HDot(T **xt, likelihood& l, T *H)
     {
       T *_q = 0;
@@ -450,7 +446,7 @@ namespace detail
       return _q;
     }
 
-    /* epistemic value of the whole likelihood */
+    /* epistemic value */
     T HDot(T **xt)
     {
       T H = 0;
