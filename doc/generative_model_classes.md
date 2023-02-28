@@ -436,12 +436,12 @@ Assign a value to a specific element of the array at time step **$0$**.
 ```c++
 void setValue(Ty val, unsigned int i, unsigned int t_)
 ```
-Assign a value to a specific element of the array at time step **$t_$**.
+Assign a value to a specific element of the array at time step **$t$**.
 
 **Parameters**
 - `val` value to assign
 - `i` element of the array where to assign the value
-- `t_` time step
+- `t_` time step **$t$**
 
 ```c++
 Ty getValue(unsigned int i)
@@ -454,19 +454,19 @@ Return the **$i-th$** array element at time step **$0$**.
 ```c++
 Ty getValue(unsigned int i, unsigned int t_)
 ```
-Return the **$i-th$** array element at time step **$t_$**.
+Return the **$i-th$** array element at time step **$t$**.
 
 **Parameters**
 - `i` array element to be retrieved
-- `t_` time step
+- `t_` time step **$t$**
 
 ```c++
 Ty *getArray(unsigned int t_)
 ```
-Return first pointer to array at time step **$t_$**.
+Return first pointer to array at time step **$t$**.
 
 **Parameters**
-- `t_` time step
+- `t_` time step **$t$**
 
 ```c++
 void Zeros()
