@@ -1,4 +1,8 @@
 # MDP class
+```c++
+template <typename Ty, std::size_t M> class MDP
+```
+
 ***Constructor:***
 ```c++
 MDP(std::vector<Beliefs<Ty>*>& __D,
