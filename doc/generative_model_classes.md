@@ -11,7 +11,7 @@ Hidden States and Observations are represented as instances of the [States](#cla
 
 **$\bf{C}$** arrays are represented as istances of the [Priors](#template-typename-t-class-priors) class.
 
-**$\bf{D}$** arrays are represented as istances of the [Beliefs](#template-typename-t-class-beliefs) class.
+**$\bf{D}$** arrays are represented as istances of the [Beliefs](#template-typename-ty-class-beliefs) class.
 
 ## `class States`
 ```c++
