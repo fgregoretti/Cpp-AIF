@@ -11,6 +11,8 @@ Hidden States and Observations are represented as instances of the [States](#cla
 
 **$\bf{C}$** arrays are represented as istances of the [Priors](#template-typename-t-class-priors) class.
 
+**$\bf{D}$** arrays are represented as istances of the [Beliefs](#template-typename-t-class-beliefs) class.
+
 ## `class States`
 ```c++
 protected:
@@ -369,7 +371,7 @@ T getValue(unsigned int i)
 Return the **$i-th$** array element.
 
 **Parameters**
-- `i` array element to be retrieve
+- `i` array element to be retrieved
 
 ```c++
 void Zeros()
@@ -401,3 +403,113 @@ Copy constructor by passing an instance of `Priors`.
 
 **Parameters**
 - `p` instance of `Priors`
+
+## `template <typename Ty> class Beliefs`
+```c++
+protected:
+  unsigned int Ns;
+  unsigned int T;
+private:
+  Ty *value;
+```
+Beliefs array (Ns by T) class: `Ty` is the template argument which is a placeholder for the data type used. **$Ns \times T$** is the size of the array stored in `value`.
+
+***Constructor:***
+```c++
+Beliefs(unsigned int Ns_, unsigned int T_ = 1)
+```
+
+**Parameters**
+- `Ns_` size of the array for each time step
+- `T_` temporal horizon 
+
+***Public methods:***
+```c++
+void setValue(Ty val, unsigned int i)
+```
+Assign a value to a specific element of the array at time step **$0$**.
+
+**Parameters**
+- `val` value to assign
+- `i` element of the array where to assign the value
+
+```c++
+void setValue(Ty val, unsigned int i, unsigned int t_)
+```
+Assign a value to a specific element of the array at time step **$t_$**.
+
+**Parameters**
+- `val` value to assign
+- `i` element of the array where to assign the value
+- `t_` time step
+
+```c++
+Ty getValue(unsigned int i)
+```
+Return the **$i-th$** array element at time step **$0$**.
+
+**Parameters**
+- `i` array element to be retrieved
+
+```c++
+Ty getValue(unsigned int i, unsigned int t_)
+```
+Return the **$i-th$** array element at time step **$t_$**.
+
+**Parameters**
+- `i` array element to be retrieved
+- `t_` time step
+
+```c++
+Ty *getArray(unsigned int t_)
+```
+Return first pointer to array at time step **$t_$**.
+
+**Parameters**
+- `t_` time step
+
+```c++
+void Zeros()
+```
+Set all array elements to **$0$**.
+
+```c++
+void Ones()
+```
+Set all array elements to **$1$**.
+
+```c++
+void Norm()
+```
+Normalisation.
+
+```c++
+void Log()
+```
+Logarithmic transformation.
+
+```c++
+void NormLog()
+```
+Logarithmic transformation (after normalisation).
+
+```c++
+unsigned int get_size()
+```
+Return size of the array at each time step.
+
+```c++
+Beliefs(std::vector<Ty> D)
+```
+Constructor by passing a vector.
+
+**Parameters**
+- `D` vector used to construct a new `Beliefs` instance.
+
+```c++
+Beliefs(const Beliefs<Ty> &b)
+```
+Copy constructor by passing an instance of `Beliefs`.
+
+**Parameters**
+- `b` instance of `Beliefs`
