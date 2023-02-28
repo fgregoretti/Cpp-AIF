@@ -12,7 +12,7 @@ template <typename T>
 class Priors {
 protected:
   unsigned int Ns;
-public:
+private:
   T *value;
 
 public:
@@ -28,6 +28,16 @@ public:
     this->Ns = Ns_;
 
     value = new T[Ns_];
+  }
+
+  void setValue(T val, unsigned int i)
+  {
+    this->value[i] = val;
+  }
+
+  T getValue(unsigned int i)
+  {
+    return this->value[i];
   }
 
   void Zeros()
