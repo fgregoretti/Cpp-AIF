@@ -371,3 +371,33 @@ Return the **$i-th$** array element.
 **Parameters**
 - `i` array element to be retrieve
 
+```c++
+void Zeros()
+```
+Set all array elements to **$0$**.
+
+```c++
+void NormLog()
+```
+Logarithmic transformation (after normalisation).
+
+```c++
+unsigned int get_size()
+```
+Return size of the array.
+
+```c++
+Priors(std::vector<T> const &v)
+```
+Constructor by passing a vector.
+
+**Parameters**
+- `v` vector used to construct a new `Priors` instance.
+
+```c++
+Priors(const Priors<T> &p)
+```
+Copy constructor by passing an instance of `Priors`.
+
+**Parameters**
+- `p` instance of `Priors`
