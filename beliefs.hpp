@@ -13,7 +13,7 @@ class Beliefs {
 protected:
   unsigned int Ns;
   unsigned int T;
-public:
+private:
   Ty *value;
 
 public:
@@ -31,6 +31,31 @@ public:
     this->T = T_;
 
     value = new Ty[T_*Ns_];
+  }
+
+  void setValue(Ty val, unsigned int i)
+  {
+    this->value[i] = val;
+  }
+
+  void setValue(Ty val, unsigned int i, unsigned int t_)
+  {
+    this->value[t_*Ns+i] = val;
+  }
+
+  Ty getValue(unsigned int i)
+  {
+    return this->value[i];
+  }
+
+  Ty getValue(unsigned int i, unsigned int t_)
+  {
+    return this->value[t_*Ns+i];
+  }
+
+  Ty *getArray(unsigned int t_)
+  {
+    return &(this->value[t_*Ns]);
   }
 
   void Zeros()

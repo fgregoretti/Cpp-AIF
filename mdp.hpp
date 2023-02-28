@@ -226,7 +226,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 #ifdef DEBUG
     std::cout << "MDP: _lnD[" << i << "] = ";
     for (unsigned int e = 0; e < Ns[i]; e++)
-      std::cout << _lnD[i]->value[e] << " ";
+      std::cout << _lnD[i]->getValue(e) << " ";
     std::cout << std::endl;
 #endif
 
@@ -343,7 +343,7 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 #ifdef DEBUG
     std::cout << "MDP: _lnC[" << g << "] = ";
     for (unsigned int e = 0; e < No[g]; e++)
-      std::cout << _lnC[g]->value[e] << " ";
+      std::cout << _lnC[g]->getValue(e) << " ";
     std::cout << std::endl;
 #endif
 
@@ -439,7 +439,7 @@ template <typename Ty, std::size_t M>
 void MDP<Ty,M>::logBtimesX(unsigned int f, unsigned int t, std::vector<Ty>& v)
 {
   int act_ut = _B[f].size() == 1 ? 0 : U[t-1];
-  _B[f][act_ut]->logTxv(&_X[f]->value[(t-1)*Ns[f]], v);
+  _B[f][act_ut]->logTxv(_X[f]->getArray(t-1), v);
 }
 
 template <typename Ty, std::size_t M>
@@ -567,9 +567,9 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
       /* initialise current state expectations */
       for(unsigned int ii = 0; ii < Ns[i]; ii++)
 #ifdef WITHOUT_TRUE_INITIAL_STATE
-        v[ii] = _lnD[i]->value[ii];
+        v[ii] = _lnD[i]->getValue(ii);
 #else
-        v[ii] += _lnD[i]->value[ii];
+        v[ii] += _lnD[i]->getValue(ii);
 #endif
     }
 
@@ -584,11 +584,11 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
 #endif
 
     for (std::size_t j = 0; j != Ns[i]; ++j)
-      _X[i]->value[tt*Ns[i]+j] = v[j];
+      _X[i]->setValue(v[j],j,tt);
 #ifdef DEBUG
     std::cout << "infer_states: _X[" << i << "] = ";
     for (std::size_t j = 0; j != Ns[i]; ++j)
-      std::cout << _X[i]->value[(tt)*Ns[i]+j] << " ";
+      std::cout << _X[i]->getValue(j,tt) << " ";
     std::cout << std::endl;
 #endif
   }
@@ -614,7 +614,7 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
 
     for (unsigned int i = 0; i < Nf; i++)
       for (std::size_t j = 0; j != Ns[i]; ++j)
-        x[i][j] = _X[i]->value[tt*Ns[i]+j];
+        x[i][j] = _X[i]->getValue(j,tt);
 
 #ifdef FULL
     for (unsigned int j = tt; j < T; j++)
@@ -670,7 +670,7 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
 
         for (unsigned int kk = 0; kk < No[g]; kk++)
           if (qo[kk] != 0.0)
-            G[k] += (_lnC[g]->value[kk] - log(qo[kk]))*qo[kk]; /* extrinsic value */
+            G[k] += (_lnC[g]->getValue(kk) - log(qo[kk]))*qo[kk]; /* extrinsic value */
 #ifdef DEBUG
         std::cout << "infer_policies: g=" << g << " G=" << G[k] << std::endl;
 #endif
