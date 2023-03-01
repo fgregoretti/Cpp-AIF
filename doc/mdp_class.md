@@ -20,6 +20,18 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 ```
 
 **Parameters**
-- `__D` agent's initial beliefs
+- `__D` agent's prior over initial states (initial beliefs)
 - `__S` agent's true inital state
 - `__B` transition model
+- `__A` observation model
+- `__C` preferred outcomes
+- `__V` policies
+- `T_` temporal horizon
+- `alpha_` gamma hyperparameter
+- `beta_` gamma hyperparameter
+- `lambda` precision update rate
+- `gamma_`
+- `N_` number of variational iterations
+- `policy_len_` when not compiled with macro FULL is the time length policy, otherwise temporal horizon and time length policy coincide 
+- `seed_` number to initialize a pseudorandom number generator
+
