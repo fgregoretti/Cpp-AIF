@@ -3,7 +3,7 @@
 template <typename Ty, std::size_t M> class MDP
 ```
 
-`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, true inital state **$\bf{S}$** arrays and optionally a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
+`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, true inital state **$S^0$** arrays and optionally a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
  
 ***Constructor:***
 ```c++
