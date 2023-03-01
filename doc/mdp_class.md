@@ -3,7 +3,7 @@
 template <typename Ty, std::size_t M> class MDP
 ```
 
-`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
+`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_ 0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
  
 ***Constructor:***
 ```c++
@@ -45,9 +45,9 @@ Understanding the representation of factorized probability distributions as vect
 
 The A array, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_t$ to observations $\mathbf{o}_t$:
 
-$$ \mathbf{A} = {A^0, A^1, …, A^{N_g} }, \hspace{5mm} A^m = P(o^m_t | s^0_t, s^1_t, …, s^{N_f}_t) $$
+$$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t | s^0_t, s^1_t, …, s^{N_f}_ t,u_t) $$
 
-Therefore, we represent the A array as an object array whose constituent arrays are multidimensional numpy.ndarrays that encode conjunctive relationships between combinations of hidden states and observations.
+Therefore, we represent as a vector  as an object array whose constituent arrays are multidimensional numpy.ndarrays that encode conjunctive relationships between combinations of hidden states and observations.
 
 This is best explained using the example in the original example code at the top of this tutorial. It is custom to build lists of the dimensionalities of the modalities (resp. hidden state factors) of your model, typically using lists named num_obs (for the dimensionalities of the observation modalities) and num_states (dimensionalities of the hidden state factors). These lists can then be used to automatically construct the A array with the correct shape.
 
