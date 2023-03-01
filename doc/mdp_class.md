@@ -3,7 +3,7 @@
 template <typename Ty, std::size_t M> class MDP
 ```
 
-`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, true inital state **$S^0$** arrays and optionally a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
+`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
  
 ***Constructor:***
 ```c++
@@ -37,15 +37,15 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 - `policy_len_` when not compiled with macro FULL is the time length policy, otherwise temporal horizon and time length policy coincide 
 - `seed_` number to initialize a pseudorandom number generator
 
-In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vector (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes] specifically designed to handle active inference data, with an array as member. 
+In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vector (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
 
 Understanding the representation of factorized probability distributions as vector (of vector) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vector of specific class instances to encode the observation and transition models of the agent’s generative model. We represent them as a vector of vector due to the convention of factorizing the observation space into multiple observation factors and the hidden states into multiple hidden state factors and to express dependency from control states **$u$** executable by the agent.
 
-This factorization of observations across modalities and hidden states across hidden state factors, carries forward into the specification of the A and B arrays, the representation of the conditional distributions $P(\mathbf{o}_t|\mathbf{s}t)$ and $P(\mathbf{s}t|\mathbf{s}{t-1}, \mathbf{u}{t-1})$ in pymdp. These two arrays of conditional distributions can also be factorized by modality and factor, respectively.
+**$\bf{A}$** and **$\bf{B}$** represent the conditional distributions **$P(\mathbf{o}_ t|\mathbf{s}_ t, u_ t)$** and **$P(\mathbf{s}_ t|\mathbf{s}_ {t-1}, u_ {t-1})$**. These arrays of conditional distributions can also be factorized by observation and hidden state factor, respectively.
 
 The A array, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_t$ to observations $\mathbf{o}_t$:
 
-$$ \mathbf{A} = {A^1, A^2, …, A^M }, \hspace{5mm} A^m = P(o^m_t | s^1_t, s^2_t, …, s^F_t) $$
+$$ \mathbf{A} = {A^0, A^1, …, A^{N_g} }, \hspace{5mm} A^m = P(o^m_t | s^0_t, s^1_t, …, s^{N_f}_t) $$
 
 Therefore, we represent the A array as an object array whose constituent arrays are multidimensional numpy.ndarrays that encode conjunctive relationships between combinations of hidden states and observations.
 
