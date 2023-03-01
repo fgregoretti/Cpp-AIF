@@ -5,4 +5,4 @@ discrete space and time, using partially-observed Markov Decision Processes
 
 [MDP Class](doc/mdp_class.md)
 
-[Generative model Classes](doc/generative_model_classes.md)
+[custom array Classes](doc/custom_array_classes.md)
