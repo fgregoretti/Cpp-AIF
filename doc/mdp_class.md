@@ -39,9 +39,9 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 
 In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vector (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
 
-Understanding the representation of factorized probability distributions as vector (of vector) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vector of specific class instances to encode the observation and transition models of the agent’s generative model. We represent them as a vector of vector due to the convention of factorizing the observation space into multiple observation factors and the hidden states into multiple hidden state factors and to express dependency from control states **$u$** executable by the agent.
+Understanding the representation of factorized probability distributions as vector (of vector) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vector of specific class instances to encode the observation and transition models of the agent’s generative model. This representation is chosen because the observation space is typically factorized into multiple observation factors, and the hidden states are similarly factorized into multiple hidden state factors. Additionally, this allows for the expression of dependencies on control states **$u$** that the agent can execute.
 
-**$\bf{A}$** and **$\bf{B}$** represent the conditional distributions **$P(\mathbf{o}_ t|\mathbf{s}_ t, u_ t)$** and **$P(\mathbf{s}_ t|\mathbf{s}_ {t-1}, u_ {t-1})$**. These arrays of conditional distributions can also be factorized by observation and hidden state factor, respectively.
+**$\bf{A}$** and **$\bf{B}$** represent the conditional distributions **$P(\mathbf{o}_ t|\mathbf{s}_ t, u_ t)$** and **$P(\mathbf{s}_ t|\mathbf{s}_ {t-1}, u_ {t-1})$**, being $\mathbf{s}_ t$ the hidden states and  $\mathbf{o}_ t$ the observations. These arrays of conditional distributions can also be factorized by observation and hidden state factor, respectively.
 
 **$\bf{A}$**, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_t$ to observations $\mathbf{o}_t$:
 
@@ -49,7 +49,7 @@ $$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t |
 
 where **$N_g$** is the number of observation factors and **$N_f$** is the number of hidden state factors.
 
-Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of class instances `likelihood`. This class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations.
+Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `likelihood` class instances. This class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations.
 
 For example, if **$N_f=3$**, **$N_g=2$**, the number of hidden states for each factor is **$\bf{N_s}=[4,2,3]$** and the number of observations for each factor is **$\bf{N_o}=[3,5]$**, **$A^0_u$** stores the conditional relationships between the hidden states $\mathbf{s}$ and observations within the first factor $o^1_t$, which has dimensionality 3. Therfore **$A^0_u$** is a 4D array of dimensions **$(3, 4, 2, 3)$** – it stores the conditional relationships between each setting of the hidden state factors (which have dimensionalities **$[4, 2, 3]$**) and the observations within the first factor, which has dimensionality **$3$**. Then, each array **$A^m_u$** stores the conditional dependencies between all the hidden state factor combinations (configurations of $s^0, s^1, …, s^{N_f}$) and the observations along factor **$m$**.
 
@@ -60,5 +60,3 @@ likelihood<double,4> *A0 = new likelihood<double,4>(3,4,2,3);
 to create a 4D array of double with dimensions **$(3, 4, 2, 3)$**
 
 Users may desire to create their own customized observation models or at least set them up with appropriate initial values. Typically, in such situations, users begin by initializing the **$A$** arrays with identical multidimensional arrays filled with zeros, using `Zeros` class method. They would then fill out the conditional probability entries “by hand”, using `()` operator or `setValue` class method, according to the task the user is interested in modelling.
-
-For this purpose, utility functions like obj_array_zeros and obj_array_uniform come in handy. These functions takes as inputs list of shapes, where each shape contains the dimensionality (e.g. [2, 3, 4]) of one of the multi-dimensional arrays that will populate the final object array. For example, creating this shape list for the A array, given num_obs and num_states is quite straightforward:
