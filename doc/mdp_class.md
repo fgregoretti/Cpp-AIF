@@ -61,3 +61,18 @@ likelihood<double,4> *A0 = new likelihood<double,4>(3,4,2,3);
 to create a 4D array of double with dimensions **$(3, 4, 2, 3)$**
 
 Users may desire to create their own customized observation models or at least set them up with appropriate initial values. Typically, in such situations, users begin by initializing the **$A$** arrays with identical multidimensional arrays filled with zeros, using `Zeros` class method. They would then fill out the conditional probability entries “by hand”, using `()` operator or `setValue` class method, according to the task the user is interested in modelling.
+
+After having filled out `A0` we define a vector of vector of pointers to `likelihood` objects 
+
+`std::vector<std::vector<likelihood<FLOAT_TYPE,4>*>> A;`
+
+to be passed to `MDP` constructor. We define a vector of pointers to `likelihood` objects
+
+`std::vector<likelihood<FLOAT_TYPE,4>*> a0;`
+
+Assuming **$A^0_u$** is uncontrollable, namely `A0` cannot be changed by **$u$** and is therefore the same for each **$u$**, we just push back  `A0` into `a0` and then `a0` into `A`
+
+```c++
+a0.push_back(A0);
+A.push_back(a0);
+```
