@@ -43,11 +43,13 @@ Understanding the representation of factorized probability distributions as vect
 
 **$\bf{A}$** and **$\bf{B}$** represent the conditional distributions **$P(\mathbf{o}_ t|\mathbf{s}_ t, u_ t)$** and **$P(\mathbf{s}_ t|\mathbf{s}_ {t-1}, u_ {t-1})$**. These arrays of conditional distributions can also be factorized by observation and hidden state factor, respectively.
 
-The A array, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_t$ to observations $\mathbf{o}_t$:
+**$\bf{A}$**, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_t$ to observations $\mathbf{o}_t$:
 
 $$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t | s^0_t, s^1_t, …, s^{N_f}_ t,u_t) $$
 
-Therefore, we represent as a vector  as an object array whose constituent arrays are multidimensional numpy.ndarrays that encode conjunctive relationships between combinations of hidden states and observations.
+where **$N_g$** is the number of observation factors and **$N_f$** is the number of hidden state factors.
+
+Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of class instances `likelihood`. This class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations.
 
 This is best explained using the example in the original example code at the top of this tutorial. It is custom to build lists of the dimensionalities of the modalities (resp. hidden state factors) of your model, typically using lists named num_obs (for the dimensionalities of the observation modalities) and num_states (dimensionalities of the hidden state factors). These lists can then be used to automatically construct the A array with the correct shape.
 
