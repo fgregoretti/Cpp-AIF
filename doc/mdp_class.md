@@ -37,6 +37,7 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 - `policy_len_` when not compiled with macro FULL is the time length policy, otherwise temporal horizon and time length policy coincide 
 - `seed_` number to initialize a pseudorandom number generator
 
+## Vector (of vector) of class instance parameters
 In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vector (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
 
 Understanding the representation of factorized probability distributions as vector (of vector) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vector of specific class instances to encode the observation and transition models of the agent’s generative model. This representation is chosen because the observation space is typically factorized into multiple observation factors, and the hidden states are similarly factorized into multiple hidden state factors. Additionally, this allows for the expression of dependencies on control states **$u$** that the agent can execute.
