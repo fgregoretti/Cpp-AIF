@@ -76,3 +76,7 @@ Assuming **$A^0_u$** is uncontrollable, namely `A0` cannot be changed by **$u$**
 a0.push_back(A0);
 A.push_back(a0);
 ```
+
+Similarly, we can create **$\bf{B}$** that encodes the temporal dependencies between the hidden state factors over time, further conditioned on control states. Mathematically, **$\bf{B}$** can be formulated as:
+
+$$\mathbf{B} = {B^0_u, B^1_U, …, B^{N_f}_ u}, \hspace{5mm} B^f_u = P(s^f_t | s^f_{t-1}, u^f_{t-1})$$
