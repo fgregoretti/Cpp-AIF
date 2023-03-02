@@ -50,7 +50,7 @@ $$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t |
 
 where **$N_g$** is the number of observation factors and **$N_f$** is the number of hidden state factors.
 
-Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `likelihood` class instances. This class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations.
+Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `likelihood` class instances. This class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations, ==eventually further conditioned on actions or control states along observation factor.==
 
 For example, if **$N_f=3$**, **$N_g=2$**, the number of hidden states for each factor is **$\bf{N_s}=[4,2,3]$** and the number of observations for each factor is **$\bf{N_o}=[3,5]$**, **$A^0_u$** stores the conditional relationships between the hidden states $\mathbf{s}$ and observations within the first factor $o^1_t$, which has dimensionality 3. Therefore **$A^0_u$** is a four-dimensional array with dimensions **$(3, 4, 2, 3)$** – it stores the conditional relationships between each setting of the hidden state factors (with dimensionalities of **$[4, 2, 3]$**) and the observations within the first factor, which has dimensionality **$3$**. Then, each array **$A^m_u$** stores the conditional dependencies between all the hidden state factor combinations (configurations of $s^0, s^1, …, s^{N_f}$) and the observations along factor **$m$**.
 
@@ -80,3 +80,9 @@ A.push_back(a0);
 Similarly, we can create **$\bf{B}$** that encodes the temporal dependencies between the hidden state factors over time, further conditioned on control states. Mathematically, **$\bf{B}$** can be formulated as:
 
 $$\mathbf{B} = {B^0_u, B^1_U, …, B^{N_f}_ u}, \hspace{5mm} B^f_u = P(s^f_t | s^f_{t-1}, u^f_{t-1})$$
+
+where $u^f_{t-1}$ denotes the control state for control factor $f$, taken at time $t-1$.
+
+Therefore, we represent it as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. This class handles a matrix of size $Ns[f] \times Ns[f] encoding the conditional dependencies between states for a given factor $f$ at subsequent timepoints,  further conditioned on actions or control states along that factor. This method of construction implies that the hidden state factors are statistically uncorrelated with each other. In other words, the hidden state factor $f$ is influenced solely by its own state at the previous time step, as well as the state of the $f-th$ control factor.
+
+**$B^0_u$** is a transition matrix with dimensions $(4, 4)$. if **$N_u=4$** and assume that, regarding first hidden state factor, control states determine transitions from one state to another
