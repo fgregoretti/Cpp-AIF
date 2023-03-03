@@ -93,7 +93,7 @@ We can use the instruction
 ```c++
 Transitions<double> *B0 = new Transitions<double>(4);
 ```
-to create a transition matrix of double with dimensions **$(4, 4)$** and $4$ non-zero values. `Transitions` matrices are stored in CSR format, therefore the easyest way to design a customized transition model is to build a 2D matrix using vector of vectors and then pass it to the constructor with vector of vectors as parameter. Alternatively it would be possible to use `SetCol`, `SetRowPtr` and `SetData` class methods to fill out the arrays (**$col$**, **$row\\_ ptr$**, **$data$**) used to represent transition matrix in CSR format.
+to create a transition matrix of double with dimensions **$(4, 4)$** and $4$ non-zero values. `Transitions` matrices are stored in CSR format, therefore the easyest way to design a customized transition model is to build a 2D matrix using vector of vectors and then pass it to the constructor with vector of vectors as parameter. Alternatively it would be possible to write a custom function that uses `SetCol`, `SetRowPtr` and `SetData` class methods to fill out the arrays (**$col$**, **$row\\_ ptr$**, **$data$**) used to represent transition matrix in CSR format.
 
 To create **$\bf{B}$** we define a vector of vectors of pointers to `Transitions` objects 
 ```c++
@@ -113,13 +113,11 @@ for (unsigned int a = 0; a < Nu; a++) {
   b0.push_back(B0);
 }
 ```
-
-Analogous instructions are needed to add **$B^1_u$** and **$B^2_u$**.
-
 Then we just push back `b0` into `B`
 
 ```c++
 B.push_back(b0);
-
-
 ```
+
+Analogous instructions are needed to add **$B^1_u$** and **$B^2_u$**.
+
