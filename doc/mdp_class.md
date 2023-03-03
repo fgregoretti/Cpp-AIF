@@ -3,7 +3,7 @@
 template <typename Ty, std::size_t M> class MDP
 ```
 
-`MDP` class allows you to run active inference processes. Firstly, you need to is build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_ 0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
+`MDP` class allows you to run active inference processes. Firstly, you need to build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_ 0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
  
 ***Constructor:***
 ```c++
@@ -44,7 +44,7 @@ Understanding the representation of factorized probability distributions as vect
 
 **$\bf{A}$** and **$\bf{B}$** represent the conditional distributions **$P(\mathbf{o}_ t|\mathbf{s}_ t, u_ t)$** and **$P(\mathbf{s}_ t|\mathbf{s}_ {t-1}, u_ {t-1})$**, being $\mathbf{s}_ t$ the hidden states and  $\mathbf{o}_ t$ the observations. These arrays of conditional distributions can also be factorized by observation and hidden state factor, respectively.
 
-**$\bf{A}$**, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_t$ to observations $\mathbf{o}_t$:
+**$\bf{A}$**, for instance, contains the agent’s observation model, that relates hidden states $\mathbf{s}_ t$ to observations $\mathbf{o}_ t$:
 
 $$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t | s^0_t, s^1_t, …, s^{N_f}_ t,u_t) $$
 
