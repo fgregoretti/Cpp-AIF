@@ -68,7 +68,7 @@ After having filled out `A0` we define a vector of vector of pointers to `likeli
 
 to be passed to `MDP` constructor. We also need to define a vector of pointers to `likelihood` objects
 
-`std::vector<likelihood<FLOAT_TYPE,4>*> a0;`.
+`std::vector<likelihood<FLOAT_TYPE,4>*> a0;`
 
 Assuming **$A^0_u$** is uncontrollable, namely `A0` cannot be changed by **$u$** and is therefore the same for each **$u$**, we just push back  `A0` into `a0` and then `a0` into `A`
 
@@ -101,7 +101,7 @@ std::vector<std::vector<Transitions<double>*>> B;
 ```
 to be passed to `MDP` constructor. We also need to define a vector of pointers to `Transitions` objects
 
-`std::vector<Transitions<FLOAT_TYPE,4>*> b0;`.
+`std::vector<Transitions<FLOAT_TYPE,4>*> b0;`
 
 if **$N_u=4$** and assuming that, regarding first hidden state factor, control states determine transitions from one state to another we need to create a transition matrix for each control state:
 
@@ -120,4 +120,3 @@ B.push_back(b0);
 ```
 
 Analogous instructions are needed to add **$B^1_u$** and **$B^2_u$**.
-
