@@ -37,10 +37,10 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 - `policy_len_` when not compiled with macro FULL is the time length policy, otherwise temporal horizon and time length policy coincide 
 - `seed_` number to initialize a pseudorandom number generator
 
-## Vector (of vector) of class instance parameters
-In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vector (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
+## Vector (of vectors) of class instance parameters
+In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
 
-Understanding the representation of factorized probability distributions as vector (of vector) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vector of specific class instances to encode the observation and transition models of the agent’s generative model. This representation is chosen because the observation space is typically factorized into multiple observation factors, and the hidden states are similarly factorized into multiple hidden state factors. Additionally, this allows for the expression of dependencies on control states **$u$** that the agent can execute.
+Understanding the representation of factorized probability distributions as vector (of vectors) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vectors of specific class instances to encode the observation and transition models of the agent’s generative model. This representation is chosen because the observation space is typically factorized into multiple observation factors, and the hidden states are similarly factorized into multiple hidden state factors. Additionally, this allows for the expression of dependencies on control states **$u$** that the agent can execute.
 
 **$\bf{A}$** and **$\bf{B}$** represent the conditional distributions **$P(\mathbf{o}_ t|\mathbf{s}_ t, u_ t)$** and **$P(\mathbf{s}_ t|\mathbf{s}_ {t-1}, u_ {t-1})$**, being $\mathbf{s}_ t$ the hidden states and  $\mathbf{o}_ t$ the observations. These arrays of conditional distributions can also be factorized by observation and hidden state factor, respectively.
 
@@ -62,7 +62,7 @@ to create a four-dimensional array of double with dimensions **$(3, 4, 2, 3)$**.
 
 Users may desire to create their own customized observation models or at least set them up with appropriate initial values. Typically, in such situations, users begin by initializing the **$A$** arrays with identical multidimensional arrays filled with zeros, using `Zeros` class method. They would then fill out the conditional probability entries “by hand”, using `()` operator or `setValue` class method, according to the task the user is interested in modelling.
 
-After having filled out `A0` we define a vector of vector of pointers to `likelihood` objects 
+After having filled out `A0` we define a vector of vectors of pointers to `likelihood` objects 
 
 `std::vector<std::vector<likelihood<FLOAT_TYPE,4>*>> A;`
 
