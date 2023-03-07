@@ -173,7 +173,7 @@ Next sampled state under the action `action`. When not compiled with macro SAMPL
 
 **Parameters**
 - `t` time step
-- `action` sampled at precious time step
+- `action` sampled at previous time step
 
 ```c++
 void sample_observation(unsigned int t, int action)
@@ -182,4 +182,4 @@ Next observed state under the action `action`.
 
 **Parameters**
 - `t` time step
-- `action` sampled at precious time step
+- `action` sampled at previous time step
