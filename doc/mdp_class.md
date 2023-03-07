@@ -38,7 +38,9 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 - `seed_` number to initialize a pseudorandom number generator
 
 The basic usage is as follows:
-c++```
+
+```c++
+MDP<double,N> *mdp = new MDP<double,N>(__D,__S,__B,__A,__C,__V,T_,<more_params>);
 unsigned int tt = 0;                                                                                       
 while (tt < T)
 {                                                                                             
@@ -53,6 +55,7 @@ while (tt < T)
   tt += 1;                                                                                                 
 }
 ```
+
 ## Vector (of vectors) of class instance parameters
 In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
 
