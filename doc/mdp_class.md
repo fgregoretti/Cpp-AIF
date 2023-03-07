@@ -126,7 +126,7 @@ Analogous instructions are needed to add **$B^1_u$** and **$B^2_u$**.
 ```c++
 void infer_states(unsigned int t)
 ```
-Compute expectations of allowable policies `\_ut` and current state `\_X`
+Compute expectations of allowable policies `\\_ut` and current state `\\_X`
 
 **Parameters**
 - `t` time step
@@ -135,7 +135,7 @@ Compute expectations of allowable policies `\_ut` and current state `\_X`
 std::vector<Ty> infer_policies(unsigned int t)
 ```
 Return value of policies (`std::vector<Ty> G`) 
-Update posterior precision `\_W` and posterior beliefs about control `\_P`
+Update posterior precision `\\_W` and posterior beliefs about control `\\_P`
  
 **Parameters**
 - `t` time step
