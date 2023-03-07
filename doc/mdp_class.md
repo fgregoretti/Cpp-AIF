@@ -126,7 +126,7 @@ Analogous instructions are needed to add **$B^1_u$** and **$B^2_u$**.
 ```c++
 void infer_states(unsigned int t)
 ```
-Compute expectations of allowable policies and currnte state, assigning results to class members `_ut` and `_X`, respectively. `_X[f]->getArray(t)` refers to beliefs about factor `f` expected at timepoint `t`.
+Compute expectations of allowable policies and current state, assigning results to class members `_ut` and `_X`, respectively. `_X[f]->getArray(t)` refers to beliefs about factor `f` expected at timepoint `t`.
 
 **Parameters**
 - `t` time step
@@ -134,9 +134,7 @@ Compute expectations of allowable policies and currnte state, assigning results 
 ```c++
 std::vector<Ty> infer_policies(unsigned int t)
 ```
-Return negative expected free energy of each policy. $\bf{G}$ `std::vector<Ty> G` 
-
-Update class members posterior precision `_W` and posterior beliefs about control `_P`
+Return negative expected free energy of each policy. $\bf{G}$ `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`
  
 **Parameters**
 - `t` time step
@@ -144,7 +142,7 @@ Update class members posterior precision `_W` and posterior beliefs about contro
 ```c++
 int sample_action(unsigned int t)
 ```
-Sample or select next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `_U` with the agent and returns it.
+Sample or select next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
 
 **Parameters**
 - `t` time step
