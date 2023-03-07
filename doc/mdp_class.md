@@ -37,6 +37,22 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 - `policy_len_` when not compiled with macro FULL is the time length policy, otherwise temporal horizon and time length policy coincide 
 - `seed_` number to initialize a pseudorandom number generator
 
+The basic usage is as follows:
+c++```
+unsigned int tt = 0;                                                                                       
+while (tt < T)
+{                                                                                             
+  infer_states(tt);
+  std::vector<Ty> G = infer_policies(tt);
+  int a = sample_action(tt);                                                                               
+  if (tt < T-1)                                                                                            
+  {                                                                                                        
+    sample_state(tt+1, a);                                                                                 
+    sample_observation(tt+1, a);                                                                           
+  }                                                                                                        
+  tt += 1;                                                                                                 
+}
+```
 ## Vector (of vectors) of class instance parameters
 In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
 
