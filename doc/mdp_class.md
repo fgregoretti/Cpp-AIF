@@ -134,7 +134,8 @@ Compute expectations of allowable policies `_ut` and current state `_X`
 ```c++
 std::vector<Ty> infer_policies(unsigned int t)
 ```
-Return value of policies (`std::vector<Ty> G`) 
+Return value of policies $\bf{G}$ `std::vector<Ty> G` 
+
 Update posterior precision `_W` and posterior beliefs about control `_P`
  
 **Parameters**
