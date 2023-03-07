@@ -134,7 +134,7 @@ Compute expectations of allowable policies and current state, assigning results 
 ```c++
 std::vector<Ty> infer_policies(unsigned int t)
 ```
-Return negative expected free energy of each policy. $\bf{G}$ `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`
+Return negative expected free energy $\bf{G}$ of each policy `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`
  
 **Parameters**
 - `t` time step
@@ -142,7 +142,7 @@ Return negative expected free energy of each policy. $\bf{G}$ `std::vector<Ty> G
 ```c++
 int sample_action(unsigned int t)
 ```
-Sample or select next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
+Sample or select (when not compiled with macro BEST_AS_MAX) next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
 
 **Parameters**
 - `t` time step
@@ -150,8 +150,17 @@ Sample or select next action (the action that minimizes expected free energy) fr
 ```c++
 void sample_state(unsigned int t, int action)
 ```
+Next sampled state under the action `action`. When not compiled with macro SAMPLE_AS_MAX ...
 
+**Parameters**
+- `t` time step
+- `action` sampled at precious time step
 
 ```c++
 void sample_observation(unsigned int t, int action)
 ```
+Next observed state under the action `action`.
+
+**Parameters**
+- `t` time step
+- `action` sampled at precious time step
