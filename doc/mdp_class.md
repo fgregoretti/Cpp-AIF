@@ -131,8 +131,9 @@ Compute expectations of allowable policies `\_ut` and current state `\_X`
 **Parameters**
 - `t` time step
 
+```c++
 std::vector<Ty> infer_policies(unsigned int t)
- 
+```
 Return value of policies (`std::vector<Ty> G`) 
 Update posterior precision `\_W` and posterior beliefs about control `\_P`
  
