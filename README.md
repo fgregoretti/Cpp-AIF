@@ -12,3 +12,7 @@ aggiungere una cosa così in mdp class? https://pymdp-rtd.readthedocs.io/en/late
 [MDP Class](doc/mdp_class.md)
 
 [custom array Classes](doc/custom_array_classes.md)
+
+[Demo: T-Maze]
+
+[Demo: Epistemic Chaining] https://github.com/fgregoretti/Cpp-AcI/blob/main/doc/cue_chaining_doc/cue_chaining.md
