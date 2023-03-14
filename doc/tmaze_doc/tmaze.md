@@ -74,3 +74,13 @@ We then fill out **$A^0$** and **$A^1$** accordingly.
   _a2.push_back(&__a2);                                                                                      
   __A.push_back(_a2); 
 ```
+
+We represent the dynamics of the environment (e.g. changes in the location of the agent and changes to the reward condition) as conditional probability distributions. These distributions encode the likelihood of transitions between the states of a given hidden state factor being grouped together into the **$\bf{B}$** array, which is also known as transition distribution. Each matrix **$B^f$** represents the transition probabilities between state-values of a specific hidden state factor with index $f$. These matrices reflect Markovian transition probabilities that encode dynamics, such that the entry $i,j$ in a particular matrix indicates the probability of transitioning to state $i$ at time $t+1$, given that the system was in state $j$ at time $t$.
+
+It is crucial to note that certain hidden state factors can be controlled by the agent. This means that the probability of being in state i at time t+1 is not solely determined by the state at time t, but also by the actions taken (or control states) from the agent's perspective. Consequently, each transition likelihood now incorporates conditional probability distributions over states at time $t+1$, where the conditioning variables comprise both the states at time $t-1$ and the actions at time $t-1$.
+
+For instance, in our scenario, the first hidden state factor (Location) is within the agent's control. Therefore, the corresponding transition likelihoods can be accessed using both the previous state and action indices **$B^0_u$**.
+
+The transition array for the reward condition factor is a "trivial" identity matrix. This implies that the reward condition remains unchanged over time, as it is mapped from its current value to the same value in the next time step.
+
+To account for the conditioning on factors and the conditioning on actions
