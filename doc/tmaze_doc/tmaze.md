@@ -172,6 +172,18 @@ We create the initial beliefs defining a vector of objects `Beliefs`. Specifical
   __D.push_back(d1);
 ```
 
+To ensure that the agent is motivated to choose the arm that maximizes the probability of receiving a reward, we need to give the agent a sense of reward and loss. We can achieve this by setting up the **$\bf{C}$** array, which represents the agent's prior preferences for each observation facor. We initialize the $C^0$ array to all 1s, indicating that the agent has no preference for any particular outcomes. Instead, since the second factor is the Reward modality, with the Reward outcome having an index of 2 and the No Reward outcome having an index of 3, we can assign values to the corresponding entries that reflect the relative preference for one outcome over the other. Specifically, we use relative log-probabilities to encode these preferences.
+
+```c++
+  std::vector<FLOAT_TYPE> C0 = {1., 1., 1., 1.};                                                             
+  softmax<FLOAT_TYPE>(C0)
+  
+  std::vector<FLOAT_TYPE> C1 = {0., 0., c, -c};                                                              
+  softmax<FLOAT_TYPE>(C1);
+```
+
+The ability to modify the agent's prior beliefs and bias it towards observing the Reward outcome more often than the Loss outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation.
+
 ## 6. Introducing the `MDP` class
 
 Within `Cpp-AcI`, we have abstracted many of the computations necessary for active inference into the `MDP` class. This flexible object can be used to store essential elements of the generative model, the agent's current observations and actions, and execute action/perception through functions like `infer_states` and `infer_policies`.
