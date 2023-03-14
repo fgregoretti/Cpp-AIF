@@ -83,7 +83,7 @@ It is crucial to note that certain hidden state factors can be controlled by the
 
 For instance, in our scenario, the first hidden state factor (Location) is within the agent's control. Therefore, the corresponding transition distribution **$B^0_u$** can be accessed using both the previous state and action indices.
 
-Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$**, we can create the four transition distribution matrix as follows:
+Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$** (i.e. there are four actions taking the agent directly to each of the four locations), we can create the four transition distribution matrix as follows:
 
 ```c++
   std::vector<std::vector<FLOAT_TYPE>> B0_0 {
@@ -117,4 +117,31 @@ Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$**,
 
 The transition array for the reward condition factor is a "trivial" identity matrix. This implies that the reward condition remains unchanged over time, as it is mapped from its current value to the same value in the next time step.
 
-To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f$** is the number of hidden state factors, while **$N_u$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in oder to build it own instance we can use the costructor with vector of vectors as parameter and pass it the 2D matrix previously created.
+To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f$** is the number of hidden state factors, while **$N_u$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in oder to build it own instance we can use the costructor with vector of vectors as parameter and pass it the 2D matrices previously created.
+
+```c++
+  std::vector<std::vector<Transitions<FLOAT_TYPE>*>> __B;
+
+  std::vector<Transitions<FLOAT_TYPE>*> _b0;
+  
+  Transitions<FLOAT_TYPE> *__b0 = new Transitions<FLOAT_TYPE>(B0_0);                                         
+  _b0.push_back(__b0)
+  Transitions<FLOAT_TYPE> *__b1 = new Transitions<FLOAT_TYPE>(B0_1);                                         
+  _b0.push_back(__b1);
+  Transitions<FLOAT_TYPE> *__b2 = new Transitions<FLOAT_TYPE>(B0_2);                                         
+  _b0.push_back(__b2);
+  Transitions<FLOAT_TYPE> *__b3 = new Transitions<FLOAT_TYPE>(B0_3);                                         
+  _b0.push_back(__b3)
+  
+  std::vector<Transitions<FLOAT_TYPE>*> _b1;                                                                 
+                                                                                                             
+  std::vector<std::vector<FLOAT_TYPE>> eye {                                                                 
+              { 1., 0. },                                                                                    
+              { 0., 1. }                                                                                     
+          };
+  Transitions<FLOAT_TYPE> *__b = new Transitions<FLOAT_TYPE>(eye);                                         
+  _b1.push_back(__b);
+  
+  __B.push_back(_b0);                                                                                        
+  __B.push_back(_b1);
+```
