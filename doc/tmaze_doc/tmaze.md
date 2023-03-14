@@ -35,7 +35,7 @@ In `Cpp-AcI`, we use a set of `likelihood` class instances to store the set of p
 
 The multidimensional arrays **$A^0$** and **$A^1$** are both 3-dimensional arrays with dimensions **$4 \times 4 \times 2$** and are the same for each action **$u$**.
 
-We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$2$**, and each element will contain a vector of one object `likelihood` **$A$** with size **$4 \times 4 \times 2$**.
+We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$2$**, and each element will contain a vector of one object `likelihood` with size **$4 \times 4 \times 2$**.
 
 ```c++
   std::vector<std::vector<likelihood<FLOAT_TYPE,3>*>> __A;
@@ -117,7 +117,7 @@ Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$** 
 
 The transition array for the reward condition factor is a "trivial" identity matrix. This implies that the reward condition remains unchanged over time, as it is mapped from its current value to the same value in the next time step.
 
-To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f$** is the number of hidden state factors, while **$N_u$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in oder to build it own instance we can use the costructor with vector of vectors as parameter and pass it the 2D matrices previously created.
+To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f=2** is the number of hidden state factors, while **$N_u=4$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in order to build its own instance we can use the costructor with vector of vectors as parameter and pass it the 2D matrices previously created.
 
 ```c++
   std::vector<std::vector<Transitions<FLOAT_TYPE>*>> __B;
