@@ -145,3 +145,35 @@ To account for the conditioning on factors and the conditioning on actions, we r
   __B.push_back(_b0);                                                                                        
   __B.push_back(_b1);
 ```
+
+## 5. The generative model
+
+Let's move forward with setting up the generative model of the agent, which involves the agent's beliefs or assumptions regarding how hidden states generate observations and transition among themselves.
+
+In most Markov Decision Processes (MDPs), the essential components of this generative model are the agent's representation of the observation likelihood and its representation of the transition distribution.
+
+Assuming that the agent has an accurate representation of the rules governing the T-maze, including how hidden states lead to observations, and its ability to control its movements with predictable consequences (i.e. 'noiseless' transitions), the agent will possess a true representation of the environment's "rules," encoded in the arrays **$\bf{A}$** and **$\bf{B}$** of the generative process.
+
+Let’s encode encode the agent's initial beliefs regarding its starting location and reward condition in the prior over hidden states, which is referred to as the **$\bf{D}$** array.
+
+We have to define two arrays $D^0$ and $D^1$, each corresponding to a specific hidden state factor. We will ensure that the agent begins with precise and accurate prior beliefs about its starting location.
+
+```c++
+std::vector<FLOAT_TYPE> D0 = {1., 0., 0., 0.};
+std::vector<FLOAT_TYPE> D1 = {1./2, 1./2};
+```
+We create the initial beliefs defining a vector of objects `Beliefs`. Specifically a vector with size $N_f=2$, and each element will contain an object `Beliefs` with size $4$ and $2$ respectively.
+
+```c++
+  std::vector<Beliefs<FLOAT_TYPE>*> __D;                                                                     
+  Beliefs<FLOAT_TYPE> *d0 = new Beliefs<FLOAT_TYPE>(D0);                                                     
+  __D.push_back(d0);                                                                                         
+  Beliefs<FLOAT_TYPE> *d1 = new Beliefs<FLOAT_TYPE>(D1);                                                     
+  __D.push_back(d1);
+```
+
+## 6. Introducing the `MDP` class
+
+Within `Cpp-AcI`, we have abstracted many of the computations necessary for active inference into the `MDP` class. This flexible object can be used to store essential elements of the generative model, the agent's current observations and actions, and execute action/perception through functions like `infer_states` and `infer_policies`.
+
+To create an instance of the `MDP`, simply call the `MDP` constructor with a list of arguments.
