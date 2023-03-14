@@ -177,7 +177,7 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
 ```c++
   std::vector<FLOAT_TYPE> C0 = {1., 1., 1., 1.};                                                             
   softmax<FLOAT_TYPE>(C0)
-  
+  const FLOAT_TYPE c = 2.;
   std::vector<FLOAT_TYPE> C1 = {0., 0., c, -c};                                                              
   softmax<FLOAT_TYPE>(C1);
 ```
