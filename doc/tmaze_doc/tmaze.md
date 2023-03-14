@@ -75,12 +75,46 @@ We then fill out **$A^0$** and **$A^1$** accordingly.
   __A.push_back(_a2); 
 ```
 
+## 4. Transition distribution
+
 We represent the dynamics of the environment (e.g. changes in the location of the agent and changes to the reward condition) as conditional probability distributions. These distributions encode the likelihood of transitions between the states of a given hidden state factor being grouped together into the **$\bf{B}$** array, which is also known as transition distribution. Each matrix **$B^f$** represents the transition probabilities between state-values of a specific hidden state factor with index $f$. These matrices reflect Markovian transition probabilities that encode dynamics, such that the entry $i,j$ in a particular matrix indicates the probability of transitioning to state $i$ at time $t+1$, given that the system was in state $j$ at time $t$.
 
 It is crucial to note that certain hidden state factors can be controlled by the agent. This means that the probability of being in state i at time t+1 is not solely determined by the state at time t, but also by the actions taken (or control states) from the agent's perspective. Consequently, each transition likelihood now incorporates conditional probability distributions over states at time $t+1$, where the conditioning variables comprise both the states at time $t-1$ and the actions at time $t-1$.
 
-For instance, in our scenario, the first hidden state factor (Location) is within the agent's control. Therefore, the corresponding transition likelihoods can be accessed using both the previous state and action indices **$B^0_u$**.
+For instance, in our scenario, the first hidden state factor (Location) is within the agent's control. Therefore, the corresponding transition distribution **$B^0_u$** can be accessed using both the previous state and action indices.
+
+Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$**, we can create the four transition distribution matrix as follows:
+
+```c++
+  std::vector<std::vector<FLOAT_TYPE>> B0_0 {
+              { 1, 0, 0, 1 },
+              { 0, 1, 0, 0 },
+              { 0, 0, 1, 0 },
+              { 0, 0, 0, 0 }
+          }
+
+  std::vector<std::vector<FLOAT_TYPE>> B0_1 {
+              { 0, 0, 0, 0 },
+              { 1, 1, 0, 1 },
+              { 0, 0, 1, 0 },
+              { 0, 0, 0, 0 },
+          };
+
+  std::vector<std::vector<FLOAT_TYPE>> B0_2 {
+              { 0, 0, 0, 0 },
+              { 0, 1, 0, 0 },
+              { 1, 0, 1, 1 },
+              { 0, 0, 0, 0 },
+          };
+          
+  std::vector<std::vector<FLOAT_TYPE>> B0_3 {
+              { 0, 0, 0, 0 },
+              { 0, 1, 0, 0 },
+              { 0, 0, 1, 0 },
+              { 1, 0, 0, 1 },
+          };
+```
 
 The transition array for the reward condition factor is a "trivial" identity matrix. This implies that the reward condition remains unchanged over time, as it is mapped from its current value to the same value in the next time step.
 
-To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f$** is the number of hidden state factors while **$N_u$** is the number of control states.
+To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f$** is the number of hidden state factors, while **$N_u$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in oder to build it own instance we can use the costructor with vector of vectors as parameter and pass it the 2D matrix previously created.
