@@ -184,8 +184,24 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
 
 The ability to modify the agent's prior beliefs and bias it towards observing the Reward outcome more often than the No Reward outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation.
 
-## 6. Introducing the `MDP` class
+## 6. Policies
+
+We can either create an empty vector of policies and in this case the constructor will generate the policies, or we can build our own vector of policies, for example:
+
+```c++
+  std::vector<std::vector<int>> V {                                                                        
+    { 0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3 },                                     
+    { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 },                                     
+    { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 }                                      
+  }
+```
+
+V is a vector of vectors of  `int` with size $(num_timesteps, num_policies)$ where $num_timesteps$ is the temporal depth of the policy and $num_policies$ is the number of policies.
+
+## 7. Introducing the `MDP` class
 
 Within `Cpp-AcI`, we have abstracted many of the computations necessary for active inference into the `MDP` class. This flexible object can be used to store essential elements of the generative model, the agent's current observations and actions, and execute action/perception through functions like `infer_states` and `infer_policies`.
 
 To create an instance of the `MDP`, simply call the `MDP` constructor with a list of arguments.
+
+## 8. Active Inference
