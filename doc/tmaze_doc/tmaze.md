@@ -199,7 +199,7 @@ In order to set up the state of the environment at the first time step in a Rewa
   __S.push_back(s1)
 ```
 
-`s0` refers to the location, while `s1` refers to the reward condition. We initialize them to all 0s, and we use `Set` method to assign the correspoind true initial state at time step $0$.
+`s0` refers to the location, while `s1` refers to the reward condition. We initialize them to all 0s, and the we use the `Set` method to assign the corresponding true initial state at time step $0$.
 
 ## 6. Policies
 
