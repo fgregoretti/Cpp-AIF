@@ -196,7 +196,7 @@ We can either create an empty vector of policies and in this case the constructo
   }
 ```
 
-V is a vector of vectors of  `int` with size $(num_timesteps, num_policies)$ where $num_timesteps$ is the temporal depth of the policy and $num_policies$ is the number of policies.
+V is a vector of vectors of  `int` with size $(num\_timesteps, num\_policies)$ where $num\_timesteps$ is the temporal depth of the policy and $num\_policies$ is the number of policies.
 
 ## 7. Introducing the `MDP` class
 
