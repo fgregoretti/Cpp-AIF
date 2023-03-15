@@ -184,6 +184,23 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
 
 The ability to modify the agent's prior beliefs and bias it towards observing the Reward outcome more often than the No Reward outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation.
 
+In order to set up the state of the environment at the first time step in a Reward on Left trial assuming the agent starts in the Center location, we define a vector of two `States` object, one for each factor.
+
+```c++
+  unsigned int context = 0;
+  std::vector<States*> __S;
+  States *s0 = new States(T);
+  s0->Zeros();
+  s0->Set(0);
+  __S.push_back(s0);
+  States *s1 = new States(T);
+  s1->Zeros();
+  s1->Set(context);
+  __S.push_back(s1)
+```
+
+`s0` refers to the location, while `s1` refers to the reward condition. We initialize them to all 0s, and we use `Set` method to assign the correspoind true initial state at time step $0$.
+
 ## 6. Policies
 
 We can either create an empty vector of policies and in this case the constructor will generate the policies, or we can build our own vector of policies, for example:
