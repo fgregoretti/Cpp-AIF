@@ -182,7 +182,7 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
   softmax<FLOAT_TYPE>(C1);
 ```
 
-The ability to modify the agent's prior beliefs and bias it towards observing the Reward outcome more often than the Loss outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation.
+The ability to modify the agent's prior beliefs and bias it towards observing the Reward outcome more often than the No Reward outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation.
 
 ## 6. Introducing the `MDP` class
 
