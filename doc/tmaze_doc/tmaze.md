@@ -196,7 +196,7 @@ We can either create an empty vector of policies and in this case the constructo
   }
 ```
 
-V is a vector of vectors of  `int` with size $(num\_timesteps, num\_policies)$ where $num\_timesteps$ is the temporal depth of the policy and $num\_policies$ is the number of policies.
+V is a vector of vectors of  `int` with size **$(num\\_timesteps, num\\_policies)$** where **$num\\_timesteps$** is the temporal depth of the policy and **$num\\_policies$** is the number of policies.
 
 ## 7. Introducing the `MDP` class
 
@@ -204,4 +204,43 @@ Within `Cpp-AcI`, we have abstracted many of the computations necessary for acti
 
 To create an instance of the `MDP`, simply call the `MDP` constructor with a list of arguments.
 
+```c++
+int seed = 0;
+unsigned int T = 3;
+MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,1,seed);
+```
+
 ## 8. Active Inference
+
+We can use the basic active inference  procedure implemented as `MDP` class method
+
+```c++
+template <typename Ty, std::size_t M>
+void MDP<Ty,M>::active_inference()
+{
+  unsigned int tt = 0;
+  while (tt < T)
+  {
+    infer_states(tt);
+
+    /* value of policies (G) */
+    std::vector<Ty> G = infer_policies(tt);
+
+    /* next action (the action that minimises expected free energy) */
+    int a = sample_action(tt);
+
+    /* sampling of next state (outcome) */
+    if (tt < T-1)
+    {
+      /* next sampled state */
+      sample_state(tt+1, a);
+
+      /* next observed state */
+      sample_observation(tt+1, a);
+    }
+
+    tt += 1;
+  }
+}
+```
+
