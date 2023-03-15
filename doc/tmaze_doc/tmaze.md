@@ -244,3 +244,8 @@ void MDP<Ty,M>::active_inference()
 }
 ```
 
+In the main we can call this function like this:
+
+```c++
+mdp->active_inference();
+```
