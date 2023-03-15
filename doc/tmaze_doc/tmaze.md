@@ -250,7 +250,7 @@ calling it in the main like this:
 mdp->active_inference();
 ```
 
-Running the program we obtain the following output:
+Executing the program we obtain the following output:
 
 T=1 Location: [Center] Observation: [Cue Left] Action: [Move to Bottom]
 
