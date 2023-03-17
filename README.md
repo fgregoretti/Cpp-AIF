@@ -13,6 +13,6 @@ aggiungere una cosa così in mdp class? https://pymdp-rtd.readthedocs.io/en/late
 
 [custom array Classes](doc/custom_array_classes.md)
 
-[Demo: T-Maze]
+[Demo: T-Maze](doc/tmaze_doc/tmaze.md)
 
 [Demo: Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md)
