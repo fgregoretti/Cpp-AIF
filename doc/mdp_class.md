@@ -3,7 +3,7 @@
 template <typename Ty, std::size_t M> class MDP
 ```
 
-template `MDP` class: T is the template argument which is a placeholder for the data type used while M is the number of the observation  multidimensional array dimensions. `MDP` class allows you to run active inference processes. Firstly, you need to build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_ 0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
+template `MDP` class: Ty is the template argument which is a placeholder for the data type used while M is the number of the observation  multidimensional array dimensions. `MDP` class allows you to run active inference processes. Firstly, you need to build a generative model in terms of **$\bf{A}$**, **$\bf{B}$**, **$\bf{C}$**, and **$\bf{D}$** arrays, initialize state **$\bf{S}$** arrays by setting up initial states **$\bf{s}_ 0$** and optionally build a vector of policies. if the latter is empty, the constructor will generate the policies. Then you have to pass them as parameters to the `MDP` constructor, and then start running active inference processes using the desired functions of the `MDP` class, like `infer_states`, `infer_policies`, `sample_action`, `sample_state`, and `sample_observation`.
  
 ***Constructor:***
 ```c++
