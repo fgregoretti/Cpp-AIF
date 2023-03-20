@@ -11,6 +11,7 @@ aggiungere una cosa così in mdp class? https://pymdp-rtd.readthedocs.io/en/late
 
 ## Quick-start: Installation and Usage
 In order to use ``cpp-AcI`` to build and develop active inference agents, you have to write your own main program file that have the includes:
+
 ``c++``
 #include "common.h"
 #include "mdp.hpp"
