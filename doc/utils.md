@@ -1,3 +1,5 @@
+# Utility functions
+
 ```c++
 template <typename T> void softmax(std::vector<T>& expectation)
 ```
