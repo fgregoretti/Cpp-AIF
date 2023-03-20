@@ -10,7 +10,7 @@ poi c'è quest'altro tutorial https://pymdp-rtd.readthedocs.io/en/latest/noteboo
 aggiungere una cosa così in mdp class? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/pymdp_fundamentals.html#constructing-factorized-distributions-with-object-arrays
 
 ## Quick-start: Installation and Usage
-In order to use ``cpp-AcI`` to build and develop active inference agents, you have to write your own main program file that have the includes:
+In order to use ``cpp-AcI`` to build and develop active inference agents, you have to write your own main program file that have these includes:
 
 ```c++
 #include "common.h"
