@@ -105,7 +105,7 @@ Create a two dimentional identity array.
 ```c++
 void Norm()
 ```
-Normalisation.
+Normalization.
 
 ```c++
 void sum(const likelihood<T,seq<Iseq...>>& b)
@@ -237,6 +237,7 @@ Assign a column index to a specific element of the array **$col$**.
 void SetRowPtr(unsigned int p, unsigned int i)
 ```
 Assign an index to a specific element of the array **$row\\_ptr$**.
+
 **Parameters**
 - `p` index to be assigned
 - `i` **$row\\_ptr$** array index
@@ -258,7 +259,7 @@ Create a two dimentional identity array.
 ```c++
 void Norm()
 ```
-Normalisation.
+Normalization.
 
 ```c++
 unsigned int get_size()
@@ -381,7 +382,7 @@ Set all array elements to **$0$**.
 ```c++
 void NormLog()
 ```
-Logarithmic transformation (after normalisation).
+Logarithmic transformation (after normalization).
 
 ```c++
 unsigned int get_size()
@@ -481,7 +482,7 @@ Set all array elements to **$1$**.
 ```c++
 void Norm()
 ```
-Normalisation.
+Normalization.
 
 ```c++
 void Log()
@@ -491,7 +492,7 @@ Logarithmic transformation.
 ```c++
 void NormLog()
 ```
-Logarithmic transformation (after normalisation).
+Logarithmic transformation (after normalization).
 
 ```c++
 unsigned int get_size()
