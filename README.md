@@ -3,6 +3,8 @@
 discrete space and time, using partially-observed Markov Decision Processes
 (POMDPs) as a generative model class.
 
+The library implements a multicore parallelisation of the most demanding computational kernels. Note that most of the computational complexity of active inference depends on the multidimensional inner products involved both in expected free energy computation and state estimation.
+
 realizzare un tutorial così? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/active_inference_from_scratch.html
 
 poi c'è quest'altro tutorial https://pymdp-rtd.readthedocs.io/en/latest/notebooks/using_the_agent_class.html
@@ -17,7 +19,7 @@ In order to use ``cpp-AcI`` to build and develop active inference agents, you ha
 #include "mdp.hpp"
 ```
 
-Then compile the main program file with just about any C++ compiler.
+Tested C++ compiler: GNU C++ compiler.
 
 [MDP Class](doc/mdp_class.md)
 
