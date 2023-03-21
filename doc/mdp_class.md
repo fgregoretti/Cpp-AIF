@@ -69,7 +69,7 @@ $$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t |
 
 where **$N_g$** is the number of observation factors and **$N_f$** is the number of hidden state factors.
 
-Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `likelihood` class instances. **$N_u$** is the number of control states. The `likelihood` class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations, ==eventually further conditioned on actions or control states along observation factor.==
+Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of [`likelihood`](custom_array_classes.md#template-typename-t-typename-s-class-likelihood)  class instances. **$N_u$** is the number of control states. The `likelihood` class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations, :warning:eventually further conditioned on actions or control states along observation factor.:warning:
 
 For example, if **$N_f=3$**, **$N_g=2$**, the number of hidden states for each factor is **$\bf{N_s}=[4,2,3]$** and the number of observations for each factor is **$\bf{N_o}=[3,5]$**, **$A^0_u$** stores the conditional relationships between the hidden states $\mathbf{s}$ and observations within the first factor $o^1_t$, which has dimensionality 3. Therefore **$A^0_u$** is a four-dimensional array with dimensions **$(3, 4, 2, 3)$** – it stores the conditional relationships between each setting of the hidden state factors (with dimensionalities of **$[4, 2, 3]$**) and the observations within the first factor, which has dimensionality **$3$**. Then, each array **$A^m_u$** stores the conditional dependencies between all the hidden state factor combinations (configurations of $s^0, s^1, …, s^{N_f}$) and the observations along factor **$m$**.
 
@@ -104,15 +104,15 @@ $$\mathbf{B} = {B^0_u, B^1_U, …, B^{N_f}_ u}, \hspace{5mm} B^f_u = P(s^f_t | s
 
 where $u^f_{t-1}$ denotes the control state for control factor $f$, taken at time $t-1$.
 
-Therefore, we represent it as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. This class handles a matrix of size $Ns[f] \times Ns[f]$ encoding the conditional dependencies between states for a given factor $f$ at subsequent timepoints, further conditioned on actions or control states along that factor. This method of construction implies that the hidden state factors are statistically uncorrelated with each other. In other words, the hidden state factor $f$ is influenced solely by its own state at the previous time step, as well as the state of the $f-th$ control factor.
+Therefore, we represent it as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of [`Transitions`](custom_array_classes.md#template-typename-t-class-transitions) class instances. This class handles a matrix of size $Ns[f] \times Ns[f]$ encoding the conditional dependencies between states for a given factor $f$ at subsequent timepoints, further conditioned on actions or control states along that factor. This method of construction implies that the hidden state factors are statistically uncorrelated with each other. In other words, the hidden state factor $f$ is influenced solely by its own state at the previous time step, as well as the state of the $f-th$ control factor.
 
 If **$N_f=3$** and the number of hidden states for each factor is **$\bf{N_s}=[4,2,3]$**, **$B^0_u$** is a transition matrix with dimensions $(4, 4)$. 
 
 We can use the instruction
 ```c++
-Transitions<double> *B0 = new Transitions<double>(4);
+Transitions<double> *B0 = new Transitions<double>(4,4);
 ```
-to create a transition matrix of double with dimensions **$(4, 4)$** and $4$ non-zero values. `Transitions` matrices are stored in CSR format, therefore the easyest way to design a customized transition model is to build a 2D matrix using vector of vectors and then pass it to the constructor with vector of vectors as parameter. Alternatively it would be possible to write a custom function that uses `SetCol`, `SetRowPtr` and `SetData` class methods to fill out the arrays (**$col$**, **$row\\_ ptr$**, **$data$**) used to represent transition matrix in CSR format.
+to create a transition matrix of double with dimensions **$(4, 4)$** and $4$ non-zero values (first parameter is size of the matrix, while second parameter is number of non-zero values). `Transitions` matrices are stored in CSR format, therefore the easyest way to design a customized transition model is to build a 2D matrix using vector of vectors and then pass it to the constructor with vector of vectors as parameter. Alternatively it would be possible to write a custom function that uses `SetCol`, `SetRowPtr` and `SetData` class methods to fill out the arrays (**$col$**, **$row\\_ ptr$**, **$data$**) used to represent transition matrix in CSR format.
 
 To create **$\bf{B}$** we define a vector of vectors of pointers to `Transitions` objects 
 ```c++
@@ -153,7 +153,7 @@ Compute expectations of allowable policies and current state, assigning results 
 ```c++
 std::vector<Ty> infer_policies(unsigned int t)
 ```
-Return negative expected free energy $\bf{G}$ of each policy `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`
+Return negative expected free energy $\bf{G}$ of each policy `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`.
  
 **Parameters**
 - `t` time step
@@ -161,7 +161,7 @@ Return negative expected free energy $\bf{G}$ of each policy `std::vector<Ty> G`
 ```c++
 int sample_action(unsigned int t)
 ```
-Sample or select (when not compiled with macro BEST_AS_MAX) next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
+[Sample](utils.md#Sampling) or select (when not compiled with macro BEST_AS_MAX) next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
 
 **Parameters**
 - `t` time step
@@ -169,7 +169,7 @@ Sample or select (when not compiled with macro BEST_AS_MAX) next action (the act
 ```c++
 void sample_state(unsigned int t, int action)
 ```
-Next sampled state under the action `action`. When not compiled with macro SAMPLE_AS_MAX ...
+Next [sampled](utils.md#Sampling) state under the action `action`. When not compiled with macro SAMPLE_AS_MAX ... :warning:
 
 **Parameters**
 - `t` time step
