@@ -167,7 +167,7 @@ Return a new object obtained by multiplying each element of the array by the log
 ```c++
 T **Dot(std::vector<int> sq, std::size_t f)
 ```
-Extract the array elements corresponding to the index tuple sq along dimension f and store them in a 2D array.
+Extract the array elements corresponding to the index tuple $sq$ along dimension $f$ and store them in a 2D array.
 
 **Parameters**
 - `sq` index tuple
