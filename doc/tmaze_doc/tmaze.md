@@ -3,16 +3,18 @@
 ## 1. The problem
 In this problem, we examine an agent traversing a T-maze with three arms,
 with the agent's initial position being the central location.
-One of the bottom arms of the maze includes a cue that provides information about the probable location
+The bottom arm of the maze includes a cue that provides information about the probable location
 of a reward in either of the two top arms, referred to as 'Left' or 'Right'.
 
+For the implementation of this problem using ``cpp-AcI`` refer to the file [`main_Tmaze.cpp`](../../main_Tmaze.cpp).
+
 ## 2. The environment
-The environment is described by the joint occurence two distinct 'types' of states at each time step,
+The environment is described by the joint occurence of two distinct 'types' of states at each time step,
 which are referred to as hidden state factors.
 
 The first hidden state factor (location) is a discrete variable with values in $(0,1,2,3)$ that encodes the agent's present location.
 The four vlaues correspond to the $( Center, Left, Right, Bottom )$ location.
-For example, if the agent is in the CUE LOCATION, the current state of this factor would be $S^0 = \left\lbrack \matrix{ 0 & 0 & 0 & 1 } \right\rbrack$.
+For example, if the agent is in the $Bottom$ location, the current state of this factor would be $S^0 = \left\lbrack \matrix{ 0 & 0 & 0 & 1 } \right\rbrack$.
 
 The second hidden state factor (reward condition) is a discrete variable with values in $(0,1)$ that econdes the reward condition of the trial: $( Reward\ on\ Left, Reward\ on\ Right )$. For example, a trial with the Reward on Left condition would be represented as the state $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$.
 
@@ -24,16 +26,16 @@ By examining the probability distributions that map from hidden states to observ
 
 In this T-maze demonstration, the agent's observations consist of two sensory channels or observation factors: Cue (exteroceptive) and Reward (interoceptive).
 
-The exteroceptive outcomes provide cues about location and context (the reward condition of the trial) $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$.
+:warning: The exteroceptive outcomes provide cues about location and context (the reward condition of the trial) $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$.
 
 The interoceptive outcomes denotes different levels of reward $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$.
-When the agent occupies the "Bottom" location, this observation unambiguously signals the reward condition of the trial, and therefore in which arm the Reward observation is more probable.
-When the agent occupies the "Center", the Cue observation will be Cue Right or Cue Left with equal probability.
-The Reward (index 2) and No Reward (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.
+When the agent occupies the $Bottom$ location, this observation unambiguously signals the reward condition of the trial, and therefore in which arm the Reward observation is more probable.
+When the agent occupies the $Center$, the Cue observation will be $Cue Right$ or $Cue Left$ with equal probability.
+The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:
 
-In `Cpp-AcI`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**.
+In `Cpp-AcI`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**. Here we have two hidden state factor with size $4$ and $2$ respectively.
 
-The multidimensional arrays **$A^0$** and **$A^1$** are both 3-dimensional arrays with dimensions **$4 \times 4 \times 2$** and are the same for each action **$u$**.
+Therefore, the multidimensional arrays **$A^0$** and **$A^1$** are both 3-dimensional arrays with dimensions **$4 \times 4 \times 2$** and are the same for each action **$u$**.
 
 We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$2$**, and each element will contain a vector of one object `likelihood` with size **$4 \times 4 \times 2$**.
 
