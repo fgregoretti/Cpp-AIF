@@ -20,6 +20,10 @@ In order to use ``cpp-AcI`` to build and develop active inference agents, you ha
 ```
 
 Tested C++ compiler: GNU C++ compiler.
+The recommended command-line compiler options for `g++` are:
+`-std=c++11 -O3`
+To enable OpenMP-based parallelization adD:
+`-fopenmp`
 
 [MDP Class](doc/mdp_class.md)
 
