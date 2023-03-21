@@ -16,9 +16,9 @@ The first hidden state factor (location) is a discrete variable with values in $
 The four vlaues correspond to the $( Center, Left, Right, Bottom )$ location.
 For example, if the agent is in the $Bottom$ location, the current state of this factor would be $S^0 = \left\lbrack \matrix{ 0 & 0 & 0 & 1 } \right\rbrack$.
 
-The second hidden state factor (reward condition) is a discrete variable with values in $(0,1)$ that econdes the reward condition of the trial: $( Reward\ on\ Left, Reward\ on\ Right )$. For example, a trial with the $Reward on Left$ condition would be represented as the state $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$.
+The second hidden state factor (reward condition) is a discrete variable with values in $(0,1)$ that econdes the reward condition of the trial: $( Reward\ on\ Left, Reward\ on\ Right )$. For example, a trial with the $Reward\ on\ Left$ condition would be represented as the state $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$.
 
-These two hidden state factors are independent of one another. As an example, consider a $Reward on Right$ trial and assume the agent begins in the center location. We can encode the state of the environment at the first time step using the following pair of hidden state vectors $S^0 = \left\lbrack \matrix{ 1 & 0 & 0 & 0\} \right\rbrack$ and $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$. If the agent subsequently moves to the right arm, the hidden state vectors would change to $S^0 = \left\lbrack \matrix{ 0 & 1 & 0 & 0\} \right\rbrack$ and $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$. This illustrates that the two hidden state factors are independent, meaning that the agent's location ($S^0$) can change without affecting the reward condition ($S^1$).
+These two hidden state factors are independent of one another. As an example, consider a $Reward\ on\ Right$ trial and assume the agent begins in the center location. We can encode the state of the environment at the first time step using the following pair of hidden state vectors $S^0 = \left\lbrack \matrix{ 1 & 0 & 0 & 0\} \right\rbrack$ and $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$. If the agent subsequently moves to the right arm, the hidden state vectors would change to $S^0 = \left\lbrack \matrix{ 0 & 1 & 0 & 0\} \right\rbrack$ and $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$. This illustrates that the two hidden state factors are independent, meaning that the agent's location ($S^0$) can change without affecting the reward condition ($S^1$).
 
 ## 3. The outcome mapping
 
@@ -186,7 +186,7 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
 
 The ability to modify the agent's prior beliefs and bias it towards observing the $Reward$ outcome more often than the $No Reward$ outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation.
 
-In order to set up the state of the environment at the first time step in a $Reward on Left$ trial assuming the agent starts in the $Center$ location, we define a vector of two `States` object, one for each factor.
+In order to set up the state of the environment at the first time step in a $Reward\ on\ Left$ trial assuming the agent starts in the $Center$ location, we define a vector of two `States` object, one for each factor.
 
 ```c++
   unsigned int context = 0;
