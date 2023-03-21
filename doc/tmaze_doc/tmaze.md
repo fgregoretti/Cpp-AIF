@@ -184,7 +184,7 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
   softmax<FLOAT_TYPE>(C1);
 ```
 
-The ability to modify the agent's prior beliefs and bias it towards observing the $Reward$ outcome more often than the $No Reward$ outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation. [`softmax`](../../utils.md#softmax) ... ⚠️
+The ability to modify the agent's prior beliefs and bias it towards observing the $Reward$ outcome more often than the $No Reward$ outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation. [`softmax`](../utils.md#softmax) ... ⚠️
 
 In order to set up the state of the environment at the first time step in a $Reward\ on\ Left$ trial assuming the agent starts in the $Center$ location, we define a vector of two `States` object, one for each factor.
 
