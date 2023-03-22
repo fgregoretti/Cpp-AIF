@@ -117,7 +117,7 @@ We create the transition model defining a vector of vector of objects `Transitio
 
 Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
 
-We need to write a derived `Transitions` class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC (in which values are read first by column) sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
+We can build a derived `Transitions` class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC (in which values are read first by column) sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
 
 In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
@@ -212,7 +212,7 @@ Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that th
 
 We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$N_g$**, and each element **$i$** will contain a vector of one object `likelihood` **$A$** with size **$N_o[g] \times N_s[0] \times N_s[1] \times N_s[2]$**.
 
-We need to write a derived `likelihood` class that adds specialized methods to fill out **$A^0, A^1, A^2$**, and **$A^3$**.
+We can build a derived `likelihood` class that adds specialized methods to fill out **$A^0, A^1, A^2$**, and **$A^3$**.
 
 In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
