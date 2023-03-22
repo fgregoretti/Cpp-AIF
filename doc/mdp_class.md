@@ -59,8 +59,8 @@ while (tt < T)
 - `unsigned int Nf` number of hidden-states factors
 - `unsigned int Ng` number of outcome factors
 - `unsigned int Np` number of allowable policies
-- `std::vector<std::vector<int>> _st` $\_st[i][j]$ sampled state for factor $j$ at time step $i$
-- `std::vector<std::vector<int>> _ot` $\_ot[i][j]$ observed state for factor $j$ at time step $i$
+- `std::vector<std::vector<int>> _st` $\\_st[i][j]$ sampled state for factor $j$ at time step $i$
+- `std::vector<std::vector<int>> _ot` $\\_ot[i][j]$ observed state for factor $j$ at time step $i$
 
 ## Vector (of vectors) of class instance parameters
 In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](custom_array_classes.md) specifically designed to handle active inference data, with an array as member. 
