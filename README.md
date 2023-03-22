@@ -43,6 +43,15 @@ Overall, ``cpp-AcI`` provides a powerful and flexible tool for implementing acti
 
 [custom array Classes](doc/custom_array_classes.md)
 
-[Demo: T-Maze](doc/tmaze_doc/tmaze.md)
+## Examples
 
-[Demo: Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md)
+We provide two hands-on examples of active inference agents in action. By providing them for users to work through, we help them build their understanding of the underlying concepts and how to apply them in practice.
+
+The [T-Maze](doc/tmaze_doc/tmaze.md) and [Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md) demo are both excellent examples of how active inference can be applied to different types of tasks. The T-Maze is a classic task used in neuroscience to study decision making, while the Epistemic Chaining demo provides a more complex example that showcases the power of active inference in solving sequential decision-making problems.
+
+Examples can help users understand how to set up and configure active inference agents for different types of tasks and therefore how to implement and explore active inference in practice. By leveraging these examples, users are helped in building their understanding of active inference and how it can be applied to solve real-world problems.
+
+
+
+
+
