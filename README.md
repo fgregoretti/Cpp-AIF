@@ -29,7 +29,17 @@ To enable OpenMP-based parallelization add:
 
 `-fopenmp`
 
-[MDP Class](doc/mdp_class.md)
+## The main API
+
+The [`MDP` Class](doc/mdp_class.md) is the main API offered by ``cpp-AcI`` for running active inference processes.
+
+It provides a high-level abstraction that allows you to specify the generative model for your system, and then perform inference and generate actions.
+
+Once you have created your generative model, you can use it to create an `MDP` object. The `MDP` Class provides necessary methods for performing active inference, including methods for computing the free energy, updating beliefs about the state of the system, and generating actions based on those beliefs.
+
+One of the key benefits of using ``cpp-AcI`` is that it allows you to abstract away the underlying mathematical details of active inference. This can be particularly useful if you are not familiar with the underlying theory, or if you simply want to focus on building your system rather than worrying about the math.
+
+Overall, ``cpp-AcI`` provides a powerful and flexible tool for implementing active inference in your projects. By allowing you to focus on the high-level aspects of your system and abstracting away the mathematical nuances, it can help you save time and improve the quality of your work.
 
 [custom array Classes](doc/custom_array_classes.md)
 
