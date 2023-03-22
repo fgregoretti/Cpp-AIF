@@ -41,7 +41,9 @@ One of the key benefits of using ``cpp-AcI`` is that it allows you to abstract a
 
 Overall, ``cpp-AcI`` provides a powerful and flexible tool for implementing active inference in your projects. By allowing you to focus on the high-level aspects of your system and abstracting away the mathematical nuances, it can help you save time and improve the quality of your work.
 
-[custom array Classes](doc/custom_array_classes.md)
+We have implemented [custom array classes](doc/custom_array_classes.md) for building the generative model.
+
+The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing custom classes for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
 
 ## Examples
 
