@@ -31,7 +31,7 @@ To enable OpenMP-based parallelization add:
 
 ## The main API
 
-The [`MDP` Class](doc/mdp_class.md) is the main API offered by ``cpp-AcI`` for running active inference processes.
+The [`MDP`](doc/mdp_class.md) class is the main API offered by ``cpp-AcI`` for running active inference processes.
 
 It provides a high-level abstraction that allows you to specify the generative model for your system, and then perform inference and generate actions.
 
