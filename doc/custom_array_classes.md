@@ -1,4 +1,4 @@
-# custom array Classes
+# Generative model: array Classes
 
 The generative model used by the Active Inference agent is defined by setting the hidden states **$\bf{S}$**,
 the observations **$\bf{O}$**, the control states **$U$**, and the parameters **$\bf{\Theta} = \\{\bf{𝐀}, \bf{𝐁}, \bf{𝐂}, \bf{𝐃}\\}$**.
