@@ -3,7 +3,7 @@
 discrete space and time, using partially-observed Markov Decision Processes
 (POMDPs) as a generative model class.
 
-The library implements a multicore parallelisation of the most demanding computational kernels. Note that most of the computational complexity of active inference depends on the multidimensional inner products involved both in expected free energy computation and state estimation.
+The library implements a multicore parallelization of the most demanding computational kernels. Note that most of the computational complexity of active inference depends on the multidimensional inner products involved both in expected free energy computation and state estimation.
 
 realizzare un tutorial così? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/active_inference_from_scratch.html
 
