@@ -30,7 +30,9 @@ To enable OpenMP-based parallelization add:
 `-fopenmp`
 
 Preprocessor directive macros:
+- `-D DEBUG` print out debugging information
 - `-D FULL` temporal horizon and time length policy coincide
+- `-D BEST_AS_MAX` the selected action is chosen as the maximum of the posterior over actions
 
 ## The main API
 
