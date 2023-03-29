@@ -29,6 +29,9 @@ To enable OpenMP-based parallelization add:
 
 `-fopenmp`
 
+Preprocessor directive macros:
+- `-D FULL` temporal horizon and time length policy coincide
+
 ## The main API
 
 The [`MDP`](doc/mdp_class.md) class is the main API offered by ``cpp-AcI`` for running active inference processes.
