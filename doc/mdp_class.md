@@ -175,7 +175,7 @@ int sample_action(unsigned int t)
 ```c++
 void sample_state(unsigned int t, int action)
 ```
-Next [sampled](utils.md#Sampling) state under the action `action`. When not compiled with macro SAMPLE_AS_MAX ... :warning:
+Next [sampled](utils.md#Sampling) state under the action `action`. When not compiled with macro SAMPLE_AS_MAX select a random action from the posterior over control states using a cumulative distribution function (CDF), otherwise the selected action is chosen as the maximum of the posterior over actions. If there are multiple maxima, then randomly select one of them.
 
 **Parameters**
 - `t` time step
