@@ -63,7 +63,7 @@ while (tt < T)
 - `std::vector<std::vector<int>> _ot` $\\_ot[i][j]$ observed state for factor $j$ at time step $i$
 
 ## Vector (of vectors) of class instance parameters
-In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "custom objects". These are instances of [classes](generative_model_classes.md) specifically designed to handle active inference data, with an array as member. 
+In `Cpp-AcI` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "specific objects". These are instances of [classes](generative_model_classes.md) specifically designed to handle active inference data, with an array as member. 
 
 Understanding the representation of factorized probability distributions as vector (of vectors) of class instances is critical for understanding and constructing generative models in `Cpp-AcI`. In particular, we use vector of vectors of specific class instances to encode the observation and transition models of the agent’s generative model. This representation is chosen because the observation space is typically factorized into multiple observation factors, and the hidden states are similarly factorized into multiple hidden state factors. Additionally, this allows for the expression of dependencies on control states **$u$** that the agent can execute.
 
@@ -201,7 +201,7 @@ std::vector<std::vector<likelihood<Ty,M>*>>& MDP<Ty,M>::update_A(
 Update parameters of the observation likelihood distribution.
 
 **Parameters**
-- `a` observation likelihood to be updated
+- `_a` observation likelihood to be updated
 - `eta` :warning:
 - `tt` time step
 
@@ -210,4 +210,34 @@ std::vector<std::vector<Transitions<Ty>*>>& MDP<Ty,M>::update_B(
                 std::vector<std::vector<Transitions<Ty>*>>& _b,                                              
                 Ty eta, unsigned int tt)
 ```
-Update parameters of the transition distribution.
+Update parameters of the transition distribution. 
+
+**Parameters**
+- `_b` transition distribution to be updated
+- `eta` :warning:
+- `tt` time step
+
+
+```c++
+std::vector<Priors<Ty>*>& MDP<Ty,M>::update_C(                                                               
+                std::vector<Priors<Ty>*>& _c,                                                                
+                Ty eta, unsigned int tt)
+```
+Update prior preferences.
+
+**Parameters**
+- `_c` prior preferences to be updated
+- `eta` :warning:
+- `tt` time step
+
+```c++
+std::vector<Beliefs<Ty>*>& MDP<Ty,M>::update_D(                                                              
+                std::vector<Beliefs<Ty>*>& _d,                                                               
+                Ty eta, unsigned int tt)
+```
+Update parameters of the initial hidden state distribution (prior beliefs about hidden states).
+
+**Parameters**
+- `_d` initial beliefs to be updated
+- `eta` :warning:
+- `tt` time step
