@@ -186,7 +186,7 @@ Multidimensional dot (inner) producT: compute the inner product obtained by summ
 ```c++
 T *HDot(T **xt, T *H)
 ```
-Multidimensional dot (inner) producT: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value. Return an array.
+Multidimensional dot (inner) product: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value. Return an array.
 
 **Parameters**
 - `xt` array of vectors
@@ -200,6 +200,33 @@ Find the likelihood elements **$t(:,sq[0],...,sq[N_f-1])$** and store them in th
 **Parameters**
 - `sq` index tuple
 - `p` output vector
+
+```c++
+T *cross(T **arr)
+```
+Multidimensional cross (outer) product. The outer-product is taken between **$arr$** and itself. Return an array.
+
+**Parameters**
+- `arr` array of vectors
+
+```c++
+void cross(unsigned int d, unsigned int tt, std::vector<Beliefs<T>*> &_X)
+```
+Multidimensional cross (outer) product. The array elements are computed from the outer-product between the logical array corresponding to the observed outcome  and the various dimensions of the expectation of hidden states, at time step **$t$**.
+
+**Parameters**
+- `d` observed outcome
+- `tt` time step **$t$**
+- `_X` expectation of hidden states
+
+```c++
+void multiplies(const likelihood<T,seq<Iseq...>>& a, const likelihood<T,seq<Iseq...>>& b)
+```
+fills up the array elements applying a mask to the first likelihood object array; the mask is obtained by comparing each element of the second likelihood object array with zero.
+
+**Parameters**
+- `a` likelihood to be masked
+- `b` likelihood used to obtain the mask
 
 ## `template <typename T> class Transitions`
 ```c++
