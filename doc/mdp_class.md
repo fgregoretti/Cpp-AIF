@@ -198,7 +198,7 @@ std::vector<std::vector<likelihood<Ty,M>*>>& MDP<Ty,M>::update_A(
                 std::vector<std::vector<likelihood<Ty,M>*>>& _a,                                             
                 Ty eta, unsigned int tt
 ```
-Updates parameters of the observation likelihood distribution.
+Update parameters of the observation likelihood distribution.
 
 **Parameters**
 - `a` observation likelihood to be updated
@@ -210,3 +210,4 @@ std::vector<std::vector<Transitions<Ty>*>>& MDP<Ty,M>::update_B(
                 std::vector<std::vector<Transitions<Ty>*>>& _b,                                              
                 Ty eta, unsigned int tt)
 ```
+Update parameters of the transition distribution.
