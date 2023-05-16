@@ -40,25 +40,25 @@ int main(int argc,char *argv[])
   /* prior beliefs about initial state */
   
   /* two factors */
-  std::vector<FLOAT_TYPE> D1 = {1., 0., 0., 0.}; /* hidden location states */
-  std::vector<FLOAT_TYPE> D2 = {1./2, 1./2}; /* cue left, cue right */
+  std::vector<FLOAT_TYPE> D0 = {1., 0., 0., 0.}; /* hidden location states */
+  std::vector<FLOAT_TYPE> D1 = {1./2, 1./2}; /* cue left, cue right */
 
   std::vector<Beliefs<FLOAT_TYPE>*> __D;
+  Beliefs<FLOAT_TYPE> *d0 = new Beliefs<FLOAT_TYPE>(D0);
+  __D.push_back(d0);
   Beliefs<FLOAT_TYPE> *d1 = new Beliefs<FLOAT_TYPE>(D1);
   __D.push_back(d1);
-  Beliefs<FLOAT_TYPE> *d2 = new Beliefs<FLOAT_TYPE>(D2);
-  __D.push_back(d2);
 
   /* true initial state */
   std::vector<States*> __S;
+  States *s0 = new States(T);
+  s0->Zeros();
+  s0->Set(0);
+  __S.push_back(s0);
   States *s1 = new States(T);
   s1->Zeros();
-  s1->Set(0);
+  s1->Set(context);
   __S.push_back(s1);
-  States *s2 = new States(T);
-  s2->Zeros();
-  s2->Set(context);
-  __S.push_back(s2);
 
   /* controlled transitions: __B
      ----------------------------------------------------------
@@ -69,54 +69,54 @@ int main(int argc,char *argv[])
 
   /* Here, there are four actions taking the
   agent directly to each of the four locations */
-  std::vector<Transitions<FLOAT_TYPE>*> _b1;
+  std::vector<Transitions<FLOAT_TYPE>*> _b0;
 
   //const FLOAT_TYPE h = .9;
   //const FLOAT_TYPE k = (1.-h)/3.;
   const FLOAT_TYPE h = 1.;
   const FLOAT_TYPE k = 0.;
 
-  std::vector<std::vector<FLOAT_TYPE>> B1 {
+  std::vector<std::vector<FLOAT_TYPE>> B0_0 {
               { h, k, k, h },
               { k, h, k, k },
               { k, k, h, k },
               { k, k, k, k }
           };
 
-  Transitions<FLOAT_TYPE> *__b1 = new Transitions<FLOAT_TYPE>(B1);
-  _b1.push_back(__b1);
+  Transitions<FLOAT_TYPE> *__b0 = new Transitions<FLOAT_TYPE>(B0_0);
+  _b0.push_back(__b0);
 
-  std::vector<std::vector<FLOAT_TYPE>> B2 {
+  std::vector<std::vector<FLOAT_TYPE>> B0_1 {
               { k, k, k, k },
               { h, h, k, h },
               { k, k, h, k },
               { k, k, k, k },
           };
 
-  Transitions<FLOAT_TYPE> *__b2 = new Transitions<FLOAT_TYPE>(B2);
-  _b1.push_back(__b2);
+  Transitions<FLOAT_TYPE> *__b1 = new Transitions<FLOAT_TYPE>(B0_1);
+  _b0.push_back(__b1);
 
-  std::vector<std::vector<FLOAT_TYPE>> B3 {
+  std::vector<std::vector<FLOAT_TYPE>> B0_2 {
               { k, k, k, k },
               { k, h, k, k },
               { h, k, h, h },
               { k, k, k, k },
           };
 
-  Transitions<FLOAT_TYPE> *__b3 = new Transitions<FLOAT_TYPE>(B3);
-  _b1.push_back(__b3);
+  Transitions<FLOAT_TYPE> *__b2 = new Transitions<FLOAT_TYPE>(B0_2);
+  _b0.push_back(__b2);
 
-  std::vector<std::vector<FLOAT_TYPE>> B4 {
+  std::vector<std::vector<FLOAT_TYPE>> B0_3 {
               { k, k, k, k },
               { k, h, k, k },
               { k, k, h, k },
               { h, k, k, h },
           };
 
-  Transitions<FLOAT_TYPE> *__b4 = new Transitions<FLOAT_TYPE>(B4);
-  _b1.push_back(__b4);
+  Transitions<FLOAT_TYPE> *__b3 = new Transitions<FLOAT_TYPE>(B0_3);
+  _b0.push_back(__b3);
 
-  std::vector<Transitions<FLOAT_TYPE>*> _b2;
+  std::vector<Transitions<FLOAT_TYPE>*> _b1;
 
   std::vector<std::vector<FLOAT_TYPE>> eye {
               { 1., 0. },
@@ -125,31 +125,35 @@ int main(int argc,char *argv[])
   /* context, which cannot be changed by action */
   //for (unsigned int j = 0; j < 4; j++) {
     Transitions<FLOAT_TYPE> *__b = new Transitions<FLOAT_TYPE>(eye);
-    _b2.push_back(__b);
+    _b1.push_back(__b);
   //}
 
+  __B.push_back(_b0);
   __B.push_back(_b1);
-  __B.push_back(_b2);
 
   /* outcome probabilities: __A
      ------------------------------------------------------
       probabilistic mapping from hidden states to outcomes;
       where outcome can be exteroceptive or interoceptive:
-      The exteroceptive outcomes _a1 provide cues about
+      The exteroceptive outcomes _a0 provide cues about
       location and context,
-      while interoceptive outcome _a2 denotes different
+      while interoceptive outcome _a1 denotes different
       levels of reward */
   std::vector<std::vector<likelihood<FLOAT_TYPE,3>*>> __A;
 
+  std::vector<likelihood<FLOAT_TYPE,3>*> _a0;
+  likelihood<FLOAT_TYPE,3> __a0(4,4,2);
+
   std::vector<likelihood<FLOAT_TYPE,3>*> _a1;
   likelihood<FLOAT_TYPE,3> __a1(4,4,2);
-  __a1.Zeros();
+
+  __a0.Zeros();
   /* cue start cue left cue right cue down */
-  __a1(0,0,0)=1; __a1(1,1,0)=1; __a1(2,2,0)=1; __a1(3,3,0)=1;
+  __a0(0,0,0)=1; __a0(1,1,0)=1; __a0(2,2,0)=1; __a0(3,3,0)=1;
   /* cue start cue left cue right cue down */
-  __a1(0,0,1)=1; __a1(1,1,1)=1; __a1(2,2,1)=1; __a1(3,3,1)=1;
-  _a1.push_back(&__a1);
-  __A.push_back(_a1);
+  __a0(0,0,1)=1; __a0(1,1,1)=1; __a0(2,2,1)=1; __a0(3,3,1)=1;
+  _a0.push_back(&__a0);
+  __A.push_back(_a0);
 
   const FLOAT_TYPE a = .9;
   const FLOAT_TYPE b = 1.-a;
@@ -157,17 +161,15 @@ int main(int argc,char *argv[])
   const FLOAT_TYPE d = 1.;
   const FLOAT_TYPE e = 1.-d; 
 
-  std::vector<likelihood<FLOAT_TYPE,3>*> _a2;
-  likelihood<FLOAT_TYPE,3> __a2(4,4,2);
-  __a2.Zeros();
+  __a1.Zeros();
   /* CS left CS right reward positive reward negative */
-  __a2(0,0,0)=0.5; __a2(0,3,0)=d; __a2(1,0,0)=0.5; __a2(1,3,0)=e;
-  __a2(2,1,0)=a;   __a2(2,2,0)=b; __a2(3,1,0)=b;   __a2(3,2,0)=a;
+  __a1(0,0,0)=0.5; __a1(0,3,0)=d; __a1(1,0,0)=0.5; __a1(1,3,0)=e;
+  __a1(2,1,0)=a;   __a1(2,2,0)=b; __a1(3,1,0)=b;   __a1(3,2,0)=a;
   /* CS left CS right reward positive reward negative */
-  __a2(0,0,1)=0.5; __a2(0,3,1)=e; __a2(1,0,1)=0.5; __a2(1,3,1)=d;
-  __a2(2,1,1)=b;   __a2(2,2,1)=a; __a2(3,1,1)=a;   __a2(3,2,1)=b;
-  _a2.push_back(&__a2);
-  __A.push_back(_a2);
+  __a1(0,0,1)=0.5; __a1(0,3,1)=e; __a1(1,0,1)=0.5; __a1(1,3,1)=d;
+  __a1(2,1,1)=b;   __a1(2,2,1)=a; __a1(3,1,1)=a;   __a1(3,2,1)=b;
+  _a1.push_back(&__a1);
+  __A.push_back(_a1);
 
   /* priors: (utility) __C
      -----------------------------------------------------
@@ -177,30 +179,34 @@ int main(int argc,char *argv[])
 
   std::vector<Priors<FLOAT_TYPE>*> __C;
 
-  std::vector<FLOAT_TYPE> C1 = {1., 1., 1., 1.};
+  std::vector<FLOAT_TYPE> C0 = {1., 1., 1., 1.};
+  softmax<FLOAT_TYPE>(C0);
+  Priors<FLOAT_TYPE>* Initial_C0 = new Priors<FLOAT_TYPE>(C0);
+  __C.push_back(Initial_C0);
+
+  const FLOAT_TYPE c = 2.;
+  std::vector<FLOAT_TYPE> C1 = {0., 0., c, -c};
   softmax<FLOAT_TYPE>(C1);
   Priors<FLOAT_TYPE>* Initial_C1 = new Priors<FLOAT_TYPE>(C1);
   __C.push_back(Initial_C1);
 
-  const FLOAT_TYPE c = 2.;
-  std::vector<FLOAT_TYPE> C2 = {0., 0., c, -c};
-  softmax<FLOAT_TYPE>(C2);
-  Priors<FLOAT_TYPE>* Initial_C2 = new Priors<FLOAT_TYPE>(C2);
-  __C.push_back(Initial_C2);
-
   /* policies */
-  //std::vector<std::vector<int>> V {
-  //  { 0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3 },
-  //  { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 },
-  //  { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 }
-  //};
-  std::vector<std::vector<int>> V;
+  std::vector<std::vector<int>> V {
+    { 0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3 },
+    { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 },
+    { 0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3,  0,  1,  2,  3 }
+  };
+  //std::vector<std::vector<int>> V;
 
   time_t start, end;
 
   time(&start);
 
+#ifdef FULL
+  MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,seed);
+#else
   MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,1,seed);
+#endif
 
   time(&end);
 
