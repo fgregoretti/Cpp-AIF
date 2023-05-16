@@ -34,7 +34,7 @@ template <typename Ty, std::size_t M>
 class MDP {
 protected:
   unsigned int T; /* temporal horizon */
-  Ty alpha; /* gamma hyperparametera */
+  Ty alpha; /* gamma hyperparameter */
   Ty beta; /* gamma hyperparameter */
   Ty lambda; /* precision update rate */
   Ty gamma;
@@ -66,6 +66,9 @@ protected:
 #ifdef FULL
   std::vector<unsigned int> _wt; /* indices of allowable policies */
 #endif
+#ifdef LEARNING
+  std::vector<std::vector<std::vector<std::vector<Ty>>>> _xt;
+#endif
 
 public:
   unsigned int Nf;
@@ -96,6 +99,16 @@ public:
   void sample_state(unsigned int t, int action);
   void sample_observation(unsigned int t, int action);
   virtual void active_inference();
+  std::vector<std::vector<likelihood<Ty,M>*>>& update_A(
+                std::vector<std::vector<likelihood<Ty,M>*>>& _a,
+                Ty eta, unsigned int tt);
+  std::vector<std::vector<Transitions<Ty>*>>& update_B(
+                std::vector<std::vector<Transitions<Ty>*>>& _b,
+                Ty eta, unsigned int tt);
+  std::vector<Priors<Ty>*>& update_C(std::vector<Priors<Ty>*>& _c,
+                Ty eta, unsigned int tt);
+  std::vector<Beliefs<Ty>*>& update_D(std::vector<Beliefs<Ty>*>& _d,
+                Ty eta, unsigned int tt);
   int getU(unsigned int t) { return this->U[t]; }
 
   virtual ~MDP() {
@@ -397,6 +410,15 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   _ut.resize(T, std::vector<Ty>(Np, 0));
   _P.resize(T, std::vector<Ty>(Nu, 0));
   _W.resize(T, 0);
+#ifdef LEARNING
+  _xt.resize(T);
+  for (unsigned int i = 0; i < T; i++)
+  {
+    _xt[i].resize(Np);
+    for (unsigned int j = 0; j < Np; j++)
+      _xt[i][j].resize(Nf);
+  }
+#endif
 
   for (unsigned int i = 0; i < Nf; i++)
     _st[0][i] = _S[i]->Get();
@@ -550,6 +572,9 @@ void MDP<Ty,M>::infer_states(unsigned int tt)
   }
 #endif
 
+//#ifdef _OPENMP
+//  #pragma omp parallel for
+//#endif
   /* expectations of allowable policies and current state */
   for (unsigned int i = 0; i < Nf; i++) {
     std::vector<Ty> v(Ns[i], 0.0);
@@ -605,6 +630,9 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
 
   std::vector<Ty> G(Np_t, 0.0); 
 
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
   for (unsigned int k = 0; k < Np_t; k++)
   {
     /* path integral of expected free energy */
@@ -641,6 +669,21 @@ std::vector<Ty> MDP<Ty,M>::infer_policies(unsigned int tt)
         for (std::size_t jj = 0; jj != Ns[i]; ++jj)
           std::cout << x[i][jj] << " ";
         std::cout << std::endl;
+#endif
+#ifdef LEARNING
+#ifdef FULL
+        if (j == tt)
+#else
+        if (j == 0)
+#endif
+	{
+        for (std::size_t jj = 0; jj != Ns[i]; ++jj)
+#ifdef FULL
+	  _xt[tt][_wt[k]][i].push_back(x[i][jj]);
+#else
+	  _xt[tt][k][i].push_back(x[i][jj]);
+#endif
+        }
 #endif
       }
 
@@ -760,7 +803,10 @@ int MDP<Ty,M>::sample_action(unsigned int tt)
   std::vector<Ty> _P_t(_P[tt].begin(), _P[tt].end());
   int a = CDFs<Ty>(_P_t, generateRand());
 #elif BEST_AS_MAX
-  int a = std::max_element(_P[tt].begin(),_P[tt].end()) - _P[tt].begin();
+  std::vector<Ty> _P_t(_P[tt].begin(), _P[tt].end());
+  std::vector<int> maxima = findMaxima(_P_t);
+  int a = maxima[generateRandAcT(maxima.size())];
+  //int a = std::max_element(_P[tt].begin(),_P[tt].end()) - _P[tt].begin();
 #endif
 #ifdef DEBUG
   std::cout << "sample_action: tt=" << tt << " a=" << a << std::endl;
@@ -793,6 +839,13 @@ void MDP<Ty,M>::sample_observation(unsigned int tt, int action)
 
     int act_t = (_A[g].size() == 1) ? 0 : action;
     _A[g][act_t]->find(_st[tt], po);
+#ifdef DEBUG
+    std::cout << "sample_observation: po = ";
+    for (Ty val: po) {
+      std::cout << val << " ";
+    }
+    std::cout << std::endl;
+#endif
 
     _ot[tt][g] = CDFs<Ty>(po, generateRand());
 #ifdef DEBUG
@@ -834,5 +887,145 @@ void MDP<Ty,M>::active_inference()
 
     tt += 1;
   }
+}
+
+/* Mapping from hidden states to outcomes: _a */
+template <typename Ty, std::size_t M>
+std::vector<std::vector<likelihood<Ty,M>*>>& MDP<Ty,M>::update_A(
+                std::vector<std::vector<likelihood<Ty,M>*>>& _a,
+                Ty eta, unsigned int tt)
+{
+  for (unsigned int g = 0; g < Ng; g++) {
+    likelihood<Ty,M> *_da = new likelihood<Ty,M>(_a[g][0]->GetIndexArray());
+    _da->cross(_O[g]->StateFind(tt), tt, _X);
+
+    unsigned int act_Nu = _a[g].size() == 1 ? 1 : Nu;
+
+    for (unsigned int j = 0; j < act_Nu; j++)
+    {
+      likelihood<Ty,M> *_dau = new likelihood<Ty,M>(_a[g][0]->GetIndexArray());
+      _dau->multiplies(*_da, *_a[g][j]);
+
+      _a[g][j]->sum(*_dau, eta);
+
+      delete _dau;
+    }
+
+    delete _da;
+
+#ifdef DEBUG
+    for (unsigned int j = 0; j < _A[g].size(); j++)
+    {
+      std::cout << "update_A: _a[" << g << "][" << j << "] = ";
+      for (unsigned int e = 0; e < _a[g][j]->get_tnc(); e++)
+        std::cout << (*_a[g][j])[e] << " ";
+      std::cout << std::endl;
+    }
+#endif
+  }
+
+  return _a;
+}
+
+/* Mapping from past hidden states to current hidden states
+   modulated by the posteriors of the policies: b(u) */
+template <typename Ty, std::size_t M>
+std::vector<std::vector<Transitions<Ty>*>>& MDP<Ty,M>::update_B(
+                std::vector<std::vector<Transitions<Ty>*>>& _b,
+                Ty eta, unsigned int tt)
+{
+#ifdef FULL
+  unsigned int Np_t = _wt.size();
+#else
+  unsigned int Np_t = Np;
+#endif
+
+  for (unsigned int i = 0; i < Nf; i++)
+  {
+    for (unsigned int k = 0; k < Np_t; k++)
+    {
+#ifdef FULL
+      int v = _b[i].size() == 1 ? 0 : _V[tt-1][_wt[k]];
+      int p = _wt[k];
+      Ty _ut_tk = _ut[tt][_wt[k]];
+#else
+      int v = _b[i].size() == 1 ? 0 : _V[(tt-1)%policy_len][k];
+      int p = k;
+      Ty _ut_tk = _ut[tt][k];
+#endif
+ 
+      std::vector<std::vector<Ty>> db(Ns[i], std::vector<Ty>(Ns[i], 0));
+
+      for (std::size_t jj = 0; jj != Ns[i]; ++jj)
+        for (std::size_t kk = 0; kk != Ns[i]; ++kk)
+          db[jj][kk] = _ut_tk * _xt[tt][p][i][jj] * _xt[tt-1][p][i][kk];
+
+      db = _b[i][v]->multiplies(db);
+
+      std::vector<std::vector<Ty>> _b_iu(Ns[i], std::vector<Ty>(Ns[i], 0));
+      _b[i][v]->add(db, _b_iu, eta);
+
+      Transitions<Ty> *__b_iu = new Transitions<FLOAT_TYPE>(_b_iu);
+      delete _b[i][v];
+      _b[i][v] = __b_iu;
+    }
+
+#ifdef DEBUG
+    for (unsigned int j = 0; j < _b[i].size(); j++)
+    {
+      std::cout << "update_B: _b[" << i << "][" << j << "] = ";
+      _b[i][j]->Print();
+    }
+#endif
+  }
+
+  return _b;
+}
+
+/* Accumulation of prior preferences: c */
+template <typename Ty, std::size_t M>
+std::vector<Priors<Ty>*>& MDP<Ty,M>::update_C(
+                std::vector<Priors<Ty>*>& _c,
+                Ty eta, unsigned int tt)
+{
+  for (unsigned int g = 0; g < Ng; g++)
+  {
+    unsigned int _dc = _O[g]->StateFind(tt);
+
+    if (_c[g]->getValue(_dc) > 0)
+      _c[g]->setValue(_c[g]->getValue(_dc) + 1*eta, _dc);
+
+#ifdef DEBUG
+    std::cout << "update_C: _c[" << g << "] = ";
+    for (unsigned int e = 0; e < No[g]; e++)
+      std::cout << _c[g]->getValue(e) << " ";
+    std::cout << std::endl;
+#endif
+  }
+
+  return _c;
+}
+
+/* Initial hidden states: d */
+template <typename Ty, std::size_t M>
+std::vector<Beliefs<Ty>*>& MDP<Ty,M>::update_D(
+                std::vector<Beliefs<Ty>*>& _d,
+                Ty eta, unsigned int tt)
+{
+  for (unsigned int i = 0; i < Nf; i++)
+  {
+    for (std::size_t j = 0; j != Ns[i]; ++j)
+      if (_d[i]->getValue(j) > 0)
+        _d[i]->setValue(_d[i]->getValue(j)+_X[i]->getValue(j,tt)*eta, j);
+
+#ifdef DEBUG
+    std::cout << "update_D: _d[" << i << "] = ";
+    for (unsigned int e = 0; e < Ns[i]; e++)
+      std::cout << _d[i]->getValue(e) << " ";
+    std::cout << std::endl;
+#endif
+  }
+
+  return _d;
 }
 #endif
