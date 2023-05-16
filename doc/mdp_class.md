@@ -189,3 +189,24 @@ Next observed state under the action `action`.
 **Parameters**
 - `t` time step
 - `action` sampled at previous time step
+
+## Learning
+The following public methods update parameters of posteriors in POMDP generative models.
+
+```c++
+std::vector<std::vector<likelihood<Ty,M>*>>& MDP<Ty,M>::update_A(                                       
+                std::vector<std::vector<likelihood<Ty,M>*>>& _a,                                             
+                Ty eta, unsigned int tt
+```
+Updates parameters of the observation likelihood distribution.
+
+**Parameters**
+- `a` observation likelihood to be updated
+- `eta` :warning:
+- `tt` time step
+
+```c++
+std::vector<std::vector<Transitions<Ty>*>>& MDP<Ty,M>::update_B(                                             
+                std::vector<std::vector<Transitions<Ty>*>>& _b,                                              
+                Ty eta, unsigned int tt)
+```
