@@ -34,6 +34,10 @@ Preprocessor directive macros:
 - `-D FULL` temporal horizon and time length policy coincide
 - `-D BEST_AS_MAX` the selected action is chosen as the maximum of the posterior over actions
 
+For example to compile the [T-Maze](doc/tmaze_doc/tmaze.md) example you can type:
+
+`g++ -O3 -D FULL -o Tmaze main_Tmaze.cpp`
+
 ## The main API
 
 The [`MDP`](doc/mdp_class.md) class is the main API offered by ``cpp-AcI`` for running active inference processes.
