@@ -279,6 +279,33 @@ Assign a non-zero value to a specific element of the array **$data$**.
 - `i` **$data$** array index
 
 ```c++
+T Get(unsigned int r, unsigned int c) const
+```
+Return element **$(r,c)$**.
+
+**Parameters**
+- `r` row index of the element to be retrieved
+- `c` column index of the element to be retrieved
+
+```c++
+std::vector<std::vector<T>>& multiplies(std::vector<std::vector<T>>& matrix)
+```
+Applies to matrix `matrix` a mask obtained by comparing each element of the `Transition` matrix with zero. Return a vector of vector (matrix) by reference.
+
+**Parameters**
+- `matrix` matrix to which apply the mask.
+
+```c++
+void add(std::vector<std::vector<T>>& imatrix, std::vector<std::vector<T>>& omatrix, T eta)
+```
+Builds a matrix by summing the `Transition` matrix with matrix `imatrix` mupliplied by the scalar factor `eta`.
+
+**Parameters**
+- `omatrix` output matrix
+- `imatrix` input matrix to be summed up with `Transition` matrix
+- `eta` scalar factor to be mulitplied with `imatrix`
+
+```c++
 void Eye()
 ```
 Create a two dimentional identity array.
