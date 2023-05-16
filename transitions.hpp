@@ -59,6 +59,7 @@ public:
     data[i] = value;
   }
 
+  /* retrieve matrix element (r,c) */
   T Get(unsigned int r, unsigned int c) const
   {
     unsigned int currCol;
@@ -77,6 +78,8 @@ public:
     return 0;
   }
 
+  /* apply to a matrix a mask obtained by comparing each element of the
+     Transitionx matrix with zero */
   std::vector<std::vector<T>>& multiplies(std::vector<std::vector<T>>& matrix)
   {
     for (std::size_t i = 0; i != matrix.size(); ++i)
@@ -87,6 +90,8 @@ public:
     return matrix;
   }
 
+  /* build a matrix by summing the Transition matrix with another matrix
+     mupliplied by a factor */
   void add(std::vector<std::vector<T>>& imatrix,
            std::vector<std::vector<T>>& omatrix,
 	   T eta)

@@ -667,7 +667,7 @@ namespace detail
       return;
     }
 
-    /* fills up the array elements applying a mask to the first likelihood object
+    /* fill up the array elements applying a mask to the first likelihood object
        array; the mask is obtained by comparing each element of the second likelihood
        object array with zero */
     void multiplies(const likelihood<T,seq<Iseq...>>& a,
