@@ -222,7 +222,7 @@ Multidimensional cross (outer) product. The array elements are computed from the
 ```c++
 void multiplies(const likelihood<T,seq<Iseq...>>& a, const likelihood<T,seq<Iseq...>>& b)
 ```
-fills up the array elements applying a mask to the first likelihood object array; the mask is obtained by comparing each element of the second likelihood object array with zero.
+Fills up the array elements applying a mask to the first likelihood object array; the mask is obtained by comparing each element of the second likelihood object array with zero.
 
 **Parameters**
 - `a` likelihood to be masked
