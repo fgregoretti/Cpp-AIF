@@ -59,6 +59,43 @@ public:
     data[i] = value;
   }
 
+  T Get(unsigned int r, unsigned int c) const
+  {
+    unsigned int currCol;
+
+    for (unsigned int pos = row_ptr[r]; pos < row_ptr[r+1]; ++pos) {
+      currCol = col[pos];
+
+      if (currCol == c) {
+        //std::cout << "(" << r << "," << col[pos] << ") " << data[pos] << " " << std::endl;
+        return data[pos];
+      } else if (currCol > c) {
+        break;
+      }
+    }
+
+    return 0;
+  }
+
+  std::vector<std::vector<T>>& multiplies(std::vector<std::vector<T>>& matrix)
+  {
+    for (std::size_t i = 0; i != matrix.size(); ++i)
+      for (std::size_t j = 0; j != matrix[i].size(); ++j)
+        if ( !Get(i,j) )
+	  matrix[i][j] = 0;
+
+    return matrix;
+  }
+
+  void add(std::vector<std::vector<T>>& imatrix,
+           std::vector<std::vector<T>>& omatrix,
+	   T eta)
+  {
+    for (std::size_t i = 0; i != imatrix.size(); ++i)
+      for (std::size_t j = 0; j != imatrix[i].size(); ++j)
+	  omatrix[i][j] = Get(i,j) + omatrix[i][j]*eta;
+  }
+
   void Eye()
   {
     row_ptr[0] = 0;
