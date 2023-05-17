@@ -271,8 +271,8 @@ mdp->active_inference();
 
 Executing the program we obtain the following output:
 
+````
 T=1 Location: [Center] Observation: [Cue Left] Action: [Move to Bottom]
-
 T=2 Location: [Bottom] Observation: [Cue Left] Action: [Move to Left]
-
 T=3 Location: [Left] Observation: [Reward!] Action: [Move to Bottom]
+````
