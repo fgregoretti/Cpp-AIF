@@ -513,6 +513,7 @@ epistemic_chaining(7, 5)\
 Ns=[ 35 4 2 ]\
 Time taken by MDP constructor is : 0.000130363 sec\
 State:\
+````
 # # # # # # # # #
 # M . L1. . . . #
 # . . . L2. S!. #
@@ -521,7 +522,7 @@ State:\
 # . . L4. . . . #
 # # # # # # # # #
 active_inference: tt=0
-
+````
 Action: South
 State:
 # # # # # # # # #
