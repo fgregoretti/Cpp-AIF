@@ -449,3 +449,196 @@ we can set up the true initial State accordingly. We define a vector of three ob
   _s3->Set(reward);
   __S.push_back(_s3);
 ```
+
+## 4. Active Inference
+
+We wrote a specific active inference procedure to ... ⚠️
+
+  ```c++
+  void active_inference() override                                                                           
+  {                                                                                                          
+    unsigned int tt = 0;                                                                                     
+                                                                                                             
+    while (tt < this->T)                                                                                     
+    {                                                                                                        
+#ifdef PRINT                                                                                                 
+      std::cout << "active_inference: tt=" << tt << std::endl;                                               
+#endif                                                                                                       
+                                                                                                             
+      this->infer_states(tt);                                                                                
+                                                                                                             
+      /* value of policies (G) */                                                                            
+      std::vector<Ty> G = this->infer_policies(tt);                                                          
+                                                                                                             
+      /* next action (the action that minimises expected free energy) */                                     
+      int a = this->sample_action(tt);                                                                       
+#ifdef PRINT                                                                                                 
+      PrintAction(a);                                                                                        
+#endif                                                                                                       
+                                                                                                             
+      /* sampling of next state (outcome) */                                                                 
+      if (tt < this->T-1)                                                                                    
+      {                                                                                                      
+        /* next sampled state */                                                                             
+        this->sample_state(tt+1, a);                                                                         
+                                                                                                             
+        /* next observed state */                                                                            
+        this->sample_observation(tt+1, a);                                                                   
+                                                                                                             
+#ifdef PRINT                                                                                                 
+        PrintState(this->_S[0]->Get(tt+1), grid);                                                            
+        std::cout << "Reward: " << RewardString[this->_O[3]->Get(tt+1)] << std::endl;                        
+#endif                                                                                                       
+        if (grid(grid.GetCoord(this->_S[0]->Get(tt+1))) == 100 ||                                            
+            grid(grid.GetCoord(this->_S[0]->Get(tt+1))) == -100)                                             
+          break;                                                                                             
+      }
+      tt += 1;                                                                                               
+    }                                                                                                        
+  }    
+  ```
+to compile the [`main`](../../examples/main_epistemic_chaining.cpp) you can type:
+
+`g++  -std=c++11 -Wall -O3 -D PRINT -D BEST_AS_MAX -o  epistemic_chaining  main_epistemic_chaining.cpp`
+
+Executing the program we obtain the following output:
+size_x=7
+size_y=5
+seed=0
+T=11
+cue2=3
+reward=1
+epistemic_chaining(7, 5)
+Ns=[ 35 4 2 ]
+Time taken by MDP constructor is : 0.000130363 sec
+State:
+# # # # # # # # #
+# M . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . . L4. . . . #
+# # # # # # # # #
+active_inference: tt=0
+
+Action: South
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# M . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . . L4. . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=1
+
+Action: South
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# M . . . . . . #
+# . . . L3. C!. #
+# . . L4. . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=2
+
+Action: South
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# M . . L3. C!. #
+# . . L4. . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=3
+
+Action: East
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . M . L3. C!. #
+# . . L4. . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=4
+
+Action: South
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . M L4. . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=5
+
+Action: East
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . . M . . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=6
+
+Action: East
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . . L4M . . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=7
+
+Action: East
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . . L4. M . . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=8
+
+Action: East
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. C!. #
+# . . L4. . M . #
+# # # # # # # # #
+Reward: Null
+active_inference: tt=9
+
+Action: North
+State:
+# # # # # # # # #
+# . . L1. . . . #
+# . . . L2. S!. #
+# C1. . . . . . #
+# . . . L3. M . #
+# . . L4. . . . #
+# # # # # # # # #
+Reward: Cheese
+Time taken by active inference is : 0.198082 sec
+Total Time is : 0.19829 sec
+=========
