@@ -226,7 +226,7 @@ To create an instance of the `MDP`, simply call the `MDP` constructor with a lis
 ```c++
 int seed = 0;
 unsigned int T = 3;
-MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,1,seed);
+MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,seed);
 ```
 
 ## 8. Active Inference
