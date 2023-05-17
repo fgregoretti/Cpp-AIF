@@ -503,34 +503,24 @@ to compile the [`main`](../../examples/main_epistemic_chaining.cpp) you can type
 
 Executing the program we obtain the following output:
 
-size_x=7
-
-size_y=5
-
-seed=0
-
-T=11
-
-cue2=3
-
-reward=1
-
-epistemic_chaining(7, 5)
-
-Ns=[ 35 4 2 ]
-
-Time taken by MDP constructor is : 0.000130363 sec
-
-State:
-
-\# \# \# \# \# \# \# \# \#
-# M . L1. . . . #
-# . . . L2. S!. #
-# C1. . . . . . #
-# . . . L3. C!. #
-# . . L4. . . . #
-# # # # # # # # #
-active_inference: tt=0
+size_x=7\
+size_y=5\
+seed=0\
+T=11\
+cue2=3\
+reward=1\
+epistemic_chaining(7, 5)\
+Ns=[ 35 4 2 ]\
+Time taken by MDP constructor is : 0.000130363 sec\
+State:\
+\# \# \# \# \# \# \# \# \#\
+\# M . L1. . . . \#\
+\# . . . L2. S!. \#\
+\# C1. . . . . . \#\
+\# . . . L3. C!. \#\
+\# . . L4. . . . \#\
+\# \# \# \# \# \# \# \# \#\
+active_inference: tt=0\
 
 Action: South
 State:
