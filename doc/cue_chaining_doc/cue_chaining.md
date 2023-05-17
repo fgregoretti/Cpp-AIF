@@ -88,7 +88,7 @@ public:
 
     int pos = grid_.CoordToIndex(start_pos_);
 
-    this->value[pos] = 1.0;
+    this->setValue(1.0,pos)
   }
 };
 ```
@@ -122,36 +122,34 @@ We can build a derived `Transitions` class that adds a specialized method to fil
 In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
 ```c++
-class _Transitions : public Transitions<Ty>
-{
-public:
-  using Transitions<Ty>::Transitions;
-
-  void epistemic_chaining_init(int action, Grid<int> grid_)
-  {
-    for(unsigned int i = 0; i < this->Ns; i++)
-    {
-      this->col[i] = 0;
-      this->row_ptr[i] = 0;
-      this->data[i] = 0.0;
-    }
-    this->row_ptr[this->Ns] = 0;
-
-    unsigned int row[this->Ns];
-    memset(row, 0, this->Ns*sizeof(unsigned int));
-    unsigned int col_ptr[this->Ns+1];
-    memset(col_ptr, 0, (this->Ns+1)*sizeof(unsigned int));
-
-    for (unsigned int s = 0; s < this->Ns; s++)
-    {
-      col_ptr[s] = s;
-      row[s] = NextState(s, action, grid_);
-      this->data[s] = 1;
-    }
-    col_ptr[this->Ns] = this->Ns;
-
-    this->csc_tocsr(col_ptr, row);
-  }
+template <typename Ty>                                                                                       
+class _Transitions : public Transitions<Ty>                                                                  
+{                                                                                                            
+public:                                                                                                      
+  using Transitions<Ty>::Transitions;                                                                        
+                                                                                                             
+  void epistemic_chaining_init(int action, Grid<int> grid_)                                                    {                                                                                                          
+    for(unsigned int i = 0; i < this->Ns; i++)                                                               
+    {                                                                                                              this->SetCol(0,i);                                                                                     
+      this->SetRowPtr(0,i);                                                                                  
+      this->SetData(0.0,i);                                                                                      }                                                                                                        
+    this->SetRowPtr(0,this->Ns);                                                                             
+                                                                                                             
+    unsigned int row[this->Ns];                                                                              
+    memset(row, 0, this->Ns*sizeof(unsigned int));                                                           
+    unsigned int col_ptr[this->Ns+1];                                                                        
+    memset(col_ptr, 0, (this->Ns+1)*sizeof(unsigned int));                                                   
+                                                                                                             
+    for (unsigned int s = 0; s < this->Ns; s++)                                                              
+    {                                                                                                        
+      col_ptr[s] = s;                                                                                        
+      row[s] = NextState(s, action, grid_);                                                                  
+      this->SetData(1,s);                                                                                    
+    }                                                                                                        
+    col_ptr[this->Ns] = this->Ns;                                                                            
+                                                                                                             
+    this->csc_tocsr(col_ptr, row);                                                                           
+  }                                                                                                          
 };
 ```
 
@@ -321,38 +319,39 @@ template <typename T, std::size_t N>
 void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
                std::vector<Coord> reward_location, T a)
 {
-  this->Zeros();
-
-  /* make Null the most likely observation everywhere */
-  for (int i = 0; i < num_states[0]; ++i)
-    for (int j = 0; j < num_states[1]; ++j)
-      for (int k = 0; k < num_states[2]; ++k)
-      {
-        this->setValue(a,0,i,j,k);
-        this->setValue((1-a)/2,1,i,j,k);
-        this->setValue((1-a)/2,2,i,j,k);
-      }
-
-  int reward_first_index = grid_.CoordToIndex(reward_location[0]);
-  int reward_second_index = grid_.CoordToIndex(reward_location[1]);
-
-  /* fill out the contingences arising when the agent is located
-     in the reward location identified as 'first' */
-  for (int j = 0; j < num_states[1]; ++j)
-  {
-    this->setValue(a,1,reward_first_index,j,0);
-        this->setValue(a,2,reward_first_index,j,1);
-    for (int k = 0; k < num_states[2]; ++k)
-      this->setValue((1-a)/2,0,reward_first_index,j,k);
-  }
-  /* fill out the contingences arising when the agent is located
-     in the reward location identified as 'second' */
-  for (int j = 0; j < num_states[1]; ++j)
-  {
-    this->setValue(a,1,reward_second_index,j,1);
-    this->setValue(a,2,reward_second_index,j,0);
-        for (int k = 0; k < num_states[2]; ++k)
-      this->setValue((1-a)/2,0,reward_second_index,j,k);
+  this->Zeros();                                                                                             
+                                                                                                             
+  /* make Null the most likely observation everywhere */                                                     
+  for (int i = 0; i < num_states[0]; ++i)                                                                    
+    for (int j = 0; j < num_states[1]; ++j)                                                                  
+      for (int k = 0; k < num_states[2]; ++k)                                                                
+        this->setValue(1,0,i,j,k);                                                                           
+                                                                                                             
+  int reward_first_index = grid_.CoordToIndex(reward_location[0]);                                           
+  int reward_second_index = grid_.CoordToIndex(reward_location[1]);                                          
+                                                                                                             
+  /* fill out the contingences arising when the agent is located                                             
+     in the reward location identified as 'first' */                                                         
+  for (int j = 0; j < num_states[1]; ++j)                                                                    
+  {                                                                                                          
+    this->setValue(a,1,reward_first_index,j,0);                                                              
+    this->setValue((1-a)/2,1,reward_first_index,j,1);                                                        
+    this->setValue(a,2,reward_first_index,j,1);                                                              
+    this->setValue((1-a)/2,2,reward_first_index,j,0);                                                        
+    for (int k = 0; k < num_states[2]; ++k)                                                                  
+      this->setValue((1-a)/2,0,reward_first_index,j,k);                                                      
+  }                                                                                                          
+                                                                                                             
+  /* fill out the contingences arising when the agent is located                                             
+     in the reward location identified as 'second' */                                                        
+  for (int j = 0; j < num_states[1]; ++j)                                                                    
+  {                                                                                                          
+    this->setValue(a,1,reward_second_index,j,1);                                                             
+    this->setValue((1-a)/2,1,reward_second_index,j,0);                                                       
+    this->setValue(a,2,reward_second_index,j,0);                                                             
+    this->setValue((1-a)/2,2,reward_second_index,j,1);                                                       
+    for (int k = 0; k < num_states[2]; ++k)                                                                  
+      this->setValue((1-a)/2,0,reward_second_index,j,k);                                                     
   }
 }
 ```
