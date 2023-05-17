@@ -502,18 +502,28 @@ to compile the [`main`](../../examples/main_epistemic_chaining.cpp) you can type
 `g++  -std=c++11 -Wall -O3 -D PRINT -D BEST_AS_MAX -o  epistemic_chaining  main_epistemic_chaining.cpp`
 
 Executing the program we obtain the following output:
-``
+
 size_x=7
+
 size_y=5
+
 seed=0
+
 T=11
+
 cue2=3
+
 reward=1
+
 epistemic_chaining(7, 5)
+
 Ns=[ 35 4 2 ]
+
 Time taken by MDP constructor is : 0.000130363 sec
+
 State:
-# # # # # # # # #
+
+\# \# \# \# \# \# \# \# \#
 # M . L1. . . . #
 # . . . L2. S!. #
 # C1. . . . . . #
@@ -643,4 +653,3 @@ Reward: Cheese
 Time taken by active inference is : 0.198082 sec
 Total Time is : 0.19829 sec
 =========
-``
