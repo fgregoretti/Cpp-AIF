@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ctime>
 #include <iomanip>
+#include <chrono>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -181,7 +182,7 @@ int main(int argc,char *argv[])
 
   std::vector<likelihood<FLOAT_TYPE,4>*> _a4;
   _likelihood<FLOAT_TYPE,4> *__a4 = new _likelihood<FLOAT_TYPE,4>(3,Ns[0],Ns[1],Ns[2]);
-  __a4->Observe(Ns, grid_, reward_pos_, 0.9);
+  __a4->Observe(Ns, grid_, reward_pos_, 1);
   _a4.push_back((likelihood<FLOAT_TYPE,4> *) __a4);
   __A.push_back(_a4);
 
@@ -219,31 +220,36 @@ int main(int argc,char *argv[])
   unsigned int N = 4;
   unsigned int policyDepth = 4;
 
-  time_t start, end;
-
-  time(&start);
+  auto start = std::chrono::high_resolution_clock::now();
 
   _MDP<FLOAT_TYPE,4> *mdp = new _MDP<FLOAT_TYPE,4>(__D,__S,__B,__A,__C,V,grid_,T,64,4,1./4,1,N,policyDepth,seed);
 
-  time(&end);
+  auto end = std::chrono::high_resolution_clock::now();
+
+  std::chrono::duration<double> elapsed_time = end - start;
 
   std::cout << "Time taken by MDP constructor is : "
-            << difftime(end,start) << " sec " << std::endl; 
+            << elapsed_time.count() << " sec " << std::endl; 
 
   PrintState(start_state, grid_);
 
-  time_t start_ats, end_ats;
-
-  time(&start_ats);
+  auto start_ats = std::chrono::high_resolution_clock::now();
 
   mdp->active_inference();
 
-  time(&end_ats);
+  auto end_ats = std::chrono::high_resolution_clock::now();
+
+  std::chrono::duration<double> elapsed_time_ = end_ats - start_ats;
 
   std::cout << "Time taken by active inference is : "
-            << difftime(end_ats,start_ats) << " sec "
-	    << std::endl; 
-  std::cout << "Total Time is : " << difftime(end_ats,start)
+            << elapsed_time_.count() << " sec "
+	    << std::endl;
+
+  std::chrono::duration<double> elapsed_time_t = end_ats - start;
+
+  std::cout << "Total Time is : " << std::fixed
+	    << std::setprecision(5)
+	    << elapsed_time_t.count()
             << " sec " << std::endl; 
 
   std::cout << "=========" << std::endl;

@@ -112,7 +112,7 @@ public:
 
     int pos = grid_.CoordToIndex(start_pos_);
 
-    this->value[pos] = 1.0;
+    this->setValue(1.0,pos);
   }
 };
 
@@ -126,11 +126,11 @@ public:
   {
     for(unsigned int i = 0; i < this->Ns; i++)
     {
-      this->col[i] = 0;
-      this->row_ptr[i] = 0;
-      this->data[i] = 0.0;
+      this->SetCol(0,i);
+      this->SetRowPtr(0,i);
+      this->SetData(0.0,i);
     }
-    this->row_ptr[this->Ns] = 0;
+    this->SetRowPtr(0,this->Ns);
 
     unsigned int row[this->Ns];
     memset(row, 0, this->Ns*sizeof(unsigned int));
@@ -141,7 +141,7 @@ public:
     {
       col_ptr[s] = s;
       row[s] = NextState(s, action, grid_);
-      this->data[s] = 1;
+      this->SetData(1,s);
     }
     col_ptr[this->Ns] = this->Ns;
 
@@ -248,11 +248,7 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
   for (int i = 0; i < num_states[0]; ++i)
     for (int j = 0; j < num_states[1]; ++j)
       for (int k = 0; k < num_states[2]; ++k)
-      {
-        this->setValue(a,0,i,j,k);
-        this->setValue((1-a)/2,1,i,j,k);
-        this->setValue((1-a)/2,2,i,j,k);
-      }
+        this->setValue(1,0,i,j,k);
 
   int reward_first_index = grid_.CoordToIndex(reward_location[0]);
   int reward_second_index = grid_.CoordToIndex(reward_location[1]);
@@ -262,28 +258,21 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states, Grid<int> grid_,
   for (int j = 0; j < num_states[1]; ++j)
   {
     this->setValue(a,1,reward_first_index,j,0);
+    this->setValue((1-a)/2,1,reward_first_index,j,1);
     this->setValue(a,2,reward_first_index,j,1);
+    this->setValue((1-a)/2,2,reward_first_index,j,0);
     for (int k = 0; k < num_states[2]; ++k)
       this->setValue((1-a)/2,0,reward_first_index,j,k);
   }
-  for (int j = 0; j < num_states[1]; ++j)
-  {
-    for (int k = 0; k < num_states[2]; ++k)
-    {
-      std::cout << "a[0,"<<reward_first_index<<","<<j<<","<<k<<"]=" << (*this)(0,reward_first_index,j,k) << std::endl;
-      std::cout << "a[1,"<<reward_first_index<<","<<j<<","<<k<<"]=" << (*this)(1,reward_first_index,j,k) << std::endl;
-      std::cout << "a[2,"<<reward_first_index<<","<<j<<","<<k<<"]=" << (*this)(2,reward_first_index,j,k) << std::endl;
-      std::cout << "a[0,25,"<<j<<","<<k<<"]=" << (*this)(0,25,j,k) << std::endl;
-      std::cout << "a[1,25,"<<j<<","<<k<<"]=" << (*this)(1,25,j,k) << std::endl;
-      std::cout << "a[2,25,"<<j<<","<<k<<"]=" << (*this)(2,25,j,k) << std::endl;
-    }
-  }
+
   /* fill out the contingences arising when the agent is located
      in the reward location identified as 'second' */
   for (int j = 0; j < num_states[1]; ++j)
   {
     this->setValue(a,1,reward_second_index,j,1);
+    this->setValue((1-a)/2,1,reward_second_index,j,0);
     this->setValue(a,2,reward_second_index,j,0);
+    this->setValue((1-a)/2,2,reward_second_index,j,1);
     for (int k = 0; k < num_states[2]; ++k)
       this->setValue((1-a)/2,0,reward_second_index,j,k);
   }
