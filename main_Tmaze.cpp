@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <vector>
 #include <stdlib.h>
-#include <ctime>
 #include <cstring>
 #include <iomanip>
 #include "common.h"
@@ -198,36 +197,13 @@ int main(int argc,char *argv[])
   };
   //std::vector<std::vector<int>> V;
 
-  time_t start, end;
-
-  time(&start);
-
 #ifdef FULL
   MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,seed);
 #else
   MDP<FLOAT_TYPE,3> *mdp = new MDP<FLOAT_TYPE,3>(__D,__S,__B,__A,__C,V,T,64,4,1./4,1,4,1,seed);
 #endif
 
-  time(&end);
-
-  std::cout << "Time taken by MDP constructor is : "
-            << difftime(end,start) << " sec " << std::endl; 
-
-  time_t start_ats, end_ats;
-
-  time(&start_ats);
-
   mdp->active_inference();
-
-  time(&end_ats);
-
-  std::cout << "Time taken by active inference is : "
-            << difftime(end_ats,start_ats) << " sec "
-	    << std::endl; 
-  std::cout << "Total Time is : " << difftime(end_ats,start)
-            << " sec " << std::endl; 
-
-  std::cout << "=========" << std::endl;
 
   for (std::size_t i = 0; i < mdp->_st.size(); i++)
     std::cout << "T=" << i+1
