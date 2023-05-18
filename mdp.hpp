@@ -51,6 +51,9 @@ protected:
   std::vector<States*> _S; /* real state in the world */
   std::vector<std::vector<Transitions<Ty>*> > _B;
   std::vector<std::vector<likelihood<Ty,M>*> > _A;
+#ifdef WITH_GP
+  std::vector<std::vector<likelihood<Ty,M>*> > _AA;
+#endif
 #ifndef NO_PRECOMPUTE_ALOGA
   std::vector<std::vector<likelihood<Ty,M>*> > _AlogA;
 #endif
@@ -81,6 +84,9 @@ public:
       std::vector<States*>& __S, /* true initial state */
       std::vector<std::vector<Transitions<Ty>*>>& __B, /* transition probabilities */
       std::vector<std::vector<likelihood<Ty,M>*>>& __A, /* observation model */
+#ifdef WITH_GP
+      std::vector<std::vector<likelihood<Ty,M>*>>& __AA, /* observation process */
+#endif
       std::vector<Priors<Ty>*>& __C, /* terminal cost probabilities */
       std::vector<std::vector<int>>& __V, /* policies */
       unsigned int T_ = 10, Ty alpha_ = 8, Ty beta_ = 4,
@@ -150,6 +156,9 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
   std::vector<States*>& __S,
   std::vector<std::vector<Transitions<Ty>*>>& __B,
   std::vector<std::vector<likelihood<Ty,M>*>>& __A,
+#ifdef WITH_GP
+  std::vector<std::vector<likelihood<Ty,M>*>>& __AA,
+#endif
   std::vector<Priors<Ty>*>& __C,
   std::vector<std::vector<int>>& __V,
   unsigned int T_, Ty alpha_, Ty beta_,
@@ -287,6 +296,9 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 #ifndef NO_PRECOMPUTE_ALOGA
     std::vector<likelihood<Ty,M>*> a2;
 #endif
+#ifdef WITH_GP
+    std::vector<likelihood<Ty,M>*> aa1;
+#endif
 
     /* future outcomes probabilities (priors) */
     _lnC.push_back(new Priors<Ty>(*__C[g]));
@@ -298,6 +310,13 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
       std::cerr << "__A not correctly specified" << std::endl;
       exit(-1);
     }
+#ifdef WITH_GP
+    if ( __AA[g].size() != __A[g].size() )
+    {
+      std::cerr << "__AA not correctly specified" << std::endl;
+      exit(-1);
+    }
+#endif
 
     for (unsigned int j = 0; j < __A[g].size(); j++)
     {
@@ -306,6 +325,13 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
         std::cerr << "__A not correctly specified" << std::endl;
         exit(-1);
       }
+#ifdef WITH_GP
+      if (__AA[g][j]->get_order() != Ns.size()+1 )
+      {
+        std::cerr << "__AA not correctly specified" << std::endl;
+        exit(-1);
+      }
+#endif
 
 #ifdef CHECK_CONSISTENCY_VERBOSE
       auto dims = __A[g][j]->get_dimensions();
@@ -333,11 +359,18 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 #ifndef NO_PRECOMPUTE_ALOGA
       a2.push_back(new likelihood<Ty,M>(__A[g][j]->AlogA()));
 #endif
+#ifdef WITH_GP
+      __AA[g][j]->Norm();
+      aa1.push_back(__AA[g][j]);
+#endif
     }
 
     _A.push_back(a1);
 #ifndef NO_PRECOMPUTE_ALOGA
     _AlogA.push_back(a2);
+#endif
+#ifdef WITH_GP
+    _AA.push_back(aa1);
 #endif
 
 #ifdef DEBUG
@@ -837,8 +870,13 @@ void MDP<Ty,M>::sample_observation(unsigned int tt, int action)
   for (unsigned int g = 0; g < Ng; g++) {
     std::vector<Ty> po(No[g], 0.0);
 
+#ifdef WITH_GP
+    int act_t = (_AA[g].size() == 1) ? 0 : action;
+    _AA[g][act_t]->find(_st[tt], po);
+#else
     int act_t = (_A[g].size() == 1) ? 0 : action;
     _A[g][act_t]->find(_st[tt], po);
+#endif
 #ifdef DEBUG
     std::cout << "sample_observation: po = ";
     for (Ty val: po) {
