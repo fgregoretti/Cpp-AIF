@@ -112,6 +112,8 @@ public:
   int getU(unsigned int t) { return this->U[t]; }
 
   virtual ~MDP() {
+    std::for_each(_lnD.begin(), _lnD.end(), delete_pointed_to<Beliefs<Ty>>);
+    std::for_each(_lnC.begin(), _lnC.end(), delete_pointed_to<Priors<Ty>>);
     std::for_each(_X.begin(), _X.end(), delete_pointed_to<Beliefs<Ty>>);
     if (Au.size() != 0)
       for (unsigned int g = 0; g < Ng; g++)
@@ -229,10 +231,9 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 
   for (unsigned int i = 0; i < Nf; i++) {
     /* initial beliefs */
-    __D[i]->NormLog();
+    _lnD.push_back(new Beliefs<Ty>(*__D[i]));
 
-    //_lnD.push_back(new Beliefs<Ty>(__D[i]));
-    _lnD.push_back(__D[i]);
+    _lnD[i]->NormLog();
 
     Ns.push_back(_lnD[i]->get_size());
 
@@ -288,10 +289,9 @@ MDP<Ty,M>::MDP(std::vector<Beliefs<Ty>*>& __D,
 #endif
 
     /* future outcomes probabilities (priors) */
-    __C[g]->NormLog();
+    _lnC.push_back(new Priors<Ty>(*__C[g]));
 
-    //_lnC.push_back(new Priors<Ty>(*__C[g]));
-    _lnC.push_back(__C[g]);
+    _lnC[g]->NormLog();
 
     if ( (__A[g].size() > 1) && (__A[g].size() != Nu) )
     {
@@ -889,6 +889,7 @@ void MDP<Ty,M>::active_inference()
   }
 }
 
+#ifdef LEARNING
 /* Mapping from hidden states to outcomes: _a */
 template <typename Ty, std::size_t M>
 std::vector<std::vector<likelihood<Ty,M>*>>& MDP<Ty,M>::update_A(
@@ -1028,4 +1029,5 @@ std::vector<Beliefs<Ty>*>& MDP<Ty,M>::update_D(
 
   return _d;
 }
+#endif
 #endif
