@@ -7,12 +7,15 @@ template `MDP` class: Ty is the template argument which is a placeholder for the
  
 ***Constructor:***
 ```c++
-MDP(std::vector<Beliefs<Ty>*>& __D,
-      std::vector<States*>& __S,
-      std::vector<std::vector<Transitions<Ty>*>>& __B,
-      std::vector<std::vector<likelihood<Ty,M>*>>& __A,
-      std::vector<Priors<Ty>*>& __C,
-      std::vector<std::vector<int>>& __V,
+  MDP(std::vector<Beliefs<Ty>*>& __D, /* initial state probabilities */
+      std::vector<States*>& __S, /* true initial state */
+      std::vector<std::vector<Transitions<Ty>*>>& __B, /* transition probabilities */
+      std::vector<std::vector<likelihood<Ty,M>*>>& __A, /* observation model */
+#ifdef WITH_GP
+      std::vector<std::vector<likelihood<Ty,M>*>>& __AA, /* observation process */
+#endif
+      std::vector<Priors<Ty>*>& __C, /* terminal cost probabilities */
+      std::vector<std::vector<int>>& __V, /* policies */
       unsigned int T_ = 10, Ty alpha_ = 8, Ty beta_ = 4,
       Ty lambda_ = 0, Ty gamma_ = 1, unsigned int N_ = 4,
 #ifndef FULL
@@ -26,6 +29,7 @@ MDP(std::vector<Beliefs<Ty>*>& __D,
 - `__S` agent's true inital state
 - `__B` transition model
 - `__A` observation model
+- `__AA` when compiled with macro WITH_GP, observation likelihood of the generative process 
 - `__C` preferred outcomes
 - `__V` policies
 - `T_` temporal horizon
