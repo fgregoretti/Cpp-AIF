@@ -33,6 +33,8 @@ Preprocessor directive macros:
 - `-D DEBUG` print out debugging information
 - `-D FULL` temporal horizon and time length policy coincide
 - `-D BEST_AS_MAX` the selected action is chosen as the maximum of the posterior over actions
+- `-D WITH_GP` if the generative model is not a veridical representation of the generative process
+- `-D LEARNING` to use the functions for updating parameters of posteriors in POMDP generative models
 
 For example to compile the [T-Maze](doc/tmaze_doc/tmaze.md) example you can type:
 
