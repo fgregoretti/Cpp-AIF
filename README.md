@@ -1,5 +1,5 @@
 # cpp-AcI
-``cpp-AcI`` is a C++ header library for simulating active inference agents in
+``cpp-AcI`` is a C++ header-only library for simulating active inference agents in
 discrete space and time, using partially-observed Markov Decision Processes
 (POMDPs) as a generative model class.
 
@@ -54,7 +54,7 @@ Overall, ``cpp-AcI`` provides a powerful and flexible tool for implementing acti
 
 We have implemented specific [classes](doc/generative_model_classes.md) for building the generative model.
 
-The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing custom classes for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
+The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing specifically designed classes for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
 
 ## Examples
 
