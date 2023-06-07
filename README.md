@@ -12,10 +12,9 @@ poi c'è quest'altro tutorial https://pymdp-rtd.readthedocs.io/en/latest/noteboo
 aggiungere una cosa così in mdp class? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/pymdp_fundamentals.html#constructing-factorized-distributions-with-object-arrays
 
 ## Quick-start: Usage
-``cpp-AcI`` is a header-only C++ library. No installation is required; in order to use ``cpp-AcI`` to build and develop active inference agents, just include the headers:
+``cpp-AcI`` is a header-only C++ library. No installation is required; in order to use ``cpp-AcI`` to build and develop active inference agents, just include the header:
 
 ```c++
-#include "common.h"
 #include "mdp.hpp"
 ```
 
