@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <cstring>
 #include <iomanip>
-#include "common.h"
 #include "mdp.hpp"
 
 const std::string LocationString[] = { "Center", "Left", "Right", "Bottom" };
