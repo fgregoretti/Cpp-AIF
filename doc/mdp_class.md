@@ -206,7 +206,7 @@ Update parameters of the observation likelihood distribution.
 
 **Parameters**
 - `_a` observation likelihood to be updated
-- `eta` :warning:
+- `eta` learning rate
 - `tt` time step
 
 ```c++
@@ -218,7 +218,7 @@ Update parameters of the transition distribution.
 
 **Parameters**
 - `_b` transition distribution to be updated
-- `eta` :warning:
+- `eta` learning rate
 - `tt` time step
 
 
@@ -231,7 +231,7 @@ Update prior preferences.
 
 **Parameters**
 - `_c` prior preferences to be updated
-- `eta` :warning:
+- `eta` learning rate
 - `tt` time step
 
 ```c++
@@ -243,5 +243,5 @@ Update parameters of the initial hidden state distribution (prior beliefs about 
 
 **Parameters**
 - `_d` initial beliefs to be updated
-- `eta` :warning:
+- `eta` learning rate
 - `tt` time step
