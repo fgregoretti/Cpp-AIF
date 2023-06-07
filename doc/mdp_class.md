@@ -194,6 +194,11 @@ Next observed state under the action `action`.
 - `t` time step
 - `action` sampled at previous time step
 
+```c++
+void actiive inference()
+```
+basic active inference procedure 
+
 ## Learning
 The following public methods update parameters of posteriors in POMDP generative models.
 
