@@ -1,5 +1,5 @@
   # Active Inference
-Active Inference agents implement perception and action planning through the minimization of variational free energy~\cite{parr2022active}. To minimize free energy, the agents use a generative model of the causes of their perceptions, which encodes the joint probability of the stochastic variables illustrated in \textcolor{revcol}{Fig.~\ref{fig:model}}, using the formalism of probabilistic graphical models~\cite{bishop2006pattern}. 
+Active Inference agents implement perception and action planning through the minimization of variational free energy~\cite{parr2022active}. To minimize free energy, the agents use a generative model of the causes of their perceptions, which encodes the joint probability of the stochastic variables illustrated in Fig.~\ref{fig:model}, using the formalism of probabilistic graphical models~\cite{bishop2006pattern}. 
 The agent's generative model is defined as follows:
 \begin{align}
 & 
@@ -46,7 +46,7 @@ This condition holds when the sufficient statistics are:
 \end{align}
 \end{subequations}
 where the symbol “$\cdot$” denotes the inner product, defined as $\mathbf{A}\cdot\mathbf{B}=\mathbf{A}^T\mathbf{B}$, with the two arbitrary matrices $\mathbf{A}$ and $\mathbf{B}$.
-Action selection is operated by selecting the policy (i.e., sequence of control states $u_1$,$u_2$,$\dots$,$u_t$) that is expected to minimize free energy the most in the future. The policy distribution $\boldsymbol{\pi}$ is expressed in Eq.~\eqref{eq:suffpi}; the term $\sigma\left(\cdot\right)$ is a softmax function, $\mathbf{E}$ encodes a prior over the policies (reflecting habitual components of action selection), $\mathbf{G}$ is the expected free energy \textcolor{red}{(EFE)} of the policies (reflecting goal-directed components of action selection) and $\gamma$ is a precision term that encodes the confidence of beliefs about $\mathbf{G}$. 
+Action selection is operated by selecting the policy (i.e., sequence of control states $u_1$,$u_2$,$\dots$,$u_t$) that is expected to minimize free energy the most in the future. The policy distribution $\boldsymbol{\pi}$ is expressed in Eq.~\eqref{eq:suffpi}; the term $\sigma\left(\cdot\right)$ is a softmax function, $\mathbf{E}$ encodes a prior over the policies (reflecting habitual components of action selection), $\mathbf{G}$ is the expected free energy (EFE) of the policies (reflecting goal-directed components of action selection) and $\gamma$ is a precision term that encodes the confidence of beliefs about $\mathbf{G}$. 
 The expected free energy (EFE) $\mathbf{G}(\pi_t)$ of each policy $\pi_t$ is defined as:
 \color{red}
 \begin{equation}
