@@ -5,11 +5,13 @@ discrete space and time, using partially-observed Markov Decision Processes
 
 The library implements a multicore parallelization of the most demanding computational kernels. Note that most of the computational complexity of active inference depends on the multidimensional inner products involved both in expected free energy computation and state estimation.
 
+<!--
 realizzare un tutorial così? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/active_inference_from_scratch.html
 
 poi c'è quest'altro tutorial https://pymdp-rtd.readthedocs.io/en/latest/notebooks/using_the_agent_class.html
 
 aggiungere una cosa così in mdp class? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/pymdp_fundamentals.html#constructing-factorized-distributions-with-object-arrays
+-->
 
 ## Quick-start: Usage
 ``cpp-AcI`` is a header-only C++ library. No installation is required; in order to use ``cpp-AcI`` to build and develop active inference agents, just include the header:
