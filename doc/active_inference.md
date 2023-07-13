@@ -69,9 +69,12 @@ After scoring all the policies using EFE, action selection is performed by drawi
 ## References
 <a id="1">[1]</a> 
 parr2022active.
+
 <a id="2">[2]</a>
 bishop2006pattern.
+
 <a id="3">[3]</a>
 8588399.
+
 <a id="4">[4]</a>
 opper2001advanced.
