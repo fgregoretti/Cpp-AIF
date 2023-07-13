@@ -1,5 +1,5 @@
-  # Active Inference
-Active Inference agents implement perception and action planning through the minimization of variational free energy~\cite{parr2022active}. To minimize free energy, the agents use a generative model of the causes of their perceptions, which encodes the joint probability of the stochastic variables illustrated in Fig.~\ref{fig:model}, using the formalism of probabilistic graphical models~\cite{bishop2006pattern}. 
+# Active Inference
+Active Inference agents implement perception and action planning through the minimization of variational free energy [[1]](#1). To minimize free energy, the agents use a generative model of the causes of their perceptions, which encodes the joint probability of the stochastic variables illustrated in Fig.~\ref{fig:model}, using the formalism of probabilistic graphical models~\cite{bishop2006pattern}. 
 The agent's generative model is defined as follows:
 \begin{align}
 & 
@@ -63,3 +63,7 @@ The EFE can be used as a quality score for the policies and has two terms. The f
 This term favours the policies that entail low risk and minimise the difference between predicted ($Q\left(o_\tau|\pi\right)$) and preferred ($P\left(o_\tau \right)\equiv\mathbf{C}$) future outcomes. The second term of Eq.~\eqref{eq:EFE} is the expected entropy under the posterior over hidden states and it represents the epistemic component of the quality score. This term favours policies that lead to states that diminish the uncertainty future outcomes $H\left[P\left( o_\tau|s_\tau \right) \right]$.
 
 After scoring all the policies using EFE, action selection is performed by drawing over the action posterior expectations derived from the sufficient statistic $\boldsymbol{\pi}$ computed via Eq.~\eqref{eq:suffpi}. Then, the selected action is executed, the agent receives a novel observation and the perception-action cycle starts again. See~\cite{parr2022active} for more details.
+
+## References
+<a id="1">[1]</a> 
+parr2022active.
