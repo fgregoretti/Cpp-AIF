@@ -35,7 +35,7 @@ Q\left(s_{0:T},u_{1:T},\gamma\right)=Q\left(\pi\right)Q\left(\gamma\right)\prod_
 \end{equation}
 ```
 where the sufficient statistics are encoded by the expectations $`\boldsymbol{\mu}=\left(\mathbf{\tilde{s}}^{\boldsymbol{\pi}},\boldsymbol{\pi},\boldsymbol{\gamma}\right)`$, with $`\mathbf{\tilde{s}}^{\boldsymbol{\pi}}=\mathbf{\tilde{s}}_0^{\boldsymbol{\pi}}`$,
-$\dots$, $`\mathbf{\tilde{s}}_ T^{\boldsymbol{\pi}}`$. Following a variational approach, the distribution in Eq. $2$ best approximates the posterior when its sufficient statistics $\mu$ minimise the free energy of the generative model, [[1]])(#1).
+$\dots$, $`\mathbf{\tilde{s}}_ T^{\boldsymbol{\pi}}`$. Following a variational approach, the distribution in Eq. $2$ best approximates the posterior when its sufficient statistics $\mu$ minimise the free energy of the generative model, [[1]](#1).
 This condition holds when sufficient statistics are:
 ```math
 \begin{align}
