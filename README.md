@@ -5,6 +5,10 @@ discrete space and time, using partially-observed Markov Decision Processes
 
 The library implements a multicore parallelization of the most demanding computational kernels. Note that most of the computational complexity of active inference depends on the multidimensional inner products involved both in expected free energy computation and state estimation.
 
+One of the key benefits of using ``cpp-AIF`` is that it allows you to abstract away the underlying mathematical details of [active_inference](doc/active_inference.md). This can be particularly useful if you are not familiar with the underlying theory, or if you simply want to focus on building your system rather than worrying about the math.
+
+Overall, ``cpp-AIF`` provides a powerful and flexible tool for implementing active inference in your projects. By allowing you to focus on the high-level aspects of your system and abstracting away the mathematical nuances, it can help you save time and improve the quality of your work.
+
 <!--
 realizzare un tutorial così? https://pymdp-rtd.readthedocs.io/en/latest/notebooks/active_inference_from_scratch.html
 
@@ -49,13 +53,9 @@ It provides a high-level abstraction that allows you to specify the generative m
 
 Once you have created your generative model, you can use it to create an `MDP` object. The `MDP` Class provides necessary methods for performing active inference, including methods for computing the free energy, updating beliefs about the state of the system, and generating actions based on those beliefs.
 
-One of the key benefits of using ``cpp-AIF`` is that it allows you to abstract away the underlying mathematical details of active inference. This can be particularly useful if you are not familiar with the underlying theory, or if you simply want to focus on building your system rather than worrying about the math.
-
-Overall, ``cpp-AIF`` provides a powerful and flexible tool for implementing active inference in your projects. By allowing you to focus on the high-level aspects of your system and abstracting away the mathematical nuances, it can help you save time and improve the quality of your work.
-
-We have implemented specific [classes](doc/generative_model_classes.md) for building the generative model.
-
 The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing specifically designed classes for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
+
+We have implemented specific [classes](doc/generative_model_classes.md) for building the generative model and [here](doc/data_structure.md) we focus on how we create the objects (e.g. components of the generative model).
 
 ## Examples
 
