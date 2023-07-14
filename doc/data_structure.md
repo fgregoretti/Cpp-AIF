@@ -1,5 +1,5 @@
 # Data structure and factorized distributions 
-In `cpp-AIF` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "specific objects". These are instances of [classes](generative_model_classes.md) specifically designed to handle active inference data, with an array as member. 
+In `cpp-AIF` generative model distributions as well as expectations of hidden states, states and observations are represented as vector of vectors (**$\bf{A}$** and **$\bf{B}$**) or vector (all the others) of "specific objects". These are instances of [classes](generative_model_classes.md) specifically designed to handle active inference data, with an array as a member. 
 
 Understanding the representation of factorized probability distributions as vector (of vectors) of class instances is critical for understanding and constructing generative models in `cpp-AIF`. In particular, we use vector of vectors of specific class instances to encode the observation and transition models of the agent’s generative model. This representation is chosen because the observation space is typically factorized into multiple observation factors, and the hidden states are similarly factorized into multiple hidden state factors. Additionally, this allows for the expression of dependencies on control states **$u$** that the agent can execute.
 
@@ -11,7 +11,7 @@ $$ \mathbf{A} = {A^0_u, A^1_u, …, A^{N_g}_ u }, \hspace{5mm} A^m_u = P(o^m_t |
 
 where **$N_g$** is the number of observation factors and **$N_f$** is the number of hidden state factors.
 
-Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of [`likelihood`](generative_model_classes.md#template-typename-t-typename-s-class-likelihood)  class instances. **$N_u$** is the number of control states. The `likelihood` class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations, eventually further conditioned on actions or control states along observation factor.
+Therefore, we represent it as a vector of size **$N_g$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of [`likelihood`](generative_model_classes.md#template-typename-t-typename-s-class-likelihood)  class instances. **$N_u$** is the number of control states. The `likelihood` class handles a multidimensional array that encodes conjunctive relationships between combinations of hidden states and observations, eventually further conditioned on actions or control states along the observation factor.
 
 For example, if **$N_f=3$**, **$N_g=2$**, the number of hidden states for each factor is **$\bf{N_s}=[4,2,3]$** and the number of observations for each factor is **$\bf{N_o}=[3,5]$**, **$A^0_u$** stores the conditional relationships between the hidden states $\mathbf{s}$ and observations within the first factor $o^1_t$, which has dimensionality 3. Therefore **$A^0_u$** is a four-dimensional array with dimensions **$(3, 4, 2, 3)$** – it stores the conditional relationships between each setting of the hidden state factors (with dimensionalities of **$[4, 2, 3]$**) and the observations within the first factor, which has dimensionality **$3$**. Then, each array **$A^m_u$** stores the conditional dependencies between all the hidden state factor combinations (configurations of $s^0, s^1, …, s^{N_f}$) and the observations along factor **$m$**.
 
@@ -54,7 +54,7 @@ We can use the instruction
 ```c++
 Transitions<double> *B0 = new Transitions<double>(4,4);
 ```
-to create a transition matrix of double with dimensions **$(4, 4)$** and $4$ non-zero values (first parameter is size of the matrix, while second parameter is number of non-zero values). `Transitions` matrices are stored in CSR format, therefore the easyest way to design a customized transition model is to build a 2D matrix using vector of vectors and then pass it to the constructor with vector of vectors as parameter. Alternatively it would be possible to write a custom function that uses `SetCol`, `SetRowPtr` and `SetData` class methods to fill out the arrays (**$col$**, **$row\\_ ptr$**, **$data$**) used to represent transition matrix in CSR format.
+to create a transition matrix of double with dimensions **$(4, 4)$** and $4$ non-zero values (the first parameter is the size of the matrix, while the second parameter is the number of non-zero values). `Transitions` matrices are stored in CSR format, therefore the easiest way to design a customized transition model is to build a 2D matrix using vector of vectors and then pass it to the constructor with vector of vectors as parameter. Alternatively, it would be possible to write a custom function that uses `SetCol`, `SetRowPtr` and `SetData` class methods to fill out the arrays (**$col$**, **$row\\_ ptr$**, **$data$**) used to represent transition matrix in CSR format.
 
 To create **$\bf{B}$** we define a vector of vectors of pointers to `Transitions` objects 
 ```c++
@@ -64,7 +64,7 @@ to be passed to `MDP` constructor. We also need to define a vector of pointers t
 
 `std::vector<Transitions<FLOAT_TYPE,4>*> b0;`
 
-if **$N_u=4$** and assuming that, regarding first hidden state factor, control states determine transitions from one state to another we need to create a transition matrix for each control state:
+if **$N_u=4$** and assuming that, regarding the first hidden state factor, control states determine transitions from one state to another we need to create a transition matrix for each control state:
 
 ```c++
 for (unsigned int a = 0; a < Nu; a++) {                                                
