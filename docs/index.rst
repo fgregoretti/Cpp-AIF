@@ -1,5 +1,5 @@
 
-cpp-AcI's documentation
+cpp-AIF's documentation
 =================================
 
 ``cpp-AIF`` is a C++ header library for simulating active inference agents in
