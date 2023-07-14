@@ -8,7 +8,7 @@ Cue 1 is located in one location of the grid world, while there are four additio
 
 The optimal strategy to maximize reward while minimizing risk in this task involves the following approach: first, the agent needs to visit Cue 1 to obtain the signal that reveals the location of Cue 2. Once the location of Cue 2 is determined, the agent can then visit that location to receive the signal that indicates the location of the reward or punishment.
 
-For the implementation of this problem using `Cpp-AIF` refer to the files [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) and [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp). Here, we have built 
+For the implementation of this problem using `cpp-AIF` refer to the files [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) and [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp). Here, we have built 
 `Beliefs`, `Transitions` and `likelihood` derived classes to add specialized methods to fill the arrays but one can also write these methods elsewhere.
 
 ## 2. The 2D grid world
