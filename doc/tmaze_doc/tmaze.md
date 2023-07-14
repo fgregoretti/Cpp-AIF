@@ -37,7 +37,7 @@ In `cpp-AIF`, we use a set of `likelihood` class instances to store the set of p
 
 Therefore, the multidimensional arrays **$A^0$** and **$A^1$** are both 3-dimensional arrays with dimensions **$4 \times 4 \times 2$** and are the same for each action **$u$**.
 
-We create the observation model defining a vector of vector of objects `likelihood`. Specifically, a vector with size **$2$**, and each element will contain a vector of one object `likelihood` with size **$4 \times 4 \times 2$**.
+We create the observation model defining a vector of vectors of objects `likelihood`. Specifically, a vector with size **$2$**, and each element will contain a vector of one object `likelihood` with size **$4 \times 4 \times 2$**.
 
 ```c++
   std::vector<std::vector<likelihood<FLOAT_TYPE,3>*>> __A;
@@ -186,7 +186,7 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
 
 The ability to modify the agent's prior beliefs and bias it towards observing the $Reward$ outcome more often than the $No Reward$ outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation. Applying [`softmax`](../utils.md#softmax) to $C^0$ and $C^1$ guarantees that the prior preferences will be in a range of 0 and 1, and the sum of them is 1, thus the preferences are interpretable as a percentage rate for each outcome. 
 
-In order to set up the state of the environment at the first time step in a $Reward\ on\ Left$ trial assuming the agent starts in the $Center$ location, we define a vector of two `States` object, one for each factor.
+In order to set up the state of the environment at the first time step in a $Reward\ on\ Left$ trial assuming the agent starts in the $Center$ location, we define a vector of two `States` objects, one for each factor.
 
 ```c++
   unsigned int context = 0;
