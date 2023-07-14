@@ -9,12 +9,12 @@ Cue 1 is located in one location of the grid world, while there are four additio
 The optimal strategy to maximize reward while minimizing risk in this task involves the following approach: first, the agent needs to visit Cue 1 to obtain the signal that reveals the location of Cue 2. Once the location of Cue 2 is determined, the agent can then visit that location to receive the signal that indicates the location of the reward or punishment.
 
 For the implementation of this problem using `cpp-AIF` refer to the files [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) and [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp). Here, we have built 
-`Beliefs`, `Transitions` and `likelihood` derived classes to add specialized methods to fill the arrays but one can also write these methods elsewhere.
+`Beliefs`, `Transitions` and `likelihood` derived classes in order to add specialized methods to fill the arrays but one can also write these methods elsewhere.
 
 ## 2. The 2D grid world
 To create the physical environment inhabited by the agent we defined a 2D grid world within a specific class `Grid` (header file [`grid.hpp`](../../examples/grid.hpp)). Locations on the grid are identified using **$(x, y)$** tuples, which correspond to a specific row and column, respectively, on the grid.
 
-Let's create a grid world with dimensions **$7 \times 5$**. To this purpose we can write a function whose parameters are `Grid<int> grid_(size_x, size_y)`, `Coord cue1_pos_`, `std::vector<Coord> cue2_pos_`, `Coord start_position_`, `std::vector<Coord> reward_pos_`, `unsigned int reward`, respectively the `Grid` object, the Cue 1 location, the vector of four Cue2 locations, the agent start location, the vector of the reward locations, and the variable indicating where the positive reward is located, as follows:
+Let's create a grid world with dimensions **$7 \times 5$**. To this purpose, we can write a function whose parameters are `Grid<int> grid_(size_x, size_y)`, `Coord cue1_pos_`, `std::vector<Coord> cue2_pos_`, `Coord start_position_`, `std::vector<Coord> reward_pos_`, `unsigned int reward`, respectively the `Grid` object, the Cue 1 location, the vector of four Cue2 locations, the agent start location, the vector of the reward locations, and the variable indicating where the positive reward is located, as follows:
 
 ```c++
 void Init_7_5(Grid<int>& grid_, Coord& cue1_pos_,
@@ -43,7 +43,7 @@ The hidden states are factorized into three factors **$S^0, S^1$**, and **$S^2$*
 1. Agent location: **$S^0$** encodes the agent's location in the grid world with as many elements as there are the grid locations. Therefore it has cardinality **$dim_x \times dim_y$** and the tuples of **$(x, y)$** coordinate locations are mapped to linear indices by using the function **$y \times dim_x+x$** (`CoordToIndex` method of the class `Grid`). It follows an example for the grid world of size **$7 \times 5$**
 <img src=s0.png width=300>
 
-2. Cue2 location: **$S^1$** has cardinality **$4$**, encoding in which of the four possible location Cue 2 is actually located (**$[L1, L2, L3, L4]$**).
+2. Cue2 location: **$S^1$** has cardinality **$4$**, encoding in which of the four possible locations Cue 2 is actually located (**$[L1, L2, L3, L4]$**).
 
 3. Reward location: **$S^2$** has cardinality **$2$**, encoding which of the two reward positions ("First" or "Second") the "Cheese" has to be found in (**$[First, Second]$**).
 
@@ -61,16 +61,16 @@ Observations **$\bf{O}$** are organized in four factors **$O^0, O^1, O^2$**, and
 
 The vector **$\bf{N_o}$** listing the number of outcomes for each factor is **$[dim_x \times dim_y, 5, 3, 3]$**.
 
-The control states **$U$** encode the actions of the agent. In this 2D grid world the agent have the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
+The control states **$U$** encode the actions of the agent. In this 2D grid world, the agent has the ability to make movements in the **$4$** cardinal directions (NORTH, EAST, SOUTH, WEST)
 
 ### The initial beliefs: **$\bf{D}$**
 The agent's initial belief is defined over the multi-factor hidden states, therefore we have to define three arrays **$D^0, D^1$**, and **$D^2$**, each corresponding to a specific hidden state factor.
 
-**$D^0$** encodes the prior beliefs over the initial location of the agent in the grid world, while **$D^1$** and **$D^2$** are array of ones impling that all the states are equally probable.
+**$D^0$** encodes the prior beliefs over the initial location of the agent in the grid world, while **$D^1$** and **$D^2$** are arrays of ones implying that all the states are equally probable.
  
-We create the initial beliefs defining a vector of objects `Beliefs`. Specifically a vector with size **$N_f$**, and each element will contain an object `Beliefs` with size **$N_s[f]$**.
+We create the initial beliefs defining a vector of objects `Beliefs`. Specifically, a vector with size **$N_f$**, and each element will contain an object `Beliefs` with size **$N_s[f]$**.
 
-We can build a derived `Beliefs` class that adds a specialized method to fill out **$D^0$**, that is a method that assign **$1$** to the state correspoing to the initial location of the agent and **$0$** elsewhere.
+We can build a derived `Beliefs` class that adds a specialized method to fill out **$D^0$**, which is a method that assigns **$1$** to the state corresponding to the initial location of the agent and **$0$** elsewhere.
 
 In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
@@ -117,7 +117,7 @@ We create the transition model defining a vector of vector of objects `Transitio
 
 Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
 
-We can build a derived `Transitions` class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easyeast way to fill out the transition matrix **$B^0_u$** is to build it as a CSC (in which values are read first by column) sparse matrix and then converting it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
+We can build a derived `Transitions` class that adds a specialized method to fill out **$B^0_u$** according to the expected outcomes of the **$4$** actions. Note that the rows correspond to the ending state and the columns correspond to the starting state of a transition. Therefore the easiest way to fill out the transition matrix **$B^0_u$** is to build it as a CSC (in which values are read first by column) sparse matrix and then convert it to CSR format by using the `void csc_tocsr(unsigned int col_ptr[], unsigned int row[])` method of the `Transitions` class.
 
 In [`epistemic_chaining.hpp`](../../examples/epistemic_chaining.hpp) we wrote:
 
@@ -205,7 +205,7 @@ Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that th
 ```
 
 ### The observation model: **$\bf{A}$**
-**$\bf{A}$** has four components, encoding the agents beliefs about how hidden states probabilistically cause observations within each factor of the observations: the multidimensional arrays **$A^0, A^1, A^2$**, and **$A^3$**. Their dimensions are **$N_o[0] \times N_s[0] \times N_s[1] \times N_s[2]$**, 
+**$\bf{A}$** has four components, encoding the agent's beliefs about how hidden states probabilistically cause observations within each factor of the observations: the multidimensional arrays **$A^0, A^1, A^2$**, and **$A^3$**. Their dimensions are **$N_o[0] \times N_s[0] \times N_s[1] \times N_s[2]$**, 
 **$N_o[1] \times N_s[0] \times N_s[1] \times N_s[2]$**, **$N_o[2] \times N_s[0] \times N_s[1] \times N_s[2]$**, and **$N_o[3] \times N_s[0] \times N_s[1] \times N_s[2]$** respectively. All the components are therefore 4-dimensional arrays and are the same for each action **$u$**.
 
 We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$N_g$**, and each element **$i$** will contain a vector of one object `likelihood` **$A$** with size **$N_o[g] \times N_s[0] \times N_s[1] \times N_s[2]$**.
@@ -281,7 +281,7 @@ void _likelihood<T,N>::Observe(std::vector<int> num_states,
 }
 ```
 
-Fill out **$A^2$** making cue2 observation depending on both the agent's presence at correct cue2 location and the reward location:
+Fill out **$A^2$** making cue2 observation depending on both the agent's presence at the correct cue2 location and the reward location:
 
 ```c++
 /* cue2 observation */
@@ -389,7 +389,7 @@ In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) w
 ### The prior over (preferred) observations: **$\bf{C}$**
 Being defined as priors over observations, C will consist of four arrays corresponding to the priors over the different observation factors: **$C^0, C^1, C^2$**, and **$C^3$** with size **$N_s[0]$**, **$5$**, **$3$**, and **$3$** respectively. **$C^3$** encodes the prior preferences for different levels of the Reward observation outcome, while the others are zero arrays.
 
-We create the prior over observations defining a vector of objects `Priors`. Specifically a vector with size **$N_g$**, and each element will contain an object `Priors` with size **$N_o[g]$**.
+We create the prior over observations defining a vector of objects `Priors`. Specifically, a vector with size **$N_g$**, and each element will contain an object `Priors` with size **$N_o[g]$**.
 
 In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) we wrote:
 ```c++
@@ -428,7 +428,7 @@ If we set up the true Cue 2 location and the location of the positive reward:
 unsigned int cue2 = 0;
 unsigned int reward = 0;
 ```
-we can set up the true initial State accordingly. We define a vector of three object `States`, we initialize them to all 0s and then we use the `Set` method to assign the corresponding true initial state at time step $0$.
+we can set up the true initial State accordingly. We define a vector of three objects `States`, we initialize them to all 0s and then we use the `Set` method to assign the corresponding true initial state at time step $0$.
 
 ```c++
   std::vector<States*> __S;
