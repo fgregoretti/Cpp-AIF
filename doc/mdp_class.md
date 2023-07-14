@@ -70,7 +70,7 @@ while (tt < T)
 ```c++
 void infer_states(unsigned int t)
 ```
-Compute expectations of allowable policies and current state, assigning results to class members `_ut` and `_X`, respectively. `_X[f]->getArray(t)` refers to beliefs about factor `f` expected at timepoint `t`.
+Compute expectations of allowable policies and current state, assigning results to class members `_ut` (policy expectations) and `_X`, respectively. `_X[f]->getArray(t)` refers to beliefs about factor `f` expected at timepoint `t`.
 
 **Parameters**
 - `t` time step
