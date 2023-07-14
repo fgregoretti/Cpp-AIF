@@ -1,5 +1,15 @@
 # Active Inference
-Active Inference agents implement perception and action planning through the minimization of variational free energy [[1]](#1). To minimize free energy, the agents use a generative model of the causes of their perceptions, which encodes the joint probability of the stochastic variables illustrated in Fig. ~\ref{fig:model}, using the formalism of probabilistic graphical models [[2]](#2). 
+Active Inference agents implement perception and action planning through the minimization of variational free energy [[1]](#1). To minimize free energy, the agents use a generative model of the causes of their perceptions, which encodes the joint probability of the stochastic variables illustrated in Fig. $1$, using the formalism of probabilistic graphical models [[2]](#2). 
+
+<figure>
+  <img
+  src="Fig1.png"
+  width="300"
+  <figcaption>Figure 1.</figcaption>
+</figure>
+
+&nbsp;
+
 The agent's generative model is defined as follows:
 ```math
 \begin{align}
