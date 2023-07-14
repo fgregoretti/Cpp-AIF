@@ -65,14 +65,12 @@ The [T-Maze](doc/tmaze_doc/tmaze.md) and [Epistemic Chaining](doc/cue_chaining_d
 
 Examples can help users understand how to set up and configure active inference agents for different types of tasks and therefore how to implement and explore active inference in practice. By leveraging these examples, users are helped in building their understanding of active inference and how it can be applied to solve real-world problems.
 
-## Table of Contents
+## Fundamentals
 -  [Active Inference](doc/active_inference.md)
 -  [Data Structure and Factorized Distributions](doc/data_structure.md)
-  -   [Generative Model Classes](doc/generative_model_classes.md)
--  [`MDP` class](doc/mdp_class.md)
--  Examples
-  -  [T-Maze](doc/tmaze_doc/tmaze.md)
-  -  [Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md)
+### Examples
+-  Example [T-Maze](doc/tmaze_doc/tmaze.md)
+-  Example [Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md)
 
 
 
