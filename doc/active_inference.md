@@ -53,6 +53,8 @@ This condition holds when sufficient statistics are:
 ```
 where the symbol $\cdot$ denotes the inner product, defined as $\mathbf{A}\cdot\mathbf{B}=\mathbf{A}^T\mathbf{B}$, with the two arbitrary matrices $\mathbf{A}$ and $\mathbf{B}$.
 Action selection is operated by selecting the policy (i.e., sequence of control states $u_1$, $u_2$, $\dots$, $u_t$) that is expected to minimize free energy the most in the future. The policy distribution $\boldsymbol{\pi}$ is expressed in Eq. $2$; the term $\sigma\left(\cdot\right)$ is a softmax function, $\mathbf{E}$ encodes a prior over the policies (reflecting habitual components of action selection), $\mathbf{G}$ is the expected free energy (EFE) of the policies (reflecting goal-directed components of action selection) and $\gamma$ is a precision term that encodes the confidence of beliefs about $\mathbf{G}$. 
+
+## EFE
 The expected free energy (EFE) $\mathbf{G}(\pi_t)$ of each policy $\pi_t$ is defined as:
 ```math
 \begin{equation}
