@@ -26,7 +26,7 @@ template `MDP` class: Ty is the template argument which is a placeholder for the
 
 **Parameters**
 - `__D` agent's prior over initial states (initial beliefs)
-- `__S` agent's true inital state
+- `__S` agent's true initial state
 - `__B` transition model
 - `__A` observation model
 - `__AA` when compiled with macro WITH_GP, observation likelihood of the generative process 
@@ -38,7 +38,7 @@ template `MDP` class: Ty is the template argument which is a placeholder for the
 - `lambda` precision update rate
 - `gamma_`
 - `N_` number of variational iterations
-- `policy_len_` when not compiled with macro FULL is the time length policy, otherwise temporal horizon and time length policy coincide 
+- `policy_len_` when not compiled with macro FULL is the time length policy, otherwise, temporal horizon and time length policy coincide 
 - `seed_` number to initialize a pseudorandom number generator
 
 The basic usage is as follows:
@@ -86,7 +86,7 @@ Return negative expected free energy [(EFE)](active_inference.md#EFE) $\bf{G}$ o
 ```c++
 int sample_action(unsigned int t)
 ```
-[Sample](utils.md#Sampling) or select (when not compiled with macro BEST_AS_MAX) next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
+[Sample](utils.md#Sampling) or select (when not compiled with macro BEST_AS_MAX) the next action (the action that minimizes expected free energy) from the posterior over control states. This function both assigns the action to the class member `U` and returns it.
 
 **Parameters**
 - `t` time step
@@ -94,11 +94,11 @@ int sample_action(unsigned int t)
 ```c++
 void sample_state(unsigned int t, int action)
 ```
-Next [sampled](utils.md#Sampling) state under the action `action`. When not compiled with macro SAMPLE_AS_MAX select a random action from the posterior over control states using a cumulative distribution function (CDF), otherwise the selected action is chosen as the maximum of the posterior over actions. If there are multiple maxima, then randomly select one of them.
+Next [sampled](utils.md#Sampling) state under the action `action`. When not compiled with macro SAMPLE_AS_MAX select a random action from the posterior over control states using a cumulative distribution function (CDF), otherwise, the selected action is chosen as the maximum of the posterior over actions. If there are multiple maxima, then randomly select one of them.
 
 **Parameters**
 - `t` time step
-- `action` sampled at previous time step
+- `action` sampled at the previous time step
 
 ```c++
 void sample_observation(unsigned int t, int action)
@@ -107,7 +107,7 @@ Next observed state under the action `action`.
 
 **Parameters**
 - `t` time step
-- `action` sampled at previous time step
+- `action` sampled at the previous time step
 
 ```c++
 void actiive inference()
@@ -115,7 +115,7 @@ void actiive inference()
 basic active inference procedure 
 
 ## Learning
-The following public methods update parameters of posteriors in POMDP generative models.
+The following public methods update the parameters of posteriors in POMDP generative models.
 
 ```c++
 std::vector<std::vector<likelihood<Ty,M>*>>& MDP<Ty,M>::update_A(                                       
