@@ -119,7 +119,7 @@ Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$** 
 
 The transition array for the reward condition factor is a "trivial" identity matrix. This implies that the reward condition remains unchanged over time, as it is mapped from its current value to the same value in the next time step.
 
-To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f=2$** is the number of hidden state factors, while **$N_u=4$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in order to build its own instance we can use the constructor with vector of vectors as a parameter and pass it the 2D matrices previously created.
+To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f=2$** is the number of hidden state factors, while **$N_u=4$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in order to build its own instance we can use the constructor with vector of vectors as parameter and pass it the 2D matrices previously created.
 
 ```c++
   std::vector<std::vector<Transitions<FLOAT_TYPE>*>> __B;
