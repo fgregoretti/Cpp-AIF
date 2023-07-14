@@ -53,9 +53,9 @@ It provides a high-level abstraction that allows you to specify the generative m
 
 Once you have created your generative model, you can use it to create an `MDP` object. The `MDP` Class provides necessary methods for performing active inference, including methods for computing the free energy, updating beliefs about the state of the system, and generating actions based on those beliefs.
 
-The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing specifically designed classes for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
+The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing specifically designed [classes](doc/generative_model_classes.md) for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
 
-We have implemented specific [classes](doc/generative_model_classes.md) for building the generative model and [here](doc/data_structure.md) we focus on how we build it (e.g. the components of the generative model).
+In [Data Structure and Factorized Distributions](doc/data_structure.md) we focus on how we build it (e.g. the components of the generative model).
 
 ## Examples
 
@@ -64,11 +64,4 @@ We provide two hands-on examples of active inference agents in action. By provid
 The [T-Maze](doc/tmaze_doc/tmaze.md) and [Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md) demo are both excellent examples of how active inference can be applied to different types of tasks. The T-Maze is a classic task used in neuroscience to study decision making, while the Epistemic Chaining demo provides a more complex example that showcases the power of active inference in solving sequential decision-making problems.
 
 Examples can help users understand how to set up and configure active inference agents for different types of tasks and therefore how to implement and explore active inference in practice. By leveraging these examples, users are helped in building their understanding of active inference and how it can be applied to solve real-world problems.
-
-## Fundamentals
--  [Active Inference](doc/active_inference.md)
--  [Data Structure and Factorized Distributions](doc/data_structure.md)
--  [T-Maze Example Demo](doc/tmaze_doc/tmaze.md)
--  [Epistemic Chaining Demo](doc/cue_chaining_doc/cue_chaining.md)
-
 
