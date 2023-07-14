@@ -68,9 +68,7 @@ Examples can help users understand how to set up and configure active inference 
 ## Fundamentals
 -  [Active Inference](doc/active_inference.md)
 -  [Data Structure and Factorized Distributions](doc/data_structure.md)
-### Examples
--  Example [T-Maze](doc/tmaze_doc/tmaze.md)
--  Example [Epistemic Chaining](doc/cue_chaining_doc/cue_chaining.md)
-
+-  [T-Maze Example Demo](doc/tmaze_doc/tmaze.md)
+-  [Epistemic Chaining Demo](doc/cue_chaining_doc/cue_chaining.md)
 
 
