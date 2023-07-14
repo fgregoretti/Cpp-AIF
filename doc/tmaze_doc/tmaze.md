@@ -6,7 +6,7 @@ with the agent's initial position being the central location.
 The bottom arm of the maze includes a cue that provides information about the probable location
 of a reward in either of the two top arms, referred to as 'Left' or 'Right'.
 
-For the implementation of this problem using ``Cpp-AIF`` refer to the file [`main_Tmaze.cpp`](../../main_Tmaze.cpp).
+For the implementation of this problem using ``cpp-AIF`` refer to the file [`main_Tmaze.cpp`](../../main_Tmaze.cpp).
 
 ## 2. The environment
 The environment is described by the joint occurence of two distinct 'types' of states at each time step,
@@ -33,7 +33,7 @@ When the agent occupies the $Bottom$ location, this observation unambiguously si
 When the agent occupies the $Center$, the Cue observation will be $Cue Right$ or $Cue Left$ with equal probability.
 The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:
 
-In `Cpp-AIF`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**. Here we have two hidden state factor with size $4$ and $2$ respectively.
+In `cpp-AIF`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**. Here we have two hidden state factor with size $4$ and $2$ respectively.
 
 Therefore, the multidimensional arrays **$A^0$** and **$A^1$** are both 3-dimensional arrays with dimensions **$4 \times 4 \times 2$** and are the same for each action **$u$**.
 
@@ -219,7 +219,7 @@ We can either create an empty vector of policies and in this case the constructo
 
 ## 7. Introducing the `MDP` class
 
-Within `Cpp-AIF`, we have abstracted many of the computations necessary for active inference into the `MDP` class. This flexible object can be used to store essential elements of the generative model, the agent's current observations and actions, and execute action/perception through functions like `infer_states` and `infer_policies`.
+Within `cpp-AIF`, we have abstracted many of the computations necessary for active inference into the `MDP` class. This flexible object can be used to store essential elements of the generative model, the agent's current observations and actions, and execute action/perception through functions like `infer_states` and `infer_policies`.
 
 To create an instance of the `MDP`, simply call the `MDP` constructor with a list of arguments.
 
