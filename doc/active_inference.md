@@ -89,7 +89,6 @@ T. Parr, G. Pezzulo, K. J. Friston, Active inference: the free energy
 principle in mind, brain, and behavior, MIT Press, 2022.
 
 <a id="2">[2]</a>
-bishop2006pattern.
 C.M, Bishop, Pattern Recognition and Machine Learning, Springer New York, 2006
 
 <a id="3">[3]</a>
