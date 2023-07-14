@@ -113,7 +113,7 @@ In [`main_epistemic_chaining.cpp`](../../examples/main_epistemic_chaining.cpp) w
 ### The transition model: **$\bf{B}$**
 To create the transition model we have to define the arrays **$B^0, B^1$**, and **$B^2$**, one for each state factor. The control states **$U$** determine the transitions from one state to another for the first hidden state factor only. Therefore only **$B^0$** will be dependent from action **$u$**, namely **$B^0_u$**
 
-We create the transition model defining a vector of vector of objects `Transitions`. Specifically a vector with size **$N_f$**, and each element **$i$** will contain a vector of **$num\\_controls[i]$** of objects `Transitions` **$B$** with size **$N_s[f] \times N_s[f]$**
+We create the transition model defining a vector of vectors of objects `Transitions`. Specifically a vector with size **$N_f$**, and each element **$i$** will contain a vector of **$num\\_controls[i]$** of objects `Transitions` **$B$** with size **$N_s[f] \times N_s[f]$**
 
 Being only the first hidden state factor controllable by the agent, **$num\\_controls[0]=4$**, while the other uncontrollable hidden state factors can be encoded as control factors of dimension **$1$**. **$num\\_controls=[4,1,1]$**
 
@@ -208,7 +208,7 @@ Fill out **$B^1$** and **$B^2$** as identity matrices, encoding the fact that th
 **$\bf{A}$** has four components, encoding the agent's beliefs about how hidden states probabilistically cause observations within each factor of the observations: the multidimensional arrays **$A^0, A^1, A^2$**, and **$A^3$**. Their dimensions are **$N_o[0] \times N_s[0] \times N_s[1] \times N_s[2]$**, 
 **$N_o[1] \times N_s[0] \times N_s[1] \times N_s[2]$**, **$N_o[2] \times N_s[0] \times N_s[1] \times N_s[2]$**, and **$N_o[3] \times N_s[0] \times N_s[1] \times N_s[2]$** respectively. All the components are therefore 4-dimensional arrays and are the same for each action **$u$**.
 
-We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$N_g$**, and each element **$i$** will contain a vector of one object `likelihood` **$A$** with size **$N_o[g] \times N_s[0] \times N_s[1] \times N_s[2]$**.
+We create the observation model defining a vector of vectors of objects `likelihood`. Specifically a vector with size **$N_g$**, and each element **$i$** will contain a vector of one object `likelihood` **$A$** with size **$N_o[g] \times N_s[0] \times N_s[1] \times N_s[2]$**.
 
 We can build a derived `likelihood` class that adds specialized methods to fill out **$A^0, A^1, A^2$**, and **$A^3$**.
 
