@@ -5,7 +5,7 @@ discrete space and time, using partially-observed Markov Decision Processes
 
 The library implements a multicore parallelization of the most demanding computational kernels. Note that most of the computational complexity of active inference depends on the multidimensional inner products involved both in expected free energy computation and state estimation.
 
-One of the key benefits of using ``cpp-AIF`` is that it allows you to abstract away the underlying mathematical details of [active_inference](doc/active_inference.md). This can be particularly useful if you are not familiar with the underlying theory, or if you simply want to focus on building your system rather than worrying about the math.
+One of the key benefits of using ``cpp-AIF`` is that it allows you to abstract away the underlying mathematical details of [active inference](doc/active_inference.md). This can be particularly useful if you are not familiar with the underlying theory, or if you simply want to focus on building your system rather than worrying about the math.
 
 Overall, ``cpp-AIF`` provides a powerful and flexible tool for implementing active inference in your projects. By allowing you to focus on the high-level aspects of your system and abstracting away the mathematical nuances, it can help you save time and improve the quality of your work.
 
