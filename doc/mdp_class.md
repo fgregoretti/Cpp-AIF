@@ -78,7 +78,7 @@ Compute expectations of allowable policies and current state, assigning results 
 ```c++
 std::vector<Ty> infer_policies(unsigned int t)
 ```
-Return negative expected free energy $\bf{G}$ of each policy `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`.
+Return negative expected free energy [EGE](active_inference.md#EFE) $\bf{G}$ of each policy `std::vector<Ty> G`. Update class members posterior precision `_W` and posterior beliefs about control `_P`.
  
 **Parameters**
 - `t` time step
