@@ -9,14 +9,14 @@ of a reward in either of the two top arms, referred to as 'Left' or 'Right'.
 For the implementation of this problem using ``cpp-AIF`` refer to the file [`main_Tmaze.cpp`](../../main_Tmaze.cpp).
 
 ## 2. The environment
-The environment is described by the joint occurence of two distinct 'types' of states at each time step,
+The environment is described by the joint occurrence of two distinct 'types' of states at each time step,
 which are referred to as hidden state factors.
 
 The first hidden state factor (location) is a discrete variable with values in $(0,1,2,3)$ that encodes the agent's present location.
-The four vlaues correspond to the $( Center, Left, Right, Bottom )$ location.
+The four values correspond to the $( Center, Left, Right, Bottom )$ location.
 For example, if the agent is in the $Bottom$ location, the current state of this factor would be $S^0 = \left\lbrack \matrix{ 0 & 0 & 0 & 1 } \right\rbrack$.
 
-The second hidden state factor (reward condition) is a discrete variable with values in $(0,1)$ that econdes the reward condition of the trial: $( Reward\ on\ Left, Reward\ on\ Right )$. For example, a trial with the $Reward\ on\ Left$ condition would be represented as the state $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$.
+The second hidden state factor (reward condition) is a discrete variable with values in $(0,1)$ that encodes the reward condition of the trial: $( Reward\ on\ Left, Reward\ on\ Right )$. For example, a trial with the $Reward\ on\ Left$ condition would be represented as the state $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$.
 
 These two hidden state factors are independent of one another. As an example, consider a $Reward\ on\ Right$ trial and assume the agent begins in the center location. We can encode the state of the environment at the first time step using the following pair of hidden state vectors $S^0 = \left\lbrack \matrix{ 1 & 0 & 0 & 0\} \right\rbrack$ and $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$. If the agent subsequently moves to the right arm, the hidden state vectors would change to $S^0 = \left\lbrack \matrix{ 0 & 1 & 0 & 0\} \right\rbrack$ and $S^1 = \left\lbrack \matrix{ 1 & 0} \right\rbrack$. This illustrates that the two hidden state factors are independent, meaning that the agent's location ($S^0$) can change without affecting the reward condition ($S^1$).
 
@@ -28,16 +28,16 @@ In this T-maze demonstration, the agent's observations consist of two sensory ch
 
 :warning: The exteroceptive outcomes provide cues about location and context (the reward condition of the trial) $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$.
 
-The interoceptive outcomes denotes different levels of reward $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$.
+The interoceptive outcomes denote different levels of reward $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$.
 When the agent occupies the $Bottom$ location, this observation unambiguously signals the reward condition of the trial, and therefore in which arm the Reward observation is more probable.
 When the agent occupies the $Center$, the Cue observation will be $Cue Right$ or $Cue Left$ with equal probability.
 The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:
 
-In `cpp-AIF`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**. Here we have two hidden state factor with size $4$ and $2$ respectively.
+In `cpp-AIF`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**. Here we have two hidden state factors with sizes $4$ and $2$ respectively.
 
 Therefore, the multidimensional arrays **$A^0$** and **$A^1$** are both 3-dimensional arrays with dimensions **$4 \times 4 \times 2$** and are the same for each action **$u$**.
 
-We create the observation model defining a vector of vector of objects `likelihood`. Specifically a vector with size **$2$**, and each element will contain a vector of one object `likelihood` with size **$4 \times 4 \times 2$**.
+We create the observation model defining a vector of vector of objects `likelihood`. Specifically, a vector with size **$2$**, and each element will contain a vector of one object `likelihood` with size **$4 \times 4 \times 2$**.
 
 ```c++
   std::vector<std::vector<likelihood<FLOAT_TYPE,3>*>> __A;
@@ -119,7 +119,7 @@ Being **$U = [ Move to Center, Move to Left, Move to Right, Move to Bottom ]$** 
 
 The transition array for the reward condition factor is a "trivial" identity matrix. This implies that the reward condition remains unchanged over time, as it is mapped from its current value to the same value in the next time step.
 
-To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f=2$** is the number of hidden state factors, while **$N_u=4$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in order to build its own instance we can use the costructor with vector of vectors as parameter and pass it the 2D matrices previously created.
+To account for the conditioning on factors and the conditioning on actions, we represent **$\bf{B}$** as a vector of size **$N_f$** whose each element will contain a vector of **$N_u$** (or **$1$** if the factor is uncontrollable) of `Transitions` class instances. **$N_f=2$** is the number of hidden state factors, while **$N_u=4$** is the number of control states. This `Transitions` class handles a transition distribution matrix and in order to build its own instance we can use the constructor with vector of vectors as a parameter and pass it the 2D matrices previously created.
 
 ```c++
   std::vector<std::vector<Transitions<FLOAT_TYPE>*>> __B;
@@ -156,7 +156,7 @@ In most Markov Decision Processes (MDPs), the essential components of this gener
 
 Assuming that the agent has an accurate representation of the rules governing the T-maze, including how hidden states lead to observations, and its ability to control its movements with predictable consequences (i.e. 'noiseless' transitions), the agent will possess a true representation of the environment's "rules," encoded in the arrays **$\bf{A}$** and **$\bf{B}$** of the generative process.
 
-Let’s encode encode the agent's initial beliefs regarding its starting location and reward condition in the prior over hidden states, which is referred to as the **$\bf{D}$** array.
+Let’s encode the agent's initial beliefs regarding its starting location and reward condition in the prior over hidden states, which is referred to as the **$\bf{D}$** array.
 
 We have to define two arrays $D^0$ and $D^1$, each corresponding to a specific hidden state factor. We will ensure that the agent begins with precise and accurate prior beliefs about its starting location.
 
@@ -164,7 +164,7 @@ We have to define two arrays $D^0$ and $D^1$, each corresponding to a specific h
 std::vector<FLOAT_TYPE> D0 = {1., 0., 0., 0.};
 std::vector<FLOAT_TYPE> D1 = {1./2, 1./2};
 ```
-We create the initial beliefs defining a vector of objects `Beliefs`. Specifically a vector with size $N_f=2$, and each element will contain an object `Beliefs` with size $4$ and $2$ respectively.
+We create the initial beliefs defining a vector of objects `Beliefs`. Specifically, a vector with size $N_f=2$, and each element will contain an object `Beliefs` with size $4$ and $2$ respectively.
 
 ```c++
   std::vector<Beliefs<FLOAT_TYPE>*> __D;                                                                     
@@ -174,7 +174,7 @@ We create the initial beliefs defining a vector of objects `Beliefs`. Specifical
   __D.push_back(d1);
 ```
 
-To ensure that the agent is motivated to choose the arm that maximizes the probability of receiving a reward, we need to give the agent a sense of reward and loss. We can achieve this by setting up the **$\bf{C}$** array, which represents the agent's prior preferences for each observation facor. We initialize the $C^0$ array to all 1s, indicating that the agent has no preference for any particular outcomes. Instead, since the second factor is the Reward modality, with the $Reward$ outcome having an index of 2 and the $No Reward$ outcome having an index of 3, we can assign values to the corresponding entries that reflect the relative preference for one outcome over the other. Specifically, we use relative log-probabilities to encode these preferences.
+To ensure that the agent is motivated to choose the arm that maximizes the probability of receiving a reward, we need to give the agent a sense of reward and loss. We can achieve this by setting up the **$\bf{C}$** array, which represents the agent's prior preferences for each observation factor. We initialize the $C^0$ array to all 1s, indicating that the agent has no preference for any particular outcomes. Instead, since the second factor is the Reward modality, with the $Reward$ outcome having an index of 2 and the $No Reward$ outcome having an index of 3, we can assign values to the corresponding entries that reflect the relative preference for one outcome over the other. Specifically, we use relative log-probabilities to encode these preferences.
 
 ```c++
   std::vector<FLOAT_TYPE> C0 = {1., 1., 1., 1.};                                                             
@@ -184,7 +184,7 @@ To ensure that the agent is motivated to choose the arm that maximizes the proba
   softmax<FLOAT_TYPE>(C1);
 ```
 
-The ability to modify the agent's prior beliefs and bias it towards observing the $Reward$ outcome more often than the $No Reward$ outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation. [`softmax`](../utils.md#softmax) ... ⚠️
+The ability to modify the agent's prior beliefs and bias it towards observing the $Reward$ outcome more often than the $No Reward$ outcome is what gives the Reward modality its intrinsic value. Without this bias, the Reward modality would be no different from any other arbitrary observation. Applying [`softmax`](../utils.md#softmax) to $C^0$ and $C^1$ guarantees that the prior preferences will be in a range of 0 and 1, and the sum of them is 1, thus the preferences are interpretable as a percentage rate for each outcome. 
 
 In order to set up the state of the environment at the first time step in a $Reward\ on\ Left$ trial assuming the agent starts in the $Center$ location, we define a vector of two `States` object, one for each factor.
 
@@ -201,7 +201,7 @@ In order to set up the state of the environment at the first time step in a $Rew
   __S.push_back(s1)
 ```
 
-`s0` refers to the location, while `s1` refers to the reward condition. We initialize them to all 0s, and the we use the `Set` method to assign the corresponding true initial state at time step $0$.
+`s0` refers to the location, while `s1` refers to the reward condition. We initialize them to all 0s, and then we use the `Set` method to assign the corresponding true initial state at time step $0$.
 
 ## 6. Policies
 
