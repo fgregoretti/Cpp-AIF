@@ -452,7 +452,7 @@ we can set up the true initial State accordingly. We define a vector of three ob
 
 ## 4. Active Inference
 
-We wrote a specific active inference procedure to ... ⚠️
+We wrote a specific active inference procedure to provide for an exit state. ⚠️
 
   ```c++
   void active_inference() override                                                                           
