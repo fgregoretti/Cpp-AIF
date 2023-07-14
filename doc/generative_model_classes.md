@@ -47,7 +47,7 @@ Assign a value to a specific element of the array.
 ```c++
 void Set(unsigned int val)
 ```
-Assign a value to first element of the array.
+Assign a value to the first element of the array.
 
 **Parameters**
 - `val` value to assign
@@ -55,7 +55,7 @@ Assign a value to first element of the array.
 ```c++
 unsigned int Get(unsigned int t)
 ```
-Retrieve value of a specific element of the array.
+Retrieve the value of a specific element of the array.
 
 **Parameters**
 - `t` element of the array whose value we are looking for
@@ -63,7 +63,7 @@ Retrieve value of a specific element of the array.
 ```c++
 unsigned int Get()
 ```
-Retrive first element array value.
+Retrieve the first element array value.
 
 
 ## `template <typename T, typename S> class likelihood`
@@ -80,7 +80,7 @@ template likelihood multidimensional array class: `T` is the template argument w
 likelihood(decltype(Iseq)... size)
 ```
 **Parameters**
-- `size` integer sequence of the size in ecah dimension 
+- `size` integer sequence of the size in each dimension 
 
 ***Public methods:***
 ```c++
@@ -100,7 +100,7 @@ Set all array elements to **$0$**.
 ```c++
 void Eye()
 ```
-Create a two dimentional identity array.
+Create a two dimensional identity array.
 
 ```c++
 void Norm()
@@ -110,7 +110,7 @@ Normalization.
 ```c++
 void sum(const likelihood<T,seq<Iseq...>>& b)
 ```
-Sum of this object and likelihood object given as a parameter.
+Sum of this object and of the likelihood object given as a parameter.
 
 **Parameters**
 - `b` likelihood instance to sum
@@ -123,22 +123,22 @@ Return order (rank).
 ```c++
 const std::size_t get_firstdimension()
 ```
-Return size of first dimension.
+Return the size of the first dimension.
 
 ```c++
 std::size_t *get_dimensions()
 ```
-Return array with sizes for each dimension.
+Return an array with sizes for each dimension.
 
 ```c++
 const std::size_t get_tnc()
 ```
-Return total number of elements.
+Return the total number of elements.
 
 ```c++
 int MaxIndex(const std::vector<std::size_t>& a) const
 ```
-Return the index of first dimension with maximum value in **$t(:,a[0],...,a[N_f-1])$**.
+Return the index of the first dimension with maximum value in **$t(:,a[0],...,a[N_f-1])$**.
 
 **Parameters**
 - `a` index tuple 
@@ -176,7 +176,7 @@ Extract the array elements corresponding to the index tuple $sq$ along dimension
 ```c++
 T *HDot(T **xt, likelihood& l, T *H)
 ```
-Multidimensional dot (inner) producT: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value. Return an array.
+Multidimensional dot (inner) product: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along the leading dimension of the likelihood and the epistemic value. Return an array.
 
 **Parameters**
 - `xt` array of vectors
@@ -186,7 +186,7 @@ Multidimensional dot (inner) producT: compute the inner product obtained by summ
 ```c++
 T *HDot(T **xt, T *H)
 ```
-Multidimensional dot (inner) product: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along leading dimension of the likelihood and the epistemic value. Return an array.
+Multidimensional dot (inner) product: compute the inner product obtained by summing the products of the likelihood and the vectors **$xt[i], i=0,...,N_f-1$**, along the leading dimension of the likelihood and the epistemic value. Return an array.
 
 **Parameters**
 - `xt` array of vectors
@@ -222,7 +222,7 @@ Multidimensional cross (outer) product. The array elements are computed from the
 ```c++
 void multiplies(const likelihood<T,seq<Iseq...>>& a, const likelihood<T,seq<Iseq...>>& b)
 ```
-Fill up the array elements applying a mask to the first likelihood object array; the mask is obtained by comparing each element of the second likelihood object array with zero.
+Fill up the array elements by applying a mask to the first likelihood object array; the mask is obtained by comparing each element of the second likelihood object array with zero.
 
 **Parameters**
 - `a` likelihood to be masked
@@ -298,17 +298,17 @@ Apply to matrix `matrix` a mask obtained by comparing each element of the `Trans
 ```c++
 void add(std::vector<std::vector<T>>& imatrix, std::vector<std::vector<T>>& omatrix, T eta)
 ```
-Build a matrix by summing the `Transition` matrix with matrix `imatrix` mupliplied by the scalar factor `eta`.
+Build a matrix by summing the `Transition` matrix with matrix `imatrix` multiplied by the scalar factor `eta`.
 
 **Parameters**
 - `omatrix` output matrix
 - `imatrix` input matrix to be summed up with `Transition` matrix
-- `eta` scalar factor to be mulitplied with `imatrix`
+- `eta` scalar factor to be multiplied with `imatrix`
 
 ```c++
 void Eye()
 ```
-Create a two dimentional identity array.
+Create a two dimensional identity array.
 
 ```c++
 void Norm()
@@ -441,7 +441,7 @@ Logarithmic transformation (after normalization).
 ```c++
 unsigned int get_size()
 ```
-Return size of the array.
+Return the size of the array.
 
 ```c++
 Priors(std::vector<T> const &v)
@@ -518,7 +518,7 @@ Return the **$i-th$** array element at time step **$t$**.
 ```c++
 Ty *getArray(unsigned int t_)
 ```
-Return first pointer to array at time step **$t$**.
+Return first pointer to the array at time step **$t$**.
 
 **Parameters**
 - `t_` time step **$t$**
@@ -551,7 +551,7 @@ Logarithmic transformation (after normalization).
 ```c++
 unsigned int get_size()
 ```
-Return size of the array at each time step.
+Return the size of the array at each time step.
 
 ```c++
 Beliefs(std::vector<Ty> D)
