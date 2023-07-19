@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/581177578.svg)](https://zenodo.org/badge/latestdoi/581177578)
+
 # cpp-AIF
 ``cpp-AIF`` is a C++ header-only library for simulating active inference agents in
 discrete space and time, using partially-observed Markov Decision Processes
