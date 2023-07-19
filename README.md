@@ -57,7 +57,7 @@ Once you have created your generative model, you can use it to create an `MDP` o
 
 The generative model is a key component of active inference, as it describes how the internal states of the system are generated and how those states give rise to observations. By providing specifically designed [classes](doc/generative_model_classes.md) for building the generative model, we help users focus on the high-level aspects of their system and reduce the amount of low-level programming needed to define the model. Users can more easily create and configure their generative models, as well as reuse and modify them as needed.
 
-In [Data Structure and Factorized Distributions](doc/data_structure.md) we focus on how we the components of the generative model.
+In [Data Structure and Factorized Distributions](doc/data_structure.md) we focus on how we build the components of the generative model.
 
 ## Examples
 
