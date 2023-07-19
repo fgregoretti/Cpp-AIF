@@ -25,11 +25,11 @@ Users may desire to create their own customized observation models or at least s
 
 After having filled out `A0` we define a vector of vectors of pointers to `likelihood` objects 
 
-`std::vector<std::vector<likelihood<FLOAT_TYPE,4>*>> A;`
+`std::vector<std::vector<likelihood<double,4>*>> A;`
 
 to be passed to `MDP` constructor. We also need to define a vector of pointers to `likelihood` objects
 
-`std::vector<likelihood<FLOAT_TYPE,4>*> a0;`
+`std::vector<likelihood<double,4>*> a0;`
 
 Assuming **$A^0_u$** is uncontrollable, namely `A0` cannot be changed by **$u$** and is therefore the same for each **$u$**, we just push back  `A0` into `a0` and then `a0` into `A`
 
@@ -62,7 +62,7 @@ std::vector<std::vector<Transitions<double>*>> B;
 ```
 to be passed to `MDP` constructor. We also need to define a vector of pointers to `Transitions` objects
 
-`std::vector<Transitions<FLOAT_TYPE,4>*> b0;`
+`std::vector<Transitions<double,4>*> b0;`
 
 if **$N_u=4$** and assuming that, regarding the first hidden state factor, control states determine transitions from one state to another we need to create a transition matrix for each control state:
 
