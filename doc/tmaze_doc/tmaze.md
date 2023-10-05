@@ -24,11 +24,13 @@ These two hidden state factors are independent of one another. As an example, co
 
 By examining the probability distributions that map from hidden states to observations, we can gain insight into the rules encoded by the environment, also known as the generative process. We refer to this collection of probabilistic relationships as the **$\bf{A}$** array.
 
-In this T-maze demonstration, the agent's observations consist of two sensory channels or observation factors: Cue (exteroceptive) and Reward (interoceptive).
+In this T-maze demonstration, agent's observations consist of two sensory channels or observation factors describing locations and context of the specific task:
+begin{itemize}
+\item Location outcomes $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$ provide agent's position in the maze.
 
-:warning: The exteroceptive outcomes provide cues about location and context (the reward condition of the trial) $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$.
+\item Contextual outcomes $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$ specify the reward levels and where they are deployed in the maze.
+\end{itemize}
 
-The interoceptive outcomes denote different levels of reward $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$.
 When the agent occupies the $Bottom$ location, this observation unambiguously signals the reward condition of the trial, and therefore in which arm the Reward observation is more probable.
 When the agent occupies the $Center$, the Cue observation will be $Cue Right$ or $Cue Left$ with equal probability.
 The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:
