@@ -25,15 +25,13 @@ These two hidden state factors are independent of one another. As an example, co
 By examining the probability distributions that map from hidden states to observations, we can gain insight into the rules encoded by the environment, also known as the generative process. We refer to this collection of probabilistic relationships as the **$\bf{A}$** array.
 
 In this T-maze demonstration, agent's observations consist of two sensory channels or observation factors describing locations and context of the specific task:
-begin{itemize}
-\item Location outcomes $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$ provide agent's position in the maze.
+1. Location outcomes $\left\lbrack \matrix{ Cue Center & Cue Left & Cue Right & Cue Bottom\} \right\rbrack$ provide agent's position in the maze;
 
-\item Contextual outcomes $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$ specify the reward levels and where they are deployed in the maze.
-\end{itemize}
+1. Contextual outcomes $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$ specify the reward levels and where they are deployed in the maze.
 
-When the agent occupies the $Bottom$ location, this observation unambiguously signals the reward condition of the trial, and therefore in which arm the Reward observation is more probable.
-When the agent occupies the $Center$, the Cue observation will be $Cue Right$ or $Cue Left$ with equal probability.
-The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:
+Wherever he moves in the maze, the agent gets an outcome for each observation factor. When the agent occupies the center of the maze, he observes the location $Center$, and receives a context observation that will be uninformative because equiprobable between $Cue Right$ or $Cue Left$. Otherwise, when the agent occupies the $Bottom$ location, he observes unambiguously the true reward location in one of two different maze's arms. Finally, when the agent halts in one of the two maze arms he observes $Reward$ or $No Reward$ depending on whether he is in the correct arm, with a probability value set by the parameter 'a'.
+
+<!--The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:-->
 
 In `cpp-AIF`, we use a set of `likelihood` class instances to store the set of probability distributions that encode the conditional probabilities of observations under different configurations of hidden states. Each factor-specific **$\bf{A}$** array is stored as a multidimensional array with $N_o[m]$ rows and as many lagging dimensions as there are hidden state factors. $N_o[m]$ refers to the number of observation values for observation factor $m$, i.e. **$\bf{N_o} = [4, 4]$**. Here we have two hidden state factors with sizes $4$ and $2$ respectively.
 
