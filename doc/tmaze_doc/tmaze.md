@@ -281,7 +281,7 @@ By default, the reward is at 'Left', but you can change where the reward is as a
 
 <figure>
   <img
-  src="Tmaze.png"
+  src="tmaze.png"
   width="300"
   <figcaption>Figure 1.</figcaption>
 </figure>
