@@ -278,3 +278,10 @@ T=3 Location: [Left] Observation: [Reward!] Action: [Move to Bottom]
 ````
 
 By default, the reward is at 'Left', but you can change where the reward is as a command line parameter along with the seed.
+
+<figure>
+  <img
+  src="Tmaze.png"
+  width="300"
+  <figcaption>Figure 1.</figcaption>
+</figure>
