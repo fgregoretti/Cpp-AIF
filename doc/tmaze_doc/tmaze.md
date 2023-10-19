@@ -29,7 +29,7 @@ In this T-maze demonstration, agent's observations consist of two sensory channe
 
 1. Contextual outcomes $\left\lbrack \matrix{ Cue Left & Cue Right & Reward & No Reward} \right\rbrack$ specify the reward levels and where they are deployed in the maze.
 
-Wherever he moves in the maze, the agent gets an outcome for each observation factor. When the agent occupies the center of the maze, he observes the location $Center$, and receives a context observation that will be uninformative because equiprobable between $Cue Right$ or $Cue Left$. Otherwise, when the agent occupies the $Bottom$ location, he observes unambiguously the true reward location in one of two different maze's arms. Finally, when the agent halts in one of the two maze arms he observes $Reward$ or $No Reward$ depending on whether he is in the correct arm, with a probability value set by the parameter 'a'.
+Wherever he moves in the maze, the agent gets an outcome for each observation factor. When the agent occupies the center of the maze, he observes the location $Center$, and receives a context observation that will be uninformative because equiprobable between $Cue Right$ or $Cue Left$. Otherwise, when the agent occupies the bottom location and is in $Bottom$ state, he observes unambiguously the true reward location in one of two different maze's arms. Finally, when the agent halts in one of the two maze arms he observes $Reward$ or $No Reward$ depending on whether he is in the correct arm, with a probability value set by the parameter 'a'.
 
 <!--The $Reward$ (index 2) and $No Reward$ (index 3) observations are observed in the right and left arms of the T-maze, with associated probabilities $a$ and $b$. The variables $a$ and $b$ represent the probabilities of obtaining a reward or a loss when choosing the "correct" arm, and the probabilities of obtaining a loss or a reward when choosing the "incorrect" arm. The definition of which arm is considered "correct" or "incorrect" depends on the reward condition, which is determined by the state of the second hidden state factor.:warning:-->
 
@@ -269,15 +269,13 @@ calling it in the main like this:
 mdp->active_inference();
 ```
 
-Executing the program we obtain the following output:
+Simulation of T-maze
 
-````
-T=1 Location: [Center] Observation: [Cue Left] Action: [Move to Bottom]
-T=2 Location: [Bottom] Observation: [Cue Left] Action: [Move to Left]
-T=3 Location: [Left] Observation: [Reward!] Action: [Move to Bottom]
-````
+In this environment, a mouse is positioned at the center of a T-maze, faced with multiple choices. It can either move to the right or left arms, both of which can contain cheese, or head to the lower arm, which provides information about the cheese's location. The mouse is limited to two moves; once it enters the right or left arms, it cannot leave (i.e., these are absorbing states). Therefore, the most favorable strategy is to first explore the lower arm for reward information and then proceed to collect the reward. Based on this strategy, the rodent gets a rewarding stimulus proportional to the prior preference parameter $c$ if the mouse reaches the correct cheese location, while it gets an aversive stimulus proportional to the penalty parameter $-c$. In the lower arm, there is a conditioned stimulus that specifies which is the arm with the cheese; it has not neither a rewarding nor aversive stimulus.
 
-By default, the reward is at 'Left', but you can change where the reward is as a command line parameter along with the seed.
+Simulations show that the active inference agent modeling rodent balances the pursuit of information (e.g., heading to the cue at time-step 2) and the pursuit of extrinsic value (e.g., collecting the cheese in the left arm at time-step 3). Notably, this behavior might not be exhibited by agents following the optimal Bayes design that conversely pursues maximizing information, preferring to resolve uncertainties about the task context by reaching the cue in the lower arm and staying until the end of the trial. Neither an agent designed to maximize the utility gained, e.g., as in Bayesian decision theory or reinforcement learning, would have the same strategy: it, instead, would linger in its starting position until time step 2 after which it would move indifferently to one of the two upper arms. This behavior stems from the agent's indifference to the information gained that entails remaining at the central location.
+
+In the Figure, results of a simulation trial with the reward placed at left arm.
 
 <figure>
   <img
