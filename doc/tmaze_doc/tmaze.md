@@ -288,5 +288,5 @@ In the Figure, the results of a simulation trial with the reward placed at the l
   <img
   src="Tmaze_plot.png"
   width="600"
-  <figcaption>Figure 1.</figcaption>
+  <figcaption>Figure 2.</figcaption>
 </figure>
