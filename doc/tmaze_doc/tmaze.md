@@ -283,8 +283,6 @@ The simulation results of the Active Inference agent simulating the rodent are i
 </figure>
 <br/><br/>
 
-In Figure 2, the top panel shows the average belief of the agent over the four maze locations (ordinate) during the three time steps of the simulation (abscissa). It can be appreciated that the most favourable behaviour is to first explore the lower arm for reward information and then proceed to collect the reward. Following this path, the rodent gets a rewarding stimulus proportional to the prior preference just after passing through the lower arm, where there is a conditioned stimulus that specifies which is the arm with the cheese without both rewarding and aversive stimulus.
-
 <figure>
   <img
   src="Tmaze_plot.png"
@@ -292,6 +290,8 @@ In Figure 2, the top panel shows the average belief of the agent over the four m
   <figcaption>Figure 2. Results of the simulations. Top panel shows in ordinate the three locations the agent is in (from top to bottom, C: initial location; L: left arm; R: right arm; B: lower arm) and in abscissa the three time steps of the simulation (left: first; center: second; right: third time step). Colors denote probabilities, with darker colors corresponding to higher probabilities. The center panel shows the hidden context inferred by the agent (from top to bottom, cheese in the left arm; cheese in the right arm). Note that the agent is uncertain about its context during the first time step; it becomes more certain at the second time step and it fully resolves its uncertainty at the third time step. the bottom panel shows the average pragmatic (utility maximization) and epistemic (uncertainty reducing) values of the states actually visited by the agent during the three time steps. These are the two terms of expected free energy illustrated in Equation 3 of the Active Inference section.</figcaption>
 </figure>
 <br/><br/>
+
+In Figure 2, the top panel shows the average belief of the agent over the four maze locations (ordinate) during the three time steps of the simulation (abscissa). It can be appreciated that the most favourable behaviour is to first explore the lower arm for reward information and then proceed to collect the reward. Following this path, the rodent gets a rewarding stimulus proportional to the prior preference just after passing through the lower arm, where there is a conditioned stimulus that specifies which is the arm with the cheese without both rewarding and aversive stimulus
 
 This behaviour highlights that the simulated rodent pursues an epistemic strategy: firstly, attending to the most diagnostic source of information (the cue at the lower arm) to resolve his uncertainty and confidently reach the cheese. This epistemic strategy is necessary because, initially, the agent is only confident about its location (see the first column of the top panel in Figure 2) but not its context (see the first column of the centre panel in Figure 2). 
 
