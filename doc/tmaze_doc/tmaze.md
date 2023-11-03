@@ -271,22 +271,34 @@ mdp->active_inference();
 
 ## 9. Simulation of T-maze
 
-In this environment, a mouse (the agent) is positioned at the center of a T-maze, faced with multiple choices. It can either move to the right or left arms, both of which can contain cheese (reward), or head to the lower arm, which provides information about the cheese's location. The mouse is limited to two moves; once it enters the right or left arms, it cannot leave (i.e., these are absorbing states). Therefore, the most favorable strategy is to first explore the lower arm for reward information and then proceed to collect the reward. Based on this strategy, the rodent gets a rewarding stimulus proportional to the prior preference parameter $c$ if the mouse reaches the correct cheese location, while it gets an aversive stimulus proportional to the penalty parameter $-c$. In the lower arm, there is a conditioned stimulus that specifies which is the arm with the cheese; it has not neither a rewarding nor aversive stimulus.
+In this environment, a mouse (the agent) is positioned at the centre of a T-maze, faced with multiple choices. It can either move to the right or left arms, which can contain cheese (reward), or head to the lower arm, which provides information about the cheese's location. The mouse is limited to two moves; once it enters the right or left arms, it cannot leave it (i.e., these are absorbing states). 
 
-Simulations show that the active inference agent modeling rodent balances the pursuit of information (e.g., heading to the cue at time-step 2) and the pursuit of extrinsic value (e.g., collecting the cheese in the left arm at time-step 3). Notably, this behavior might not be exhibited by agents following the optimal Bayes design that conversely pursues maximizing information, preferring to resolve uncertainties about the task context by reaching the cue in the lower arm and staying until the end of the trial. Neither an agent designed to maximize the utility gained, e.g., as in Bayesian decision theory or reinforcement learning, would have the same strategy: it, instead, would linger in its starting position until time step 2, after which it would move indifferently to one of the two upper arms. This behavior stems from the agent's indifference to the information gained that entails remaining at the central location.
-
-In the Figure, the results of a simulation trial with the reward placed at the left arm.
+The simulation results of the Active Inference agent simulating the rodent are illustrated in Figure 1 and Figure 2. In these figures, the results are the average of 10 simulations, with the same initial conditions – cheese at the left arm – but a different seed for the pseudorandom generator controlling the stochasticity of the process. For all simulations, the same path depicted in Figure 1 was inferred by the agent: at the first step, the agent always starts from the centre, goes through the lower arm and halts in the left arm.
 
 <figure>
   <img
   src="tmaze.png"
   width="300"
-  <figcaption>Figure 1.</figcaption>
+  <figcaption>Figure 1. Path in all the 10 simulation trials carried out with the reward placed at the left arm.</figcaption>
 </figure>
+<br/><br/>
+
+In Figure 2, the top panel shows the average belief of the agent over the four maze locations (ordinate) during the three time steps of the simulation (abscissa). It can be appreciated that the most favourable behaviour is to first explore the lower arm for reward information and then proceed to collect the reward. Following this path, the rodent gets a rewarding stimulus proportional to the prior preference just after passing through the lower arm, where there is a conditioned stimulus that specifies which is the arm with the cheese without both rewarding and aversive stimulus.
 
 <figure>
   <img
   src="Tmaze_plot.png"
   width="600"
-  <figcaption>Figure 2.</figcaption>
+  <figcaption>Figure 2. Results of the simulations. Top panel shows in ordinate the three locations the agent is in (from top to bottom, C: initial location; L: left arm; R: right arm; B: lower arm) and in abscissa the three time steps of the simulation (left: first; center: second; right: third time step). Colors denote probabilities, with darker colors corresponding to higher probabilities. The center panel shows the hidden context inferred by the agent (from top to bottom, cheese in the left arm; cheese in the right arm). Note that the agent is uncertain about its context during the first time step; it becomes more certain at the second time step and it fully resolves its uncertainty at the third time step. the bottom panel shows the average pragmatic (utility maximization) and epistemic (uncertainty reducing) values of the states actually visited by the agent during the three time steps. These are the two terms of expected free energy illustrated in Equation 3 of the Active Inference section.</figcaption>
 </figure>
+<br/><br/>
+
+This behaviour highlights that the simulated rodent pursues an epistemic strategy: firstly, attending to the most diagnostic source of information (the cue at the lower arm) to resolve his uncertainty and confidently reach the cheese. This epistemic strategy is necessary because, initially, the agent is only confident about its location (see the first column of the top panel in Figure 2) but not its context (see the first column of the centre panel in Figure 2). 
+
+The central panel of Figure 2 shows which context (left or right) the agent infers being in during the simulation. Initially, the agent is uncertain about context; nevertheless, its uncertainty drastically reduces after the first choice (i.e., at the second time step) because it selects going down to the lower arm and gathering informative observations. Furthermore, the agent’s contextual uncertainty reduces again at the third time step, as it usually gathers a rewarding stimulus at the terminal state that is ultimately informative about context.
+
+The bottom panel shows the average pragmatic (utility maximisation) and epistemic (uncertainty reducing) values of the states visited by the agent during the three time steps. It can be appreciated that the agent’s first choice (after the first time step) brings higher epistemic value and resolves most of the agent’s uncertainty, whereas the agent’s second choice (after the second time step) has a higher utility value.
+
+Simulations show that the active inference agent modelling rodent balances the pursuit of information (e.g., heading to the cue at time-step 2) and the pursuit of extrinsic value (e.g., collecting the cheese in the left arm at time-step 3). Notably, this behaviour might not be exhibited by agents following other decision-making paradigms. 
+
+For instance, agents designed according to the optimal Bayes decision paradigm pursue maximising information, preferring to resolve uncertainties about the task context by reaching the cue in the lower arm and staying until the end of the trial. Neither an agent designed to maximise the expected utility gained, as in Bayesian decision theory or reinforcement learning, would have the same strategy: it, instead, would linger in its starting position until time step 2, after which it would move indifferently to one of the two upper arms. This behaviour stems from the agent's indifference to the information gained. Such a ‘indifference’ induces it remaining at the central location.
