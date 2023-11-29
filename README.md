@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/581177578.svg)](https://zenodo.org/badge/latestdoi/581177578)
 
-This repository contains the software related to the publication [cpp-AIF: A multi-core C++ implementation of Active Inference for Partially Observable Markov Decision Processes](https://doi.org/10.1016/j.neucom.2023.127065) in Neurocomputing journal
+This repository contains the software related to the publication [cpp-AIF: A multi-core C++ implementation of Active Inference for Partially Observable Markov Decision Processes](https://doi.org/10.1016/j.neucom.2023.127065) in Neurocomputing journal.
 
 # cpp-AIF
 ``cpp-AIF`` is a C++ header-only library for simulating active inference agents in
