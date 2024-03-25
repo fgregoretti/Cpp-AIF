@@ -89,7 +89,6 @@ protected:
   std::vector<Priors<Ty>*> _lnC;
   std::vector<likelihood<Ty,M>*> Au;
   std::vector<Beliefs<Ty>*> _X;
-  std::vector<States*> _O; /* states observed */
   std::vector<int> U; /* action selected each time */
   std::mt19937 generator;
   std::vector<std::vector<Ty>> _ut; /* policy expectations */
@@ -106,6 +105,7 @@ public:
   unsigned int Nf;
   unsigned int Ng;
   unsigned int Np;
+  std::vector<States*> _O; /* states observed */
   std::vector<std::vector<int>> _st;
   std::vector<std::vector<int>> _ot;
 
